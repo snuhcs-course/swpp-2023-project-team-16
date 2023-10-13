@@ -1,0 +1,11 @@
+/frontend/*.iml
+/frontend/.gradle
+/frontend/local.properties
+/frontend/.idea
+/frontend/.DS_Store
+/frontend/build
+/frontend/captures
+/frontend/.externalNativeBuild
+/frontend/.cxx
+/frontend/local.properties
+/frontend/.idea
