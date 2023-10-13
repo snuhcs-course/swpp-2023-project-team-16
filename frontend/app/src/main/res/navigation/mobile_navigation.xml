@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_station">
+
+    <fragment
+        android:id="@+id/navigation_station"
+        android:name="com.example.shattle.ui.station.StationFragment"
+        android:label="@string/title_station"
+        tools:layout="@layout/fragment_station" />
+
+    <fragment
+        android:id="@+id/navigation_circular"
+        android:name="com.example.shattle.ui.circular.CircularFragment"
+        android:label="@string/title_circular"
+        tools:layout="@layout/fragment_circular" />
+
+    <fragment
+        android:id="@+id/navigation_lostnfound"
+        android:name="com.example.shattle.ui.lostnfound.LostnfoundFragment"
+        android:label="@string/title_lostnfound"
+        tools:layout="@layout/fragment_lostnfound" />
+
+    <fragment
+        android:id="@+id/navigation_timetable"
+        android:name="com.example.shattle.ui.timetable.TimetableFragment"
+        android:label="@string/title_timetable"
+        tools:layout="@layout/fragment_timetable" />
+</navigation>

@@ -391,3 +391,16 @@ pip-selfcheck.json
 # End of https://www.toptal.com/developers/gitignore/api/django,python,venv,pycharm
 
 .idea/*
+
+# /frontend
+/frontend/*.iml
+/frontend/.gradle
+/frontend/local.properties
+/frontend/.idea
+/frontend/.DS_Store
+/frontend/build
+/frontend/captures
+/frontend/.externalNativeBuild
+/frontend/.cxx
+/frontend/local.properties
+/frontend/.idea
