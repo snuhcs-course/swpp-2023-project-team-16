@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name">Shattle</string>
-    <string name="title_station">Station</string>
-    <string name="title_circular">Circular</string>
-    <string name="title_lostnfound">Lostnfound</string>
-    <string name="title_timetable">Timetable</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_station">서울대입구</string>
+    <string name="title_circular">순환셔틀</string>
+    <string name="title_lostnfound">분실물센터</string>
+    <string name="title_timetable">시간표</string>
 </resources>

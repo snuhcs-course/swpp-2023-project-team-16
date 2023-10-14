@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.shattle.MainActivity
+import com.example.shattle.R
 import com.example.shattle.databinding.FragmentStationBinding
 
 class StationFragment : Fragment() {
@@ -34,10 +37,6 @@ class StationFragment : Fragment() {
         stationViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
-
-
-        //
-
 
         return root
     }

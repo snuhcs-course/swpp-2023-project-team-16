@@ -23,7 +23,7 @@ class LostnfoundFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val lostnfoundViewModel =
-            ViewModelProvider(this).get(TimetableViewModel::class.java)
+            ViewModelProvider(this).get(LostnfoundViewModel::class.java)
 
         _binding = FragmentLostnfoundBinding.inflate(inflater, container, false)
         val root: View = binding.root

@@ -28,4 +28,5 @@
         android:name="com.example.shattle.ui.timetable.TimetableFragment"
         android:label="@string/title_timetable"
         tools:layout="@layout/fragment_timetable" />
+
 </navigation>
