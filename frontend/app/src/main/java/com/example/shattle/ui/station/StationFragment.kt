@@ -42,11 +42,11 @@ class StationFragment : Fragment() {
         _binding = FragmentStationBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textStation
-        stationViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        getWaitingTimeData();
+//        val textView: TextView = binding.textStation
+//        stationViewModel.text.observe(viewLifecycleOwner) {
+//            textView.text = it
+//        }
+        //getWaitingTimeData();
         return root
     }
 

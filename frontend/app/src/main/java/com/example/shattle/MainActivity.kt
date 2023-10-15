@@ -8,6 +8,7 @@ import android.widget.TextView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.add
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -26,8 +27,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // navi
         val navView: BottomNavigationView = binding.navView
-
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -37,36 +38,30 @@ class MainActivity : AppCompatActivity() {
 //            ),
 //        )
 //        setupActionBarWithNavController(navController, appBarConfiguration)
-        
         navView.setupWithNavController(navController)
 
-        var isInfoOpened = false
+        // info
         val infoFragment = InfoFragment()
+        showInfo(infoFragment, binding, supportFragmentManager)
+
+    }
+
+    private fun showInfo(
+        infoFragment: InfoFragment,
+        binding: ActivityMainBinding,
+        supportFragmentManager: FragmentManager
+    ) {
+
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.infoContainer, infoFragment)
         transaction.hide(infoFragment)
         transaction.commit()
-        binding.infoButton.setOnClickListener{
-            isInfoOpened = showInfo(isInfoOpened, infoFragment)
-        }
-        // info 팝업
-    }
 
-    private fun showInfo(isInfoOpened: Boolean, infoFragment: InfoFragment): Boolean{
-        // TODO : 뒤로가기 버튼이나 클릭 시 hide, 팝업 밖 공간 클릭 시 hide
-        // TODO : x 버튼? 좌측상단 << 버튼?
-
-        val transaction = supportFragmentManager.beginTransaction()
-        return if (isInfoOpened){
-            transaction.hide(infoFragment)
-            transaction.commit()
-            false
-        } else {
+        binding.infoImageButton.setOnClickListener {
+            val transaction = supportFragmentManager.beginTransaction()
             transaction.show(infoFragment)
             transaction.commit()
-            true
         }
-
     }
 
 }

@@ -28,10 +28,6 @@ class CircularFragment : Fragment() {
         _binding = FragmentCircularBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textCircular
-        circularViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
         return root
     }
 

@@ -4,16 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topContainer"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/top_container_size"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:padding="20dp">
+        android:padding="@dimen/top_container_padding">
 
 <!--        <TextView-->
 <!--            android:id="@+id/titleTextView"-->
@@ -21,31 +22,34 @@
 <!--            android:layout_height="wrap_content"-->
 <!--            android:text="Title"-->
 <!--            android:textStyle="bold"-->
-<!--            android:textSize="30sp"-->
-<!--            android:textColor="@color/black"-->
+<!--            android:textSize="@dimen/title_size"-->
+<!--            android:textColor="@color/title_text"-->
 <!--            app:layout_constraintTop_toTopOf="parent"-->
 <!--            app:layout_constraintBottom_toBottomOf="parent"-->
 <!--            app:layout_constraintLeft_toLeftOf="parent"/>-->
 
         <ImageButton
-            android:id="@+id/infoButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_info_gray_24"
-            android:background="@color/white"
-            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/infoImageButton"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:background="@color/transparent"
+            android:scaleType="center"
+            android:src="@drawable/btn_info"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/gray"
+            android:onClick="on"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:menu="@menu/bottom_nav_menu"
         app:itemTextColor="@drawable/sel_navi"
         app:itemIconTint="@drawable/sel_navi"
@@ -61,6 +65,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topContainer"
         app:layout_constraintBottom_toTopOf="@id/nav_view"
+        android:layout_marginHorizontal="@dimen/view_margin_horizental"
         app:navGraph="@navigation/mobile_navigation" />
 
     <androidx.fragment.app.FragmentContainerView
@@ -71,6 +76,5 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topContainer" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

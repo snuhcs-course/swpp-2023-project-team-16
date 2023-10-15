@@ -6,10 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import com.example.shattle.R
 import com.example.shattle.databinding.FragmentInfoBinding
 
-class InfoFragment : Fragment() {
+class InfoFragment : DialogFragment() {
 
     private var _binding: FragmentInfoBinding? = null
     private val binding get() = _binding!!
@@ -17,8 +18,14 @@ class InfoFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentInfoBinding.inflate(layoutInflater, container, false)
+
+
+        binding.closeImageButton.setOnClickListener{
+            fragmentManager?.beginTransaction()?.hide(this)?.commit()
+        }
+
         return binding.root
     }
 

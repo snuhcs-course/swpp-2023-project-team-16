@@ -9,11 +9,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topContainer"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/top_container_size"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:padding="20dp">
+        app:layout_constraintRight_toRightOf="parent">
 
         <TextView
             android:id="@+id/titleTextView"
@@ -21,11 +20,12 @@
             android:layout_height="wrap_content"
             android:text="@string/title_circular"
             android:textStyle="bold"
-            android:textSize="30sp"
-            android:textColor="@color/black"
+            android:textSize="@dimen/title_size"
+            android:textColor="@color/title_text"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -42,9 +42,10 @@
             android:id="@+id/lineMapImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="50dp"
-            android:layout_marginTop="84dp"
+            android:layout_marginVertical="50dp"
+            android:layout_marginHorizontal="100dp"
             android:src="@drawable/img_line_map"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -57,9 +58,10 @@
             android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@+id/lineMapImageView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintHorizontal_bias="0.463"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="0.551" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/textView"
@@ -67,52 +69,76 @@
             android:layout_height="wrap_content"
             android:text="정문"
             android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lineMapImageView" />
+            app:layout_constraintTop_toBottomOf="@+id/lineMapImageView"
+            app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="40dp"
             android:layout_height="32dp"
-            android:layout_marginTop="4dp"
-            android:src="@drawable/image_bus_black"
-            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            android:src="@drawable/img_bus"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.493"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintVertical_bias="1.0" />
 
         <ImageView
             android:id="@+id/imageView33"
             android:layout_width="40dp"
             android:layout_height="32dp"
-            android:layout_marginTop="112dp"
-            android:src="@drawable/image_bus_black"
+            android:src="@drawable/img_bus"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.311"
             app:layout_constraintStart_toEndOf="@+id/lineMapImageView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.258"
+            app:tint="@color/transparent" />
 
         <ImageView
             android:id="@+id/imageView12"
             android:layout_width="40dp"
             android:layout_height="32dp"
-            android:src="@drawable/image_bus_black"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/img_bus"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/lineMapImageView"
+            app:layout_constraintHorizontal_bias="0.55"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.193" />
 
         <ImageView
             android:id="@+id/imageView18"
             android:layout_width="40dp"
             android:layout_height="32dp"
-            android:layout_marginTop="88dp"
-            android:src="@drawable/image_bus_black"
-            app:layout_constraintEnd_toStartOf="@+id/lineMapImageView"
-            app:layout_constraintHorizontal_bias="1.0"
+            android:src="@drawable/img_bus"
+            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton
+        android:id="@+id/refreshButton"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:background="@color/transparent"
+        android:src="@drawable/btn_refresh"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.855"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.888"
+        app:tint="@color/gray" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
