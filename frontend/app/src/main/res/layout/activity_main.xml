@@ -7,41 +7,6 @@
     android:layout_height="match_parent"
     >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/topContainer"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/top_container_size"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:padding="@dimen/top_container_padding">
-
-<!--        <TextView-->
-<!--            android:id="@+id/titleTextView"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Title"-->
-<!--            android:textStyle="bold"-->
-<!--            android:textSize="@dimen/title_size"-->
-<!--            android:textColor="@color/title_text"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintLeft_toLeftOf="parent"/>-->
-
-        <ImageButton
-            android:id="@+id/infoImageButton"
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
-            android:background="@color/transparent"
-            android:scaleType="center"
-            android:src="@drawable/btn_info"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/gray"
-            android:onClick="on"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
@@ -76,5 +41,40 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topContainer" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topContainer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/top_container_size"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:padding="@dimen/top_container_padding">
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/titleTextView"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Title"-->
+        <!--            android:textStyle="bold"-->
+        <!--            android:textSize="@dimen/title_size"-->
+        <!--            android:textColor="@color/title_text"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintLeft_toLeftOf="parent"/>-->
+
+        <ImageButton
+            android:id="@+id/infoImageButton"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:background="@color/transparent"
+            android:scaleType="center"
+            android:src="@drawable/btn_info"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/gray"
+            android:onClick="on"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

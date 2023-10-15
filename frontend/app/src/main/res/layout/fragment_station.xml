@@ -36,89 +36,119 @@
         app:layout_constraintTop_toBottomOf="@id/topContainer">
 
         <ImageView
-            android:id="@+id/busStopImageView"
-            android:layout_width="90dp"
-            android:layout_height="159dp"
-            android:src="@drawable/img_bus_stop"
+            android:id="@+id/imageView3"
+            android:layout_width="76dp"
+            android:layout_height="60dp"
+            android:src="@drawable/img_waiting_people_left"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.692"
+            app:layout_constraintStart_toEndOf="@id/imageView2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.985" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="85dp"
+            android:layout_height="73dp"
+            android:src="@drawable/img_waiting_people_left"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView3"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/imageView1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.984" />
+
+        <ImageView
+            android:id="@+id/busStopImageView"
+            android:layout_width="78dp"
+            android:layout_height="131dp"
+            android:src="@drawable/img_bus_stop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/imageView1"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
-        <ImageView
-            android:layout_width="@dimen/waiting_people_size"
-            android:layout_height="@dimen/waiting_people_size"
-            android:src="@drawable/img_waiting_people_right"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.423"
-            app:layout_constraintStart_toEndOf="@id/busStopImageView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.495" />
 
         <ImageView
-            android:layout_width="@dimen/waiting_people_size"
-            android:layout_height="@dimen/waiting_people_size"
+            android:id="@+id/imageView1"
+            android:layout_width="93dp"
+            android:layout_height="85dp"
             android:src="@drawable/img_waiting_people_left"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.09"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/busStopImageView"
+            app:layout_constraintEnd_toStartOf="@id/imageView2"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.495" />
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/waitingLineTextView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_marginTop="44dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/waitingLineVisualView">
 
         <TextView
-            android:layout_width="187dp"
-            android:layout_height="90dp"
-            android:text="현재 # 명 대기중입니다.\n예상 대기시간 # 분\n보내야 하는 버스 # 대"
+            android:id="@+id/num_people"
+            android:layout_width="246dp"
+            android:layout_height="37dp"
+            android:text="현재 # 명 대기 중입니다."
+            android:textSize="24sp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.169"
+            app:layout_constraintHorizontal_bias="0.581"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.337" />
+
+        <TextView
+            android:id="@+id/num_others"
+            android:layout_width="191dp"
+            android:layout_height="93dp"
+            android:layout_marginTop="1dp"
+            android:text="예상 대기시간: # 분\n탈 수 있는 버스: # 번쨰 버스"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.436"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/num_people"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageButton
+            android:id="@+id/refreshButton"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:background="@color/transparent"
+            android:src="@drawable/btn_refresh_2"
+            app:tint="@color/black"
+            tools:layout_editor_absoluteX="319dp"
+            tools:layout_editor_absoluteY="16dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <ImageButton
         android:id="@+id/chartButton"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="58dp"
+        android:layout_height="60dp"
         android:background="@color/transparent"
         android:scaleType="fitXY"
-        android:src="@drawable/btn_chart"
+        android:src="@drawable/btn_chart_2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.926"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/waitingLineTextView"
-        app:layout_constraintVertical_bias="0.331" />
-
-    <ImageButton
-        android:id="@+id/refreshButton"
-        android:layout_width="@dimen/button_size"
-        android:layout_height="@dimen/button_size"
-        android:background="@color/transparent"
-        android:src="@drawable/btn_refresh"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.858"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/waitingLineTextView"
-        app:layout_constraintVertical_bias="0.382"
-        app:tint="@color/gray" />
+        app:layout_constraintVertical_bias="0.545" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
