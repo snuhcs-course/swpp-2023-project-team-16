@@ -15,5 +15,5 @@ class LostItems(models.Model):
     is_returned = models.BooleanField()
     is_discarded = models.BooleanField()
     acquired_at = models.DateTimeField()
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
