@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.shattle.R
 import com.example.shattle.databinding.FragmentCircularBinding
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -16,7 +15,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
-import org.jetbrains.annotations.TestOnly
 
 class CircularFragment : Fragment() {
 
@@ -28,6 +26,9 @@ class CircularFragment : Fragment() {
 
     private var googleMap: GoogleMap? = null
 
+    private val circularData = CircularData(true)
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,8 +38,9 @@ class CircularFragment : Fragment() {
         _binding = FragmentCircularBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+
+        // mapFragment 는 onCreateView 안에서만 초기화하기!!!
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        // 무조건 onCreateView() 안에서 선언해야됨
         mapFragment.getMapAsync(OnMapReadyCallback { mMap ->
             googleMap = mMap
             customizeGoogleMap()
@@ -59,34 +61,19 @@ class CircularFragment : Fragment() {
         val zoomLevel = 14.70f
         googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(initialLocation, zoomLevel))
 
-        showMarkers()
+        // show the bus stop locations on the map
+        showBusStopLocations()
 
+        // show the route of the circular shuttle on the map
         showRoute()
     }
 
-    data class BusStop(val position: LatLng, val title: String, val snippet: String)
-    private val busStops = listOf(
-        BusStop(LatLng(37.46577, 126.9484), "정문", ""),
-        BusStop(LatLng(37.46306, 126.9490), "법과대", ""),
-        BusStop(LatLng(37.46046, 126.9490), "자연대", ""),
-        BusStop(LatLng(37.45703, 126.9493), "농생대", ""),
-        BusStop(LatLng(37.45502, 126.9498), "38동, 공대입구", ""),
-        BusStop(LatLng(37.45356, 126.9502), "신소재", ""),
-        BusStop(LatLng(37.44809, 126.9521), "302동", ""),
-        BusStop(LatLng(37.45158, 126.9526), "301동, 유회진학술정보관", ""),
-        BusStop(LatLng(37.45408, 126.9539), "유전공학연구소", ""),
-        BusStop(LatLng(37.45612, 126.9554), "교수회관입구", ""),
-        BusStop(LatLng(37.46103, 126.9565), "기숙사삼거리", ""),
-        BusStop(LatLng(37.46418, 126.9553), "국제대학원", ""),
-        BusStop(LatLng(37.46606, 126.9546), "수의대", ""),
-        BusStop(LatLng(37.46602, 126.9522), "경영대", ""),
-    )
-    private fun showMarkers() {
+    private fun showBusStopLocations() {
 
         val customMarkerIcon =
             BitmapDescriptorFactory.fromResource(R.drawable.img_bus_stop_marker)
 
-        for (busStop in busStops) {
+        for (busStop in circularData.busStops) {
             googleMap?.addMarker(
                 MarkerOptions()
                     .position(busStop.position)
@@ -99,16 +86,9 @@ class CircularFragment : Fragment() {
 
     private fun showRoute() {
 
-        val roadCoordinates = listOf(
-            LatLng(37.46577, 126.9484),
-            LatLng(37.44809, 126.9521),
-            LatLng(37.46103, 126.9565),
-            LatLng(37.46577, 126.9484),
-        )
-
         googleMap?.addPolyline(
             PolylineOptions()
-                .addAll(roadCoordinates)
+                .addAll(circularData.roadCoordinates)
                 .width(10f) // Set the width of the line
             //.color(Color.RED) // Set the color of the line
         )
