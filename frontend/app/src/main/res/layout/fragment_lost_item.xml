@@ -7,12 +7,12 @@
     android:orientation="horizontal"
     android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/itemImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/common_google_signin_btn_icon_dark"/> <!-- You can set a default image or leave it empty -->
+<!--    <ImageView-->
+<!--        android:id="@+id/itemImage"-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        android:src="@drawable/common_google_signin_btn_icon_dark"/> &lt;!&ndash; You can set a default image or leave it empty &ndash;&gt;-->
 
     <TextView
         android:id="@+id/itemName"

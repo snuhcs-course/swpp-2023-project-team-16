@@ -12,7 +12,7 @@ class ItemAdapter(private val items: List<LostnfoundFragment.LostItem>) : Recycl
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemName: TextView = itemView.findViewById(R.id.itemName)
-        val itemImageView: ImageView = itemView.findViewById(R.id.itemImage)
+        //val itemImageView: ImageView = itemView.findViewById(R.id.itemImage)
         val itemDescription: TextView = itemView.findViewById(R.id.itemDescription)
         // Add other views as needed
     }
@@ -28,11 +28,11 @@ class ItemAdapter(private val items: List<LostnfoundFragment.LostItem>) : Recycl
         holder.itemDescription.text = item.description
 
         // Load the image into the itemImage view using Glide
-        Glide.with(holder.itemView)
-            .load(item.imageUrl)
-            .placeholder(R.drawable.img_loading) // Placeholder image while loading
-            .error(R.drawable.img_error) // Image to display if loading fails
-            .into(holder.itemImageView)
+//        Glide.with(holder.itemView)
+//            .load(item.imageUrl)
+//            .placeholder(R.drawable.img_loading) // Placeholder image while loading
+//            .error(R.drawable.img_error) // Image to display if loading fails
+//            .into(holder.itemImageView)
     }
 
     override fun getItemCount() = items.size

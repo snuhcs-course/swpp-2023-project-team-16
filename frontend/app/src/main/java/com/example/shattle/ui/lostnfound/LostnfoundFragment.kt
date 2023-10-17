@@ -33,8 +33,6 @@ class LostnfoundFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val lostnfoundViewModel =
-            ViewModelProvider(this).get(LostnfoundViewModel::class.java)
 
         _binding = FragmentLostnfoundBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -54,12 +52,12 @@ class LostnfoundFragment : Fragment() {
     }
 
     private val lostItems = listOf(
-        LostItem(1, "item 1", "description 1", "https://images.thdstatic.com/productImages/76299625-ff58-4c0a-bf20-36e4be558bf7/svn/firm-grip-rain-umbrellas-38124-64_1000.jpg"),
-        LostItem(2, "item 2", "description 2", "https://i.ebayimg.com/images/g/8ucAAOxyvSVREXUL/s-l1200.webp"),
-        LostItem(3, "item 3", "description 3", "https://aaaa"),
-        LostItem(4, "item 4", "description 4", "https://i.ebayimg.com/images/g/8ucAAOxyvSVREXUL/s-l1200.webp"),
-        LostItem(5, "item 5", "description 5", "https://i.ebayimg.com/images/g/8ucAAOxyvSVREXUL/s-l1200.webp"),
-        LostItem(6, "item 6", "description 6", "https://i.ebayimg.com/images/g/8ucAAOxyvSVREXUL/s-l1200.webp"),
+        LostItem(1, "item 1", "description 1"),
+        LostItem(2, "item 2", "description 2"),
+        LostItem(3, "item 3", "description 3"),
+        LostItem(4, "item 4", "description 4"),
+        LostItem(5, "item 5", "description 5"),
+        LostItem(6, "item 6", "description 6"),
 
     )
 
@@ -67,7 +65,5 @@ class LostnfoundFragment : Fragment() {
         val id: Int,
         val name: String,
         val description: String,
-        val imageUrl: String
-        // Add other properties as needed to represent the item's attributes
     )
 }
