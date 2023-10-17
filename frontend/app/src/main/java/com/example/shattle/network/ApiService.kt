@@ -11,6 +11,6 @@ import retrofit2.http.Query
 interface ApiService {
     @GET("dropoff/waiting-line")
     fun getWaitingLine(): Call<ResponseWaitingLine>
-    @GET("/dropoff/congestion")
+    @GET("dropoff/congestion")
     fun getCongestionData(@Query("day") day: Int): Call<List<ResponseCongestion>>
 }
