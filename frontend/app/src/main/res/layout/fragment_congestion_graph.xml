@@ -5,16 +5,16 @@
     android:layout_height="match_parent"
     android:layout_marginTop="@dimen/top_container_height"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.info.InfoFragment">
+    tools:context=".ui.congestion.CongestionGraphFragment">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/popUpContainer"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_margin="30dp"
         app:cardCornerRadius="20dp"
-        app:cardElevation="20dp"
+        app:cardElevation="16dp"
+        app:contentPadding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,14 +28,14 @@
             android:src="@drawable/btn_arrow_back"
             app:tint="@color/gray" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:text="INFO\n1.aaaaaaaa\n2.bbbbbbbbbbb\n3.cccccccccc\n4.dddddddd\n5.eeeee"
-            android:textSize="20sp" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/day_time_chart"
+            android:layout_width="360dp"
+            android:layout_height="320dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:visibility="gone" />
 
     </androidx.cardview.widget.CardView>
 

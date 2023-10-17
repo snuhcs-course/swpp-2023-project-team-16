@@ -1,15 +1,17 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
-    <dimen name="top_container_size">100dp</dimen>
+    <dimen name="navigation_height">60dp</dimen>
+
+    <!-- top container (제목, info 버튼) -->
+    <dimen name="top_container_height">100dp</dimen>
     <dimen name="top_container_padding">20dp</dimen>
     <dimen name="title_size">30sp</dimen>
+    <dimen name="title_marzin_left">20dp</dimen>
 
-    <dimen name="view_margin_horizental">20dp</dimen>
-
+    <!-- -->
     <dimen name="button_size">50dp</dimen>
 
     <dimen name="waiting_people_size">40dp</dimen>
