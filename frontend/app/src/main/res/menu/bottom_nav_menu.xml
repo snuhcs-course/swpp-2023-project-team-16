@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/navigation_station"
-        android:icon="@drawable/ic_station_black_24dp"
+        android:icon="@drawable/ic_station"
         android:title="@string/title_station" />
 
     <item
         android:id="@+id/navigation_circular"
-        android:icon="@drawable/ic_circular_black_24dp"
+        android:icon="@drawable/ic_circular"
         android:title="@string/title_circular" />
 
     <item
         android:id="@+id/navigation_lostnfound"
-        android:icon="@drawable/ic_lostnfound_black_24dp"
+        android:icon="@drawable/ic_lostnfound"
         android:title="@string/title_lostnfound" />
 
     <item
         android:id="@+id/navigation_timetable"
-        android:icon="@drawable/ic_timetable_black_24dp"
+        android:icon="@drawable/ic_timetable"
         android:title="@string/title_timetable" />
 
 </menu>
