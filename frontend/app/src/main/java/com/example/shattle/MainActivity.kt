@@ -27,40 +27,36 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // navi
+        // 바텀 네비게이션 설정
+        // activity_main.xml 의 navView 를 네비게이션 메뉴로 설정 (app:menu="@menu/bottom_nav_menu")
         val navView: BottomNavigationView = binding.navView
+        // activity_main.xml 의 nav_host_fragment_activity_main 에 네비게이션 컨트롤러 설정 (app:navGraph="@navigation/mobile_navigation")
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-//        val appBarConfiguration = AppBarConfiguration(
-//            setOf(
-//                R.id.navigation_station, R.id.navigation_circular, R.id.navigation_lostnfound, R.id.navigation_timetable,
-//            ),
-//        )
-//        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        // info
-        val infoFragment = InfoFragment()
-        showInfo(infoFragment, binding, supportFragmentManager)
+        // Info 팝업 생성
+        showInfo(supportFragmentManager)
 
     }
 
     private fun showInfo(
-        infoFragment: InfoFragment,
-        binding: ActivityMainBinding,
         supportFragmentManager: FragmentManager
     ) {
 
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.infoContainer, infoFragment)
-        transaction.hide(infoFragment)
-        transaction.commit()
-
+        // Info 버튼을 누르면 InfoFragment 생성
         binding.infoImageButton.setOnClickListener {
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.show(infoFragment)
-            transaction.commit()
+            // Info Fragment 가 열려있는지 확인 (닫혀있다면 null 이 할당됨)
+            val existingFragment = supportFragmentManager.findFragmentByTag("InfoFragment")
+
+            // InfoFragment 가 닫혀 있는 경우에만 열기
+            if(existingFragment == null){
+                val infoFragment = InfoFragment()
+                val transaction = supportFragmentManager.beginTransaction()
+                // infoFragment 가 표시될 위치 설정 (infoContainer), tag 설정(tag 로 fragment 가 열려있는지 확인 가능)
+                transaction.add(R.id.infoContainer, infoFragment, "InfoFragment")
+                // transaction 은 생성 할 때마다 commit 해주기
+                transaction.commit()
+            }
         }
     }
 
