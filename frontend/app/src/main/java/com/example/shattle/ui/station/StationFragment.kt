@@ -12,17 +12,21 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.example.shattle.MainActivity
 import com.example.shattle.R
 import com.example.shattle.data.models.ResponseWaitingLine
+import com.example.shattle.databinding.ActivityMainBinding
 import com.example.shattle.databinding.FragmentStationBinding
 import com.example.shattle.network.ServiceCreator
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
+import com.example.shattle.ui.congestion.CongestionGraphFragment
+import androidx.fragment.app.FragmentActivity
 class StationFragment : Fragment() {
 
 
@@ -69,7 +73,25 @@ class StationFragment : Fragment() {
         handler.post(dataFetchRunnable)
 
 
+        // Show the congestion graph if needed
+        showChart(requireActivity().supportFragmentManager)
+
         return root
+    }
+
+    private fun showChart(
+        supportFragmentManager: FragmentManager
+    ) {
+
+        binding.chartButton.setOnClickListener {
+            val existingFragment = supportFragmentManager.findFragmentByTag("congestionGraphFragment")
+            if(existingFragment == null){
+                val congestionGraphFragment = CongestionGraphFragment()
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.add(R.id.congestionGraphContainer, congestionGraphFragment, "congestionGraphFragment")
+                transaction.commit()
+            }
+        }
     }
 
     private fun getWaitingTimeData() {
@@ -121,6 +143,15 @@ class StationFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
+        val supportFragmentManager = requireActivity().supportFragmentManager
+        val existingFragment = supportFragmentManager.findFragmentByTag("congestionGraphFragment")
+        if(existingFragment != null) {
+            Log.d("Checker@@", "existingFragment != null")
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.remove(existingFragment)
+            transaction.commit()
+        }
         _binding = null
     }
 
