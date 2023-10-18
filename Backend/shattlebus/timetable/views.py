@@ -1,7 +1,4 @@
-from django.views import View
+from django.shortcut import render
 
 # Create your views here.
 
-
-class RetrieveTimeTableView(View):
-    pass
