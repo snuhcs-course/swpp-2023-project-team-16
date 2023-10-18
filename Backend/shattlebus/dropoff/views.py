@@ -1,6 +1,8 @@
 from django.views import View
 from django.http import HttpResponse
 
+import json
+
 import time
 
 from .models import CurrentLine
@@ -17,20 +19,20 @@ class RetrieveWaitingTimeView(View):
     def get(self, request):
         current_line = CurrentLine.objects.all().values()[0]
         num_people_waiting = current_line['num_people_waiting']
-        response = HttpResponse()
+        # response = HttpResponse()
 
         try:
             if not current_line['is_executing']:
                 raise NoShuttleException
 
             waiting_data = self.get_waiting_data(num_people_waiting)
-            response["waiting_data"] = waiting_data
         except NoShuttleException:
-            response["waiting_data"] = {"num_waiting_people": -1,
-                                        "waiting_time": -1,
-                                        "num_needed_bus": -1
-                                        }
-        return response
+            waiting_data = {"num_waiting_people": -1,
+                            "waiting_time": -1,
+                            "num_needed_bus": -1
+                            }
+
+        return HttpResponse(json.dumps(waiting_data))
 
     def get_waiting_data(self, num_people_waiting):
         num_needed_bus = (num_people_waiting // MAX_NUM_OF_PEOPLE) + 1
@@ -87,10 +89,8 @@ class RetrieveCongestionView(View):
     def get(self, request):
         day = request.GET['day']
         congestion = Congestion.objects.filter(day=day).values()
-        response = HttpResponse()
-        response['congestion'] = congestion
 
-        return response
+        return HttpResponse(json.dumps(congestion))
 
 
 # Exception when there is no available shuttle
