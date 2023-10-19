@@ -11,9 +11,9 @@ import com.example.shattle.ui.lostnfound.LostnfoundFragment
 class ItemAdapter(private val items: List<LostnfoundFragment.LostItem>) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val itemName: TextView = itemView.findViewById(R.id.itemName)
+        val itemName: TextView = itemView.findViewById(R.id.itemNameTextView)
         //val itemImageView: ImageView = itemView.findViewById(R.id.itemImage)
-        val itemDescription: TextView = itemView.findViewById(R.id.itemDescription)
+        val itemDescription: TextView = itemView.findViewById(R.id.itemDescriptionTextView)
         // Add other views as needed
     }
 
