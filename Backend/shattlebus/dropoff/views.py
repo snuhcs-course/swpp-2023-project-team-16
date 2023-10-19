@@ -10,6 +10,8 @@ from .models import Congestion
 
 HOUR_SHUTTLE_START = 7
 HOUR_SHUTTLE_END = 19
+# estimated maximum numbers of people can board on a bus
+# this can be revised
 MAX_NUM_OF_PEOPLE = 40
 FRIDAY = 4
 
@@ -19,7 +21,6 @@ class RetrieveWaitingTimeView(View):
     def get(self, request):
         current_line = CurrentLine.objects.all().values()[0]
         num_people_waiting = current_line['num_people_waiting']
-        # response = HttpResponse()
 
         try:
             if not current_line['is_executing']:
@@ -88,9 +89,16 @@ class RetrieveCongestionView(View):
 
     def get(self, request):
         day = request.GET['day']
-        congestion = Congestion.objects.filter(day=day).values()
+        congestion_list = Congestion.objects.filter(day=day).values()
+        response = {}
+        for congestion in congestion_list:
+            congestion_data = {"time_slot_start": str(congestion['time_slot_start']),
+                               "time_slot_end": str(congestion['time_slot_end']),
+                               "average_people_waiting": congestion['average_people_waiting']
+                               }
+            response[congestion['id']] = congestion_data
 
-        return HttpResponse(json.dumps(congestion))
+        return HttpResponse(json.dumps(response))
 
 
 # Exception when there is no available shuttle
