@@ -19,8 +19,6 @@ class RetrieveCircularBusView(View):
         location_id = my_bus['location_id']
         location = Location.objects.filter(id=location_id).values()[0]
 
-        print(location_id)
-
         response = {"id": my_bus['id'],
                     "license_plate": my_bus['license_plate'],
                     "location_id": my_bus['location_id'],
@@ -30,6 +28,5 @@ class RetrieveCircularBusView(View):
                     "is_tracked": my_bus['is_tracked'],
                     "updated_at": str(my_bus['updated_at'])
                     }
-        print(response)
 
         return HttpResponse(json.dumps(response))
