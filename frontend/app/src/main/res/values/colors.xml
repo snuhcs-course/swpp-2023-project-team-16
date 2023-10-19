@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
+    <color name="title_text">@color/black</color>
+
+    <color name="gray_400_transparent">#80AAAAAA</color>
+
+    <color name="green_100">#DAEDD5</color>
+    <color name="green_200">#B8D6B0</color>
+    <color name="green_300">#BCDBB4</color>
+    <color name="green_400">#79B669</color>
+    <color name="green_500">#1F8505</color>
+    <color name="green_600">#155A03</color>
+    <color name="green_700">#104502</color>
+    <color name="green_800">#0B2E02</color>
+    <color name="green_Primary">@color/green_400</color>
+
+    <color name="creme_white">#FCFBFA</color>
+    <color name="gray_100">#E5E5E5</color>
+    <color name="gray_200">#CECFCD</color>
+    <color name="gray_300">#C8C8C8</color>
+    <color name="gray_400">#AAAAAA</color>
+    <color name="gray_500">#6E726E</color>
+    <color name="gray_600">#3B3D3B</color>
+    <color name="dark">#141514</color>
+
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,8 +33,6 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="gray">#FF888888</color>
+    <color name="gray">#FF808080</color>
     <color name="transparent">#00000000</color>
-
-    <color name="title_text">#000000</color>
 </resources>
