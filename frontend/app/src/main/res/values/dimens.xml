@@ -1,16 +1,32 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
-    <dimen name="top_container_size">100dp</dimen>
+    <!-- bottom navigation-->
+    <dimen name="navigation_height">60dp</dimen>
+    <!-- top container (제목, info 버튼) -->
+    <dimen name="top_container_height">100dp</dimen>
     <dimen name="top_container_padding">20dp</dimen>
     <dimen name="title_size">30sp</dimen>
+    <dimen name="title_marzin_left">20dp</dimen>
 
-    <dimen name="view_margin_horizental">20dp</dimen>
+    <!-- PopUp -->
+    <dimen name="pop_up_margin_horizontal">30dp</dimen>
+    <dimen name="pop_up_corner_radius">20dp</dimen>
+    <dimen name="pop_up_elevation">@dimen/card_view_elevation</dimen>
+    <dimen name="pop_up_margin_bottom">50dp</dimen>
+    <dimen name="pop_up_margin_top">150dp</dimen>
+    <dimen name="pop_up_button_margin">5dp</dimen>
 
+    <!-- refresh button -->
+    <dimen name="refresh_btn_margin_bottom">30dp</dimen>
+    <dimen name="refresh_btn_margin_end">30dp</dimen>
+    
+    <!-- extra -->
     <dimen name="button_size">50dp</dimen>
+    <dimen name="card_view_elevation">5dp</dimen>
+
 
     <dimen name="waiting_people_size">40dp</dimen>
 </resources>
