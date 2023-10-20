@@ -1,10 +1,12 @@
-package com.example.shattle.ui.congestion_graph
+package com.example.shattle.ui.congestion
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.DialogFragment
 import com.example.shattle.databinding.FragmentCongestionGraphBinding
 import com.github.mikephil.charting.charts.LineChart
@@ -34,15 +36,10 @@ class CongestionGraphFragment : DialogFragment() {
         loadGraphData(binding.dayTimeChart)
 
         binding.closeImageButton.setOnClickListener {
-            fragmentManager?.beginTransaction()?.hide(this)?.commit()
+            dismiss()
         }
 
         return view
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun setupChart(chart: LineChart) {
@@ -88,5 +85,20 @@ class CongestionGraphFragment : DialogFragment() {
             calendar.timeInMillis = millis
             return sdf.format(calendar.time)
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                dismiss()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
