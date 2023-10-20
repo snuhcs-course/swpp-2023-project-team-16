@@ -1,6 +1,7 @@
 # USAGE
 # python yolo.py --image images/baggage_claim.jpg
 # import the necessary packages
+# copy from github yolov5
 import numpy as np
 import argparse
 import time
