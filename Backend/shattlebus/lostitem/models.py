@@ -8,7 +8,7 @@ from django.db import models
 # Create your models here.
 
 
-class LostItems(models.Model):
+class LostItem(models.Model):
     name = models.CharField(max_length=20)
     description = models.CharField(max_length=255)
     bus_type = models.PositiveIntegerField()
