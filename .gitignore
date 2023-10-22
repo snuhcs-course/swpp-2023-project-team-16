@@ -404,3 +404,16 @@ pip-selfcheck.json
 /frontend/.cxx
 /frontend/local.properties
 /frontend/.idea
+
+# /driverapp
+/driverapp/*.iml
+/driverapp/.gradle
+/driverapp/local.properties
+/driverapp/.idea
+/driverapp/.DS_Store
+/driverapp/build
+/driverapp/captures
+/driverapp/.externalNativeBuild
+/driverapp/.cxx
+/driverapp/local.properties
+/driverapp/.idea
