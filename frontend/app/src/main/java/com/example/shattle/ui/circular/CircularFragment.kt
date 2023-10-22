@@ -1,9 +1,14 @@
 package com.example.shattle.ui.circular
 
+import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.shattle.R
 import com.example.shattle.databinding.FragmentCircularBinding
@@ -13,6 +18,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 
@@ -27,7 +33,8 @@ class CircularFragment : Fragment() {
     private var googleMap: GoogleMap? = null
 
     private val circularData = CircularData(true)
-
+    private var currentBusLocations = circularData.currentBusLocations
+    private var busMarkers: MutableList<Marker> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,14 +45,16 @@ class CircularFragment : Fragment() {
         _binding = FragmentCircularBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
         // mapFragment 는 onCreateView 안에서만 초기화하기!!!
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(OnMapReadyCallback { mMap ->
             googleMap = mMap
             customizeGoogleMap()
-            showCurrentLocationOfBuses()
+            refreshData()
+            showCurrentLocationsOfBus()
+            refreshView()
         })
+
         return root
     }
 
@@ -61,15 +70,17 @@ class CircularFragment : Fragment() {
         val zoomLevel = 14.70f
         googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(initialLocation, zoomLevel))
 
-        // show the bus stop locations on the map
+        // Show the bus stop locations on the map
         showBusStopLocations()
 
-        // show the route of the circular shuttle on the map
+        // Show the route of the circular shuttle on the map
         showRoute()
     }
 
     private fun showBusStopLocations() {
+        // Show the bus stop locations on the map
 
+        // 기본 마커로도 할 수 있고, 마커 이미지 커스텀 가능 (20~50 픽셀)
         val customMarkerIcon =
             BitmapDescriptorFactory.fromResource(R.drawable.img_bus_stop_marker)
 
@@ -85,30 +96,70 @@ class CircularFragment : Fragment() {
     }
 
     private fun showRoute() {
+        // Show the route of the circular shuttle on the map
 
         googleMap?.addPolyline(
             PolylineOptions()
+                .clickable(false)
                 .addAll(circularData.roadCoordinates)
                 .width(10f) // Set the width of the line
-            //.color(Color.RED) // Set the color of the line
+                .color(Color.BLACK) // Set the color of the line
         )
     }
 
-    private fun showCurrentLocationOfBuses() {
-        // TODO
-        // Create a marker for a bus
-        val busMarker = googleMap?.addMarker(
-            MarkerOptions()
-                .position(LatLng(37.46577, 126.9484)) // Set the bus's initial position
-                .title("Bus Name") // Set the title for the marker (optional)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.img_bus)) // Use a custom bus icon
-        )
+    private fun showCurrentLocationsOfBus() {
 
-        // Update the bus marker's position when you receive real-time location updates
-        binding.refreshButton.setOnClickListener {
-            val newBusLocation = LatLng(37.44809, 126.9521) // New bus location coordinates
-            busMarker?.position = newBusLocation
+        // Remove previous bus markers
+        if (busMarkers.size != 0) {
+            for (busMarker in busMarkers) {
+                busMarker.remove()
+            }
+            busMarkers.clear()
         }
+
+        if (currentBusLocations == null || currentBusLocations.size == 0) {
+            Toast.makeText(activity, "정보를 받아오는 중 에러가 발생했습니다", Toast.LENGTH_SHORT).show()
+        } else {
+            // Add bus markers on the map ("currentBusLocations" holds the locations)
+            for (circularBus in currentBusLocations) {
+                val busMarker = googleMap?.addMarker(
+                    MarkerOptions()
+                        .position(circularBus.location) // Set the bus's initial position
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.img_bus)) // Use a custom bus icon
+                    // 20~50픽셀
+                )
+                if (busMarker != null) {
+                    busMarkers.add(busMarker)
+                }
+            }
+        }
+    }
+
+    private fun refreshView() {
+
+        // 1. Refresh manually
+        binding.refreshButton.setOnClickListener {
+            refreshData()
+            showCurrentLocationsOfBus()
+        }
+
+        // 2. Refresh automatically
+        // Schedule marker removal after 10 seconds
+        Handler(Looper.getMainLooper()).postDelayed({
+            try {
+                refreshData()
+                showCurrentLocationsOfBus()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("MyLogChecker", "error: $e")
+            }
+
+        }, 5000) // TODO: change to 10000
+
+    }
+    private fun refreshData() {
+        circularData.refreshCurrentBusLocation2()
+        currentBusLocations = circularData.currentBusLocations
 
     }
 
