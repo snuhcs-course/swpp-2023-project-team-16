@@ -1,7 +1,14 @@
 package com.example.shattle.ui.circular
 
+import android.util.Log
+import android.widget.Toast
 import com.example.shattle.data.models.CircularBus
+import com.example.shattle.data.models.ResponseWaitingLine
+import com.example.shattle.network.ServiceCreator
 import com.google.android.gms.maps.model.LatLng
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.UUID
 
 data class CircularData(val isCreated: Boolean) {
@@ -29,7 +36,29 @@ data class CircularData(val isCreated: Boolean) {
     )
     var cnt = 0;
     fun refreshCurrentBusLocation2() {
+        val call: Call<List<CircularBus>> = ServiceCreator.apiService.getCircularLocation()
 
+        call.enqueue(object : Callback<List<CircularBus>> {
+            override fun onResponse(
+                call: Call<List<CircularBus>>,
+                response: Response<List<CircularBus>>
+            ) {
+                if (response.isSuccessful) {
+                    val locations = response.body()
+                    if (locations == null) {
+                        Log.e("Circular", "error: response contained null data")
+                    }
+                    else {
+                        currentBusLocations = locations
+                    }
+                } else {
+
+                }
+            }
+            override fun onFailure(call: Call<List<CircularBus>>, t: Throwable) {
+                Log.e("Circular", "error: $t")
+            }
+        })
         if(cnt >= dummy.size){
             currentBusLocations = emptyList()
             return
