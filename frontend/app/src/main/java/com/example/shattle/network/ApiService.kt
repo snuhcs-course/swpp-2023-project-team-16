@@ -13,6 +13,6 @@ interface ApiService {
     fun getWaitingLine(): Call<ResponseWaitingLine>
     @GET("dropoff/congestion")
     fun getCongestionData(@Query("day") day: Int): Call<List<ResponseCongestion>>
-    @GET("circular/buses")
+    @GET("circular/location")
     fun getCircularLocation(): Call<List<CircularBus>>
 }
