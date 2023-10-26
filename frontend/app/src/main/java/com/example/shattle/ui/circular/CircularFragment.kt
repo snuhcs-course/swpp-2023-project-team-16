@@ -82,7 +82,7 @@ class CircularFragment : Fragment() {
 
         // 기본 마커로도 할 수 있고, 마커 이미지 커스텀 가능 (20~50 픽셀)
         val customMarkerIcon =
-            BitmapDescriptorFactory.fromResource(R.drawable.img_bus_stop_marker)
+            BitmapDescriptorFactory.fromResource(R.drawable.img_circular_bus_stop)
 
         for (busStop in circularData.busStops) {
             googleMap?.addMarker(
@@ -118,14 +118,14 @@ class CircularFragment : Fragment() {
         }
 
         if (currentBusLocations == null || currentBusLocations.size == 0) {
-            Toast.makeText(activity, "정보를 받아오는 중 에러가 발생했습니다", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, R.string.toast_refresh_error, Toast.LENGTH_SHORT).show()
         } else {
             // Add bus markers on the map ("currentBusLocations" holds the locations)
             for (circularBus in currentBusLocations) {
                 val busMarker = googleMap?.addMarker(
                     MarkerOptions()
                         .position(circularBus.location) // Set the bus's initial position
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.img_bus)) // Use a custom bus icon
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.img_circular_bus)) // Use a custom bus icon
                     // 20~50픽셀
                 )
                 if (busMarker != null) {
@@ -158,7 +158,7 @@ class CircularFragment : Fragment() {
 
     }
     private fun refreshData() {
-        circularData.refreshCurrentBusLocation2()
+        circularData.refreshCurrentBusLocation()
         currentBusLocations = circularData.currentBusLocations
 
     }
