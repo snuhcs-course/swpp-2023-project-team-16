@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.shattle.databinding.FragmentTimetableBinding
-import com.example.shattle.ui.lostnfound.TimetableViewModel
+import com.example.shattle.ui.timetable.TimetableViewModel
 
 class TimetableFragment : Fragment() {
 

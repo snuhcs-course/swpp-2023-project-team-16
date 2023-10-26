@@ -1,9 +1,7 @@
 package com.example.shattle.ui.circular
 
 import android.util.Log
-import android.widget.Toast
 import com.example.shattle.data.models.CircularBus
-import com.example.shattle.data.models.ResponseWaitingLine
 import com.example.shattle.network.ServiceCreator
 import com.google.android.gms.maps.model.LatLng
 import retrofit2.Call

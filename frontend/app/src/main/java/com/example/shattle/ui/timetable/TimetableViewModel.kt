@@ -1,4 +1,4 @@
-package com.example.shattle.ui.lostnfound
+package com.example.shattle.ui.timetable
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
