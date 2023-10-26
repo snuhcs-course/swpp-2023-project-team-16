@@ -13,10 +13,10 @@
         android:icon="@drawable/ic_circular"
         android:title="@string/title_circular" />
 
-    <item
-        android:id="@+id/navigation_lostnfound"
-        android:icon="@drawable/ic_lostnfound"
-        android:title="@string/title_lostnfound" />
+<!--    <item-->
+<!--        android:id="@+id/navigation_lostnfound"-->
+<!--        android:icon="@drawable/ic_lostnfound"-->
+<!--        android:title="@string/title_lostnfound" />-->
 
     <item
         android:id="@+id/navigation_timetable"
