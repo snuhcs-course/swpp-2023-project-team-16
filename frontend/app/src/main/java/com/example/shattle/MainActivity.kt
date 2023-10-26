@@ -1,21 +1,13 @@
 package com.example.shattle
 
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.add
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.shattle.databinding.ActivityMainBinding
-import com.example.shattle.ui.info.InfoFragment
+import com.example.shattle.ui.info.InfoDialog
 
 class MainActivity : AppCompatActivity() {
 
@@ -49,10 +41,10 @@ class MainActivity : AppCompatActivity() {
             val existingFragmentInfo = supportFragmentManager.findFragmentByTag("InfoFragment")
             // 다른 팝업이 닫혀 있는 경우에만 열기
             if (existingFragmentInfo == null) {
-                val infoFragment = InfoFragment()
+                val infoDialog = InfoDialog()
                 val transaction = supportFragmentManager.beginTransaction()
                 // infoFragment 가 표시될 위치 설정 (infoContainer), tag 설정(tag 로 fragment 가 열려있는지 확인 가능)
-                transaction.add(R.id.infoContainer, infoFragment, "InfoFragment")
+                transaction.add(R.id.infoContainer, infoDialog, "InfoFragment")
                 // transaction 은 생성 할 때마다 commit 해주기
                 transaction.commit()
             }

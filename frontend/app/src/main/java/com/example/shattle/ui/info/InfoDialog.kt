@@ -1,27 +1,24 @@
 package com.example.shattle.ui.info
 
 import android.content.Context
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.DialogFragment
-import com.example.shattle.R
-import com.example.shattle.databinding.FragmentInfoBinding
+import com.example.shattle.databinding.DialogInfoBinding
 
-class InfoFragment : DialogFragment() {
+class InfoDialog : DialogFragment() {
 
-    private var _binding: FragmentInfoBinding? = null
+    private var _binding: DialogInfoBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentInfoBinding.inflate(layoutInflater, container, false)
+        _binding = DialogInfoBinding.inflate(layoutInflater, container, false)
 
 
         binding.closeImageButton.setOnClickListener{
