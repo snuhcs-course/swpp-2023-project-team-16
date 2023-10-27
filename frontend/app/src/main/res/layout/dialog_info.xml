@@ -6,7 +6,7 @@
     android:background="@color/gray_400_transparent"
     android:layout_marginBottom="@dimen/navigation_height"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.info.InfoFragment">
+    tools:context=".ui.info.InfoDialog">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/popUpContainer"
