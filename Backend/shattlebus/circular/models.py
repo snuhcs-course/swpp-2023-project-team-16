@@ -20,10 +20,4 @@ class CircularBus(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class CircularBusStop(models.Model):
-    name = models.CharField(max_length=255)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
-
-
-
 

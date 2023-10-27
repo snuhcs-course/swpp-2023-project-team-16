@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'circular',
     'driverapp',
     'timetable',
-    'lostitem'
 ]
 
 MIDDLEWARE = [
