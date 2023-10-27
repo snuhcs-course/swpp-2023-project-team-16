@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-
     <color name="title_text">@color/dark</color>
+
+    <!-- staiton -->
+    <color name="station_text_view_color">@color/dark</color>
 
     <!-- refresh button -->
     <color name="on_refresh_button">@color/creme_white</color>
