@@ -6,7 +6,6 @@ import json
 import time
 
 from .models import CurrentLine
-from .models import Congestion
 
 HOUR_SHUTTLE_START = 7
 HOUR_SHUTTLE_END = 19
@@ -84,21 +83,6 @@ class RetrieveWaitingTimeView(View):
 
         return hour_next_bus, minute_next_bus
 
-
-class RetrieveCongestionView(View):
-
-    def get(self, request):
-        day = request.GET['day']
-        congestion_list = Congestion.objects.filter(day=day).values()
-        response = {}
-        for congestion in congestion_list:
-            congestion_data = {"time_slot_start": str(congestion['time_slot_start']),
-                               "time_slot_end": str(congestion['time_slot_end']),
-                               "average_people_waiting": congestion['average_people_waiting']
-                               }
-            response[congestion['id']] = congestion_data
-
-        return HttpResponse(json.dumps(response))
 
 
 # Exception when there is no available shuttle

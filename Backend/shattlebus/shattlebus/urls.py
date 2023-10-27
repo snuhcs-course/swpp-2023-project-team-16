@@ -22,5 +22,4 @@ urlpatterns = [
     path('dropoff/', include('dropoff.urls')),
     path('circular/', include('circular.urls')),
     path('driverapp/', include('driverapp.urls')),
-    path('lostitem/', include('lostitem.urls')),
 ]
