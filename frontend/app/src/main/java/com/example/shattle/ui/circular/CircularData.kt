@@ -16,6 +16,8 @@ data class CircularData(val isCreated: Boolean) {
 
     var currentBusLocations = listOf<CircularBus>()
 
+    var dateTimeString = "2023-01-23T12:34:56Z"
+
     val dummy = listOf(
         listOf(
             CircularBus(UUID.randomUUID(), LatLng(37.46577, 126.9484)),
