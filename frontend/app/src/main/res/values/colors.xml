@@ -2,8 +2,13 @@
 <resources>
 
 
-    <color name="title_text">@color/black</color>
+    <color name="title_text">@color/dark</color>
 
+    <!-- refresh button -->
+    <color name="on_refresh_button">@color/creme_white</color>
+    <color name="updated_time">@color/dark</color>
+
+    <!-- info button -->
     <color name="gray_400_transparent">#80AAAAAA</color>
 
     <color name="green_100">#DAEDD5</color>

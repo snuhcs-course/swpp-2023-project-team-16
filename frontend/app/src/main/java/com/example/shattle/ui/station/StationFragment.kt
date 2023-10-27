@@ -13,6 +13,9 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import com.example.shattle.R
 import com.example.shattle.databinding.FragmentStationBinding
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 
 class StationFragment : Fragment() {
@@ -41,6 +44,7 @@ class StationFragment : Fragment() {
         refreshData()
         changeView()
         refreshView()
+        updateUpdatedDateTime()
 
         return root
     }
@@ -87,12 +91,22 @@ class StationFragment : Fragment() {
         binding.numMinute.text = "예상 대기시간: ${waitingTimeInMin}분"
     }
 
+    fun updateUpdatedDateTime() {
+        var inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val dateTime = inputFormat.parse(stationData.dateTimeString)
+
+        val outputFormat = SimpleDateFormat("MM.dd HH:mm", Locale.getDefault())
+        binding.updatedTimeTextView.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
+    }
+
     fun refreshView() {
 
         // 1. Refresh manually
         binding.refreshButton.setOnClickListener {
             refreshData()
             changeView()
+            updateUpdatedDateTime()
         }
 
         // 2. Refresh automatically
@@ -100,6 +114,7 @@ class StationFragment : Fragment() {
             try {
                 refreshData()
                 changeView()
+                updateUpdatedDateTime()
 
             } catch (e: Exception) {
                 e.printStackTrace()

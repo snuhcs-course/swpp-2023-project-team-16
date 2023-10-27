@@ -13,6 +13,8 @@ data class StationData(val isCreated: Boolean) {
     var numberOfNeededBus: Int? = null
     var waitingTimeInMin: Int? = null
 
+    var dateTimeString = "2023-01-23T12:34:56Z"
+
     data class WaitingData(val p: Int, val b: Int, val t: Int)
 
     private var cnt = 0
