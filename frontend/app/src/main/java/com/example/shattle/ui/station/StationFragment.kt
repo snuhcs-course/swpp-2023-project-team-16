@@ -9,7 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
+import com.example.shattle.R
 import com.example.shattle.databinding.FragmentStationBinding
 
 
@@ -37,55 +39,67 @@ class StationFragment : Fragment() {
         val root: View = binding.root
 
         refreshData()
-        showWaitingData()
+        changeView()
         refreshView()
 
         return root
     }
 
     private fun refreshData() {
-        stationData.refreshWaitingTimeData2()
+        stationData.refreshWaitingTimeData()
 
         numberOfPeopleWaitingLine = stationData.numberOfPeopleWaitingLine
         numberOfNeededBus = stationData.numberOfNeededBus
         waitingTimeInMin = stationData.waitingTimeInMin
     }
 
-    private fun showWaitingData() {
+    fun changeView() {
 
         if (numberOfPeopleWaitingLine == null || numberOfNeededBus == null || waitingTimeInMin == null) {
-            Toast.makeText(activity, "정보를 받아오는 중 에러가 발생했습니다", Toast.LENGTH_SHORT).show()
-            binding.numPeople.text = "현재 # 명 대기 중입니다."
-            binding.numOthers.text =
-                "예상 대기시간: # 분\n탈 수 있는 버스: # 번째 버스"
+            Toast.makeText(activity, R.string.toast_refresh_error, Toast.LENGTH_SHORT).show()
         } else {
-            changePeopleImage(numberOfNeededBus!!, numberOfPeopleWaitingLine!!)
-            binding.numPeople.text = "현재 $numberOfPeopleWaitingLine 명 대기 중입니다."
-            binding.numOthers.text =
-                "예상 대기시간: $waitingTimeInMin 분\n탈 수 있는 버스: $numberOfNeededBus 번째 버스"
+            changeVisualView(numberOfPeopleWaitingLine!!, numberOfNeededBus!!)
+            changeTextView()
         }
     }
 
-    private fun changePeopleImage(buses: Int, numPeople: Int) {
-        val imageViews = listOf(binding.imageView1, binding.imageView2, binding.imageView3)
-        imageViews.forEachIndexed { index, imageView ->
-            imageView.setColorFilter(if (index < numPeople && index < buses) Color.BLACK else Color.GRAY)
-        }
+    fun changeVisualView(numPeople: Int, buses: Int) {
+        val imageView = binding.manImageView
+
+        val constraintLayout = binding.visualViewLayout
+
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(constraintLayout)
+
+        // Change the bias values as desired.
+        var bias = (numPeople / 120.0).toFloat()
+        if(bias < 0.1)
+            bias = 0.15F
+        constraintSet.setHorizontalBias(R.id.manImageView, (bias))
+        // Apply the updated constraints to the ConstraintLayout.
+        constraintSet.applyTo(constraintLayout)
+
     }
 
-    private fun refreshView() {
+    fun changeTextView() {
+        binding.numPeople.text = "현재 ${numberOfPeopleWaitingLine}명 대기 중입니다."
+        binding.numBus.text = "다음 ${numberOfNeededBus}번째 버스 탑승 가능합니다."
+        binding.numMinute.text = "예상 대기시간: ${waitingTimeInMin}분"
+    }
+
+    fun refreshView() {
 
         // 1. Refresh manually
         binding.refreshButton.setOnClickListener {
             refreshData()
-            showWaitingData()
+            changeView()
         }
 
         // 2. Refresh automatically
         Handler(Looper.getMainLooper()).postDelayed({
             try {
                 refreshData()
-                showWaitingData()
+                changeView()
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -96,14 +110,6 @@ class StationFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
-        val supportFragmentManager = requireActivity().supportFragmentManager
-        val existingFragment = supportFragmentManager.findFragmentByTag("CongestionGraphFragment")
-        if (existingFragment != null) {
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.remove(existingFragment)
-            transaction.commit()
-        }
         _binding = null
     }
 
