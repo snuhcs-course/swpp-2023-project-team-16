@@ -17,11 +17,11 @@
         android:label="@string/title_circular"
         tools:layout="@layout/fragment_circular" />
 
-    <fragment
-        android:id="@+id/navigation_lostnfound"
-        android:name="com.example.shattle.ui.lostnfound.LostnfoundFragment"
-        android:label="@string/title_lostnfound"
-        tools:layout="@layout/fragment_lostnfound" />
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_lostnfound"-->
+<!--        android:name="com.example.shattle.ui.lostnfound.LostnfoundFragment"-->
+<!--        android:label="@string/title_lostnfound"-->
+<!--        tools:layout="@layout/fragment_lostnfound" />-->
 
     <fragment
         android:id="@+id/navigation_timetable"

@@ -8,18 +8,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModelProvider
-import com.example.shattle.MainActivity
-import com.example.shattle.R
 import com.example.shattle.databinding.FragmentStationBinding
-import com.example.shattle.ui.congestion.CongestionGraphFragment
-import com.google.gson.annotations.SerializedName
 
 
 class StationFragment : Fragment() {
@@ -48,8 +39,6 @@ class StationFragment : Fragment() {
         refreshData()
         showWaitingData()
         refreshView()
-
-        showChart(requireActivity().supportFragmentManager)
 
         return root
     }
@@ -103,27 +92,6 @@ class StationFragment : Fragment() {
                 Log.e("MyLogChecker", "error: $e")
             }
         }, 5000) // TODO: change to 10000
-    }
-
-    private fun showChart(
-        supportFragmentManager: FragmentManager
-    ) {
-
-        binding.chartButton.setOnClickListener {
-            val existingFragmentChart =
-                supportFragmentManager.findFragmentByTag("CongestionGraphFragment")
-            val existingFragmentInfo = supportFragmentManager.findFragmentByTag("InfoFragment")
-            if (existingFragmentChart == null && existingFragmentInfo == null) {
-                val congestionGraphFragment = CongestionGraphFragment()
-                val transaction = supportFragmentManager.beginTransaction()
-                transaction.add(
-                    R.id.congestionGraphContainer,
-                    congestionGraphFragment,
-                    "CongestionGraphFragment"
-                )
-                transaction.commit()
-            }
-        }
     }
 
     override fun onDestroyView() {
