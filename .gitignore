@@ -391,6 +391,7 @@ pip-selfcheck.json
 # End of https://www.toptal.com/developers/gitignore/api/django,python,venv,pycharm
 
 .idea/*
+/Backend/.idea
 
 # /frontend
 /frontend/*.iml
