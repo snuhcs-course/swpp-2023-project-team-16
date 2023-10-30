@@ -4,7 +4,6 @@ import android.content.Context
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Bundle
 import androidx.core.content.ContextCompat
 import android.Manifest
 import android.content.pm.PackageManager
@@ -22,7 +21,8 @@ class GPSTracker(private val context: Context) : LocationListener {
         // Check if the ACCESS_FINE_LOCATION permission is granted
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
-            locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, this)
+            locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000L, 10f, this)
+            location = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         } else {
             // Handle the situation when permission is not granted (e.g., show a message to the user)
         }
@@ -36,12 +36,11 @@ class GPSTracker(private val context: Context) : LocationListener {
         location = newLocation
     }
 
-    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-    }
-
     override fun onProviderEnabled(provider: String) {
+        super.onProviderEnabled(provider)
     }
 
     override fun onProviderDisabled(provider: String) {
+        super.onProviderDisabled(provider)
     }
 }
