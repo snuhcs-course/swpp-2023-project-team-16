@@ -32,17 +32,4 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/responseText"
-        android:layout_width="370dp"
-        android:layout_height="279dp"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="130dp"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.528"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
