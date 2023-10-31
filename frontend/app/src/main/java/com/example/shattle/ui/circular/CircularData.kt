@@ -16,6 +16,8 @@ data class CircularData(val isCreated: Boolean) {
 
     var currentBusLocations = listOf<CircularBus>()
 
+    var dateTimeString = "2023-01-23T12:34:56Z"
+
     val dummy = listOf(
         listOf(
             CircularBus(UUID.randomUUID(), LatLng(37.46577, 126.9484)),
@@ -29,10 +31,29 @@ data class CircularData(val isCreated: Boolean) {
             CircularBus(UUID.randomUUID(), LatLng(37.46046, 126.9490)),
             CircularBus(UUID.randomUUID(), LatLng(37.45408, 126.9539)),
         ),
+        listOf(
+            CircularBus(UUID.randomUUID(), LatLng(37.46046, 126.9490)),
+            CircularBus(UUID.randomUUID(), LatLng(37.45408, 126.9539)),
+        ),
+        listOf(
+            CircularBus(UUID.randomUUID(), LatLng(37.46046, 126.9490)),
+            CircularBus(UUID.randomUUID(), LatLng(37.45408, 126.9539)),
+        ),
+        listOf(
+            CircularBus(UUID.randomUUID(), LatLng(37.46046, 126.9490)),
+            CircularBus(UUID.randomUUID(), LatLng(37.45408, 126.9539)),
+        ),
 
 
     )
     var cnt = 0;
+    fun refreshCurrentBusLocation() {
+        if(cnt >= dummy.size)
+            currentBusLocations = emptyList()
+        else
+            currentBusLocations = dummy[cnt++]
+    }
+
     fun refreshCurrentBusLocation2() {
         val call: Call<List<CircularBus>> = ServiceCreator.apiService.getCircularLocation()
 
@@ -57,11 +78,6 @@ data class CircularData(val isCreated: Boolean) {
                 Log.e("Circular", "error: $t")
             }
         })
-        if(cnt >= dummy.size){
-            currentBusLocations = emptyList()
-            return
-        }
-        currentBusLocations = dummy.get(cnt++)
     }
 
     val busStops = listOf(

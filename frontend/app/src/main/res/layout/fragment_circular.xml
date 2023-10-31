@@ -43,13 +43,27 @@
     <Button
         android:id="@+id/refreshButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_height="@dimen/refresh_btn_height"
+        android:background="@drawable/bck_refresh_button_rounded"
         android:text="버스 위치 업데이트"
-        android:textColor="@color/white"
+        android:textSize="@dimen/refresh_btn_text_size"
+        android:textStyle="normal"
+        android:drawableLeft="@drawable/btn_refresh"
+        android:drawableTint="@color/on_refresh_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="@dimen/refresh_btn_margin_bottom"/>
+
+    <TextView
+        android:id="@+id/updatedTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="최종 업데이트 - MM.dd hh.mm"
+        android:textSize="@dimen/refresh_text_updated_time"
+        android:textColor="@color/updated_time"
+        app:layout_constraintStart_toStartOf="@id/refreshButton"
+        app:layout_constraintEnd_toEndOf="@id/refreshButton"
+        app:layout_constraintTop_toBottomOf="@id/refreshButton"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

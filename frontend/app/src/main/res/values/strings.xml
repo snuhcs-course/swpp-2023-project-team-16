@@ -5,6 +5,10 @@
     <string name="title_lostnfound">분실물센터</string>
     <string name="title_timetable">시간표</string>
 
+    <!-- refresh -->
+    <string name="toast_refresh_error">정보를 받아오는 중 에러가 발생했습니다.</string>
+
+
     <string name="info_content"> 분실물 등 신고·접수·반환 :\n청원경찰 사무실\n(문화관 73동, 880–8112, 8119)</string>
 
 </resources>

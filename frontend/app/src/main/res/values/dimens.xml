@@ -11,6 +11,17 @@
     <dimen name="title_size">30sp</dimen>
     <dimen name="title_marzin_left">20dp</dimen>
 
+    <!-- station -->
+    <dimen name="station_text_data_size_small">20sp</dimen>
+    <dimen name="station_text_data_size_big">25sp</dimen>
+
+    <!-- refresh button -->
+    <dimen name="refresh_btn_height">38dp</dimen>
+    <dimen name="refresh_btn_margin_bottom">30dp</dimen>
+    <dimen name="refresh_btn_margin_end">30dp</dimen>
+    <dimen name="refresh_btn_text_size">15sp</dimen>
+    <dimen name="refresh_text_updated_time">12sp</dimen>
+
     <!-- PopUp -->
     <dimen name="pop_up_margin_horizontal">30dp</dimen>
     <dimen name="pop_up_corner_radius">20dp</dimen>
@@ -18,15 +29,9 @@
     <dimen name="pop_up_margin_bottom">50dp</dimen>
     <dimen name="pop_up_margin_top">150dp</dimen>
     <dimen name="pop_up_button_margin">5dp</dimen>
-
-    <!-- refresh button -->
-    <dimen name="refresh_btn_margin_bottom">30dp</dimen>
-    <dimen name="refresh_btn_margin_end">30dp</dimen>
     
     <!-- extra -->
     <dimen name="button_size">50dp</dimen>
     <dimen name="card_view_elevation">5dp</dimen>
 
-
-    <dimen name="waiting_people_size">40dp</dimen>
 </resources>

@@ -21,6 +21,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 class CircularFragment : Fragment() {
 
@@ -52,6 +55,7 @@ class CircularFragment : Fragment() {
             customizeGoogleMap()
             refreshData()
             showCurrentLocationsOfBus()
+            updateUpdatedDateTime()
             refreshView()
         })
 
@@ -82,7 +86,7 @@ class CircularFragment : Fragment() {
 
         // 기본 마커로도 할 수 있고, 마커 이미지 커스텀 가능 (20~50 픽셀)
         val customMarkerIcon =
-            BitmapDescriptorFactory.fromResource(R.drawable.img_bus_stop_marker)
+            BitmapDescriptorFactory.fromResource(R.drawable.img_circular_bus_stop)
 
         for (busStop in circularData.busStops) {
             googleMap?.addMarker(
@@ -118,14 +122,14 @@ class CircularFragment : Fragment() {
         }
 
         if (currentBusLocations == null || currentBusLocations.size == 0) {
-            Toast.makeText(activity, "정보를 받아오는 중 에러가 발생했습니다", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, R.string.toast_refresh_error, Toast.LENGTH_SHORT).show()
         } else {
             // Add bus markers on the map ("currentBusLocations" holds the locations)
             for (circularBus in currentBusLocations) {
                 val busMarker = googleMap?.addMarker(
                     MarkerOptions()
                         .position(circularBus.location) // Set the bus's initial position
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.img_bus)) // Use a custom bus icon
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.img_circular_bus)) // Use a custom bus icon
                     // 20~50픽셀
                 )
                 if (busMarker != null) {
@@ -135,12 +139,22 @@ class CircularFragment : Fragment() {
         }
     }
 
+    fun updateUpdatedDateTime() {
+        var inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val dateTime = inputFormat.parse(circularData.dateTimeString)
+
+        val outputFormat = SimpleDateFormat("MM.dd HH:mm", Locale.getDefault())
+        binding.updatedTimeTextView.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
+    }
+
     private fun refreshView() {
 
         // 1. Refresh manually
         binding.refreshButton.setOnClickListener {
             refreshData()
             showCurrentLocationsOfBus()
+            updateUpdatedDateTime()
         }
 
         // 2. Refresh automatically
@@ -149,6 +163,7 @@ class CircularFragment : Fragment() {
             try {
                 refreshData()
                 showCurrentLocationsOfBus()
+                updateUpdatedDateTime()
             } catch (e: Exception) {
                 e.printStackTrace()
                 Log.e("MyLogChecker", "error: $e")
@@ -158,7 +173,7 @@ class CircularFragment : Fragment() {
 
     }
     private fun refreshData() {
-        circularData.refreshCurrentBusLocation2()
+        circularData.refreshCurrentBusLocation()
         currentBusLocations = circularData.currentBusLocations
 
     }
