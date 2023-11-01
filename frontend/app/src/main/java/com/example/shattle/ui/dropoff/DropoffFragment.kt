@@ -1,6 +1,5 @@
-package com.example.shattle.ui.station
+package com.example.shattle.ui.dropoff
 
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,26 +7,25 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import com.example.shattle.R
-import com.example.shattle.databinding.FragmentStationBinding
+import com.example.shattle.databinding.FragmentDropoffBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 
 
-class StationFragment : Fragment() {
+class DropoffFragment : Fragment() {
 
 
-    private var _binding: FragmentStationBinding? = null
+    private var _binding: FragmentDropoffBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private val stationData = StationData(true)
+    private val dropoffData = DropoffData(true)
     private var numberOfPeopleWaitingLine: Int? = null
     private var numberOfNeededBus: Int? = null
     private var waitingTimeInMin: Int? = null
@@ -38,7 +36,7 @@ class StationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentStationBinding.inflate(inflater, container, false)
+        _binding = FragmentDropoffBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         refreshData()
@@ -50,17 +48,18 @@ class StationFragment : Fragment() {
     }
 
     private fun refreshData() {
-        stationData.refreshWaitingTimeData()
+        dropoffData.refreshWaitingTimeData()
 
-        numberOfPeopleWaitingLine = stationData.numberOfPeopleWaitingLine
-        numberOfNeededBus = stationData.numberOfNeededBus
-        waitingTimeInMin = stationData.waitingTimeInMin
+        numberOfPeopleWaitingLine = dropoffData.numberOfPeopleWaitingLine
+        numberOfNeededBus = dropoffData.numberOfNeededBus
+        waitingTimeInMin = dropoffData.waitingTimeInMin
     }
 
     fun changeView() {
 
         if (numberOfPeopleWaitingLine == null || numberOfNeededBus == null || waitingTimeInMin == null) {
-            Toast.makeText(activity, R.string.toast_refresh_error, Toast.LENGTH_SHORT).show()
+            //Toast.makeText(activity, R.string.toast_refresh_error, Toast.LENGTH_SHORT).show()
+            //TODO change
         } else {
             changeVisualView(numberOfPeopleWaitingLine!!, numberOfNeededBus!!)
             changeTextView()
@@ -94,7 +93,7 @@ class StationFragment : Fragment() {
     fun updateUpdatedDateTime() {
         var inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
         inputFormat.timeZone = TimeZone.getTimeZone("UTC")
-        val dateTime = inputFormat.parse(stationData.dateTimeString)
+        val dateTime = inputFormat.parse(dropoffData.dateTimeString)
 
         val outputFormat = SimpleDateFormat("MM.dd HH:mm", Locale.getDefault())
         binding.updatedTimeTextView.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
@@ -120,7 +119,7 @@ class StationFragment : Fragment() {
                 e.printStackTrace()
                 Log.e("MyLogChecker", "error: $e")
             }
-        }, 5000) // TODO: change to 10000
+        }, 10000) // TODO: change to 10000
     }
 
     override fun onDestroyView() {

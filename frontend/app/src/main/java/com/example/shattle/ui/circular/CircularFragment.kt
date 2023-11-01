@@ -169,7 +169,7 @@ class CircularFragment : Fragment() {
                 Log.e("MyLogChecker", "error: $e")
             }
 
-        }, 5000) // TODO: change to 10000
+        }, 10000) // TODO: change to 10000
 
     }
     private fun refreshData() {

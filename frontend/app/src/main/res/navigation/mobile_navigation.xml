@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_station"
-        android:name="com.example.shattle.ui.station.StationFragment"
+        android:name="com.example.shattle.ui.dropoff.DropoffFragment"
         android:label="@string/title_station"
-        tools:layout="@layout/fragment_station" />
+        tools:layout="@layout/fragment_dropoff" />
 
     <fragment
         android:id="@+id/navigation_circular"

@@ -1,13 +1,13 @@
-package com.example.shattle.ui.station
+package com.example.shattle.ui.dropoff
 
 import android.util.Log
-import com.example.shattle.data.models.ResponseWaitingLine
+import com.example.shattle.data.models.CurrentLine
 import com.example.shattle.network.ServiceCreator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-data class StationData(val isCreated: Boolean) {
+data class DropoffData(val isCreated: Boolean) {
 
     var numberOfPeopleWaitingLine: Int? = null
     var numberOfNeededBus: Int? = null
@@ -19,29 +19,16 @@ data class StationData(val isCreated: Boolean) {
 
     private var cnt = 0
     private val dummy = listOf(
-        WaitingData(10, 1, 1),
-        WaitingData(20, 1, 1),
-        WaitingData(30, 1, 2),
-        WaitingData(40, 2, 6),
-        WaitingData(50, 2, 6),
-        WaitingData(60, 2, 6),
-        WaitingData(70, 2, 6),
-        WaitingData(80, 3, 11),
-        WaitingData(90, 3, 11),
-        WaitingData(100, 3, 11),
-        WaitingData(110, 3, 11),
-        WaitingData(0, 0, 0),
-        WaitingData(0, 0, 0),
-        WaitingData(0, 0, 0),
-        WaitingData(0, 0, 0),
-        WaitingData(0, 0, 0),
-        WaitingData(0, 0, 0),
-        WaitingData(0, 0, 0),
-        WaitingData(0, 0, 0),
-        WaitingData(0, 0, 0),
+        WaitingData(30, 1, 4),
+        WaitingData(70, 2, 8),
+        WaitingData(70, 2, 8),
+        WaitingData(70, 2, 8),
+        WaitingData(70, 2, 8),
+        WaitingData(70, 2, 8),
+        WaitingData(70, 2, 8),
     )
 
-    fun refreshWaitingTimeData() {
+    fun refreshWaitingTimeData2() {
         if (cnt >= dummy.size) {
             numberOfPeopleWaitingLine = null
             numberOfNeededBus = null
@@ -54,32 +41,41 @@ data class StationData(val isCreated: Boolean) {
         waitingTimeInMin = data.t
     }
 
-    fun refreshWaitingTimeData2() {
-        val call: Call<ResponseWaitingLine> = ServiceCreator.apiService.getWaitingLine()
+    fun refreshWaitingTimeData() {
+        Log.e("MyLogChecker", "@@ start refreshWaitingTimeData()")
 
-        call.enqueue(object : Callback<ResponseWaitingLine> {
+        val call: Call<CurrentLine> = ServiceCreator.apiService.getCurrentLine()
+        Log.e("MyLogChecker", "@@ val call: Call<ResponseWaitingLine> = ServiceCreator.apiService.getWaitingLine()")
+
+        Log.e("MyLogChecker", "# start call.enqueue():")
+        call.enqueue(object : Callback<CurrentLine> {
             override fun onResponse(
-                call: Call<ResponseWaitingLine>,
-                response: Response<ResponseWaitingLine>
+                call: Call<CurrentLine>,
+                response: Response<CurrentLine>
             ) {
+                Log.e("MyLogChecker", "## start onResponse():")
+
                 if (response.isSuccessful) {
+                    Log.e("MyLogChecker", "### response is successful")
                     val body = response.body()
                     numberOfPeopleWaitingLine = body?.numberOfPeopleWaiting
                     numberOfNeededBus = body?.numberOfNeededBuses
                     waitingTimeInMin = body?.waitingTimeInMin
                 } else {
-                    Log.e("MyLogChecker", "error: response is not successful")
+                    Log.e("MyLogChecker", "### response is not successful\n\tresponse.code(): ${response.code().toString()}")
                     numberOfPeopleWaitingLine = null
                     numberOfNeededBus = null
                     waitingTimeInMin = null
                 }
+                Log.e("MyLogChecker", "## end onResponse():")
             }
 
-            override fun onFailure(call: Call<ResponseWaitingLine>, t: Throwable) {
-                Log.e("MyLogChecker", "error: onFailure\n\t$t")
+            override fun onFailure(call: Call<CurrentLine>, t: Throwable) {
+                Log.e("MyLogChecker", "## start onFailure)")
                 numberOfPeopleWaitingLine = null
                 numberOfNeededBus = null
                 waitingTimeInMin = null
+                Log.e("MyLogChecker", "## end onFailure\n\t$t")
             }
         })
     }
