@@ -18,23 +18,46 @@
         app:cardCornerRadius="@dimen/pop_up_corner_radius"
         app:cardElevation="@dimen/card_view_elevation">
 
-        <ImageButton
-            android:id="@+id/closeImageButton"
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
-            android:layout_margin="@dimen/pop_up_button_margin"
-            android:background="@color/transparent"
-            android:src="@drawable/btn_arrow_back"
-            app:tint="@color/gray_400"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="70dp"
-            android:layout_marginEnd="20dp"
-            android:text="@string/info_content"
-            android:textSize="20sp" />
+            <ImageButton
+                android:id="@+id/closeImageButton"
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                android:layout_margin="@dimen/pop_up_button_margin"
+                android:background="@color/transparent"
+                android:src="@drawable/btn_arrow_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/gray_400"/>
+
+            <TextView
+                android:id="@+id/infoTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/info_content"
+                android:textSize="15sp"
+                app:layout_constraintTop_toBottomOf="@id/closeImageButton"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <ImageView
+                android:id="@+id/infoImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="108dp"
+                android:scaleType="fitXY"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
+                android:src="@drawable/img_info_map"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.cardview.widget.CardView>
 
