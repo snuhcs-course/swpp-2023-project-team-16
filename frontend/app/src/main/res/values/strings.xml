@@ -9,6 +9,12 @@
     <string name="toast_refresh_error">정보를 받아오는 중 에러가 발생했습니다.</string>
 
 
-    <string name="info_content"> 분실물 등 신고·접수·반환 :\n청원경찰 사무실\n(문화관 73동, 880–8112, 8119)</string>
+    <string name="info_content">
+        분실물 등 신고·접수·반환 : \n
+        문화관 73동, 880–8112, 8119\n
+        \n
+        시설관리과: \n
+        행정관 60동 \n
+        02-880-5131~2, 5116, 5228</string>
 
 </resources>
