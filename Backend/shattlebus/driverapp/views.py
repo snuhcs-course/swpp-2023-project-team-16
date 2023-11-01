@@ -44,8 +44,14 @@ class UpdateCircularBusLocationView(View):
         location_data = Location(latitude=latitude, longitude=longitude)
         location_data.save()
 
-        CircularBus.objects\
-            .filter(license_plate=license_plate)\
-            .update(location=location_data, is_running=True, is_tracked=True)
+        # If there's no bus with the license plate
+        if CircularBus.objects\
+                .filter(license_plate=license_plate)\
+                .update(location=location_data, is_running=True, is_tracked=True) == 0:
+            new_bus_data = CircularBus(license_plate=license_plate,
+                                       location=location_data,
+                                       is_running=True,
+                                       is_tracked=True)
+            new_bus_data.save()
 
         return HttpResponse()
