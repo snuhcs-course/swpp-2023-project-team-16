@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_station">
+    app:startDestination="@+id/navigation_dropoff">
 
     <fragment
-        android:id="@+id/navigation_station"
+        android:id="@+id/navigation_dropoff"
         android:name="com.example.shattle.ui.dropoff.DropoffFragment"
         android:label="@string/title_station"
         tools:layout="@layout/fragment_dropoff" />
