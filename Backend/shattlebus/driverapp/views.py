@@ -1,5 +1,7 @@
 from django.views import View
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 import json
 
@@ -8,7 +10,6 @@ from circular.models import Location
 
 
 # Create your views here.
-
 
 class RetrieveCircularBusView(View):
 
@@ -30,3 +31,27 @@ class RetrieveCircularBusView(View):
                     }
 
         return HttpResponse(json.dumps(response))
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class UpdateCircularBusLocationView(View):
+
+    def put(self, request):
+        license_plate = request.GET['license_plate']
+        latitude = request.GET['latitude']
+        longitude = request.GET['longitude']
+
+        location_data = Location(latitude=latitude, longitude=longitude)
+        location_data.save()
+
+        # If there's no bus with the license plate
+        if CircularBus.objects\
+                .filter(license_plate=license_plate)\
+                .update(location=location_data, is_running=True, is_tracked=True) == 0:
+            new_bus_data = CircularBus(license_plate=license_plate,
+                                       location=location_data,
+                                       is_running=True,
+                                       is_tracked=True)
+            new_bus_data.save()
+
+        return HttpResponse()
