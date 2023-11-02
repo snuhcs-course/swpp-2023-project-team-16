@@ -1,5 +1,6 @@
 package com.example.shattle.ui.dropoff
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -7,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import com.example.shattle.R
@@ -16,6 +18,7 @@ import java.util.Locale
 import java.util.TimeZone
 
 
+
 class DropoffFragment : Fragment() {
 
 
@@ -23,12 +26,12 @@ class DropoffFragment : Fragment() {
 
     // This property is only valid between onCreateView and
     // onDestroyView.
-    private val binding get() = _binding!!
-
-    private val dropoffData = DropoffData(true)
-    private var numberOfPeopleWaitingLine: Int? = null
-    private var numberOfNeededBus: Int? = null
-    private var waitingTimeInMin: Int? = null
+    val binding get() = _binding!!
+    val dropoffData = DropoffData(true)
+    var numberOfPeopleWaitingLine: Int? = null
+    var numberOfNeededBus: Int? = null
+    var waitingTimeInMin: Int? = null
+    var dateTimeString: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,49 +42,50 @@ class DropoffFragment : Fragment() {
         _binding = FragmentDropoffBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        refreshData()
+        dropoffData.refreshCurrentLineData()
         changeView()
+
         refreshView()
-        updateUpdatedDateTime()
 
         return root
     }
 
-    private fun refreshData() {
-        dropoffData.refreshWaitingTimeData()
+    fun refreshData() {
+        dropoffData.refreshCurrentLineData()
 
+        // data class 의 전역변수를 fragment 전역변수에 저장
         numberOfPeopleWaitingLine = dropoffData.numberOfPeopleWaitingLine
         numberOfNeededBus = dropoffData.numberOfNeededBus
         waitingTimeInMin = dropoffData.waitingTimeInMin
+        dateTimeString = dropoffData.dateTimeString
     }
 
     fun changeView() {
 
-        if (numberOfPeopleWaitingLine == null || numberOfNeededBus == null || waitingTimeInMin == null) {
-            //Toast.makeText(activity, R.string.toast_refresh_error, Toast.LENGTH_SHORT).show()
-            //TODO change
-        } else {
-            changeVisualView(numberOfPeopleWaitingLine!!, numberOfNeededBus!!)
+        // 서버 호출이 성공한 경우에만 화면 업데이트, 호출 실패 시 toast 만 띄워주고 화면 업데이트 X
+        if (dropoffData.isSuccessCall) {
+            changeVisualView()
             changeTextView()
+            updateUpdatedDateTime()
+        } else {
+            Toast.makeText(activity, R.string.toast_refresh_error, Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun changeVisualView(numPeople: Int, buses: Int) {
-        val imageView = binding.manImageView
-
+    fun changeVisualView() {
         val constraintLayout = binding.visualViewLayout
 
         val constraintSet = ConstraintSet()
         constraintSet.clone(constraintLayout)
 
         // Change the bias values as desired.
-        var bias = (numPeople / 120.0).toFloat()
-        if(bias < 0.1)
+        var bias = (numberOfPeopleWaitingLine!! / 120.0).toFloat()
+        // 정류장 이미지랑 겹쳐서 최소 bias 0.15로 설정
+        if(bias < 0.15F)
             bias = 0.15F
         constraintSet.setHorizontalBias(R.id.manImageView, (bias))
         // Apply the updated constraints to the ConstraintLayout.
         constraintSet.applyTo(constraintLayout)
-
     }
 
     fun changeTextView() {
@@ -105,7 +109,6 @@ class DropoffFragment : Fragment() {
         binding.refreshButton.setOnClickListener {
             refreshData()
             changeView()
-            updateUpdatedDateTime()
         }
 
         // 2. Refresh automatically
@@ -113,13 +116,12 @@ class DropoffFragment : Fragment() {
             try {
                 refreshData()
                 changeView()
-                updateUpdatedDateTime()
 
             } catch (e: Exception) {
                 e.printStackTrace()
                 Log.e("MyLogChecker", "error: $e")
             }
-        }, 10000) // TODO: change to 10000
+        }, 30000)
     }
 
     override fun onDestroyView() {
