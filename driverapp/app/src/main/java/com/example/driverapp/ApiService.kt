@@ -1,9 +1,13 @@
 package com.example.driverapp
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Query
 
 interface ApiService {
-    @POST("buses/submit") // Replace with your actual endpoint
-    fun submitGPSData(@Body gpsData: GPSData): Call<Void>
+    @PUT("driverapp/update") // Replace with your actual endpoint
+    fun submitGPSData(
+        @Query("license_plate") licensePlate: String,
+        @Query("latitude") latitude: Double,
+        @Query("longitude") longitude: Double
+    ): Call<Void>
 }

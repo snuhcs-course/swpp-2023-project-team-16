@@ -9,20 +9,21 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.os.Handler
 import android.widget.Button
-import java.text.SimpleDateFormat
-import java.util.*
+import android.widget.EditText
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
+private const val BASE_URL = "http://54.180.118.50:8000"
 class MainActivity : AppCompatActivity() {
 
     private lateinit var startStopButton: Button
     private lateinit var gpsTracker: GPSTracker
+    private lateinit var licensePlateText: EditText
     private var isTracking: Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         startStopButton = findViewById(R.id.startStopButton)
         startStopButton.setOnClickListener { toggleTracking() }
+        licensePlateText = findViewById(R.id.licensePlateText)
 
         // Request location permissions if not granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -60,13 +62,13 @@ class MainActivity : AppCompatActivity() {
             override fun run() {
                 if (isTracking) {
                     val location: Location? = gpsTracker.getLocation()
+                    val licensePlate: String = licensePlateText.text.toString()
                     if (location != null) {
                         // Construct a GPSData object
                         val gpsData = GPSData(
                             latitude = location.latitude,
                             longitude = location.longitude,
-                            created_at = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()),
-                            updated_at = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+                            licensePlate = licensePlate
                         )
 
                         // Send the GPSData object to the endpoint
@@ -80,17 +82,16 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-
-
-
     private fun sendDataToEndpoint(data: GPSData) {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://endpoint.com/") // Replace with your server's base URL
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val apiService = retrofit.create(ApiService::class.java)
-        val call = apiService.submitGPSData(data)
+        val call = apiService.submitGPSData(licensePlate = data.licensePlate,
+                                            latitude = data.latitude,
+                                            longitude = data.longitude)
 
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -106,7 +107,5 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-
-
 }
 
