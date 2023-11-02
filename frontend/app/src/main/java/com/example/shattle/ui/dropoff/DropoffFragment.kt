@@ -1,6 +1,5 @@
 package com.example.shattle.ui.dropoff
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.shattle.R
 import com.example.shattle.databinding.FragmentDropoffBinding
 import java.text.SimpleDateFormat
@@ -21,17 +22,17 @@ import java.util.TimeZone
 
 class DropoffFragment : Fragment() {
 
+    private lateinit var dropoffViewModel: DropoffViewModel
+    var numberOfPeopleWaitingLine: Int? = null
+    var numberOfNeededBus: Int? = null
+    var waitingTimeInMin: Int? = null
+    var dateTimeString: String? = null
 
     private var _binding: FragmentDropoffBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     val binding get() = _binding!!
-    val dropoffData = DropoffData(true)
-    var numberOfPeopleWaitingLine: Int? = null
-    var numberOfNeededBus: Int? = null
-    var waitingTimeInMin: Int? = null
-    var dateTimeString: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,31 +40,48 @@ class DropoffFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        dropoffViewModel = ViewModelProvider(this).get(DropoffViewModel::class.java)
+
         _binding = FragmentDropoffBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        dropoffData.refreshCurrentLineData()
-        changeView()
+        setObserver()
+
+        // 서버에서 받아오는 시간 때문에 0.5초 뒤 화면 변경
+        // call 이 실패하거나 0.5초보다 오래 걸릴 경우 하단 새로고침 버튼 눌러야됨
+        Handler(Looper.getMainLooper()).postDelayed({
+            changeView()
+        }, 500)
+
 
         refreshView()
 
         return root
     }
 
-    fun refreshData() {
-        dropoffData.refreshCurrentLineData()
+    fun setObserver(){
+        dropoffViewModel.numberOfPeopleWaitingLine.observe(viewLifecycleOwner, Observer {
+            numberOfPeopleWaitingLine = it
+        })
+        dropoffViewModel.numberOfNeededBus.observe(viewLifecycleOwner, Observer {
+            numberOfNeededBus = it
+        })
+        dropoffViewModel.waitingTimeInMin.observe(viewLifecycleOwner, Observer {
+            waitingTimeInMin = it
+        })
+        dropoffViewModel.dateTimeString.observe(viewLifecycleOwner, Observer {
+            dateTimeString = it
+        })
+    }
 
-        // data class 의 전역변수를 fragment 전역변수에 저장
-        numberOfPeopleWaitingLine = dropoffData.numberOfPeopleWaitingLine
-        numberOfNeededBus = dropoffData.numberOfNeededBus
-        waitingTimeInMin = dropoffData.waitingTimeInMin
-        dateTimeString = dropoffData.dateTimeString
+    fun refreshData() {
+        dropoffViewModel.refreshCurrentLineData()
     }
 
     fun changeView() {
 
         // 서버 호출이 성공한 경우에만 화면 업데이트, 호출 실패 시 toast 만 띄워주고 화면 업데이트 X
-        if (dropoffData.isSuccessCall) {
+        if (dropoffViewModel.isSuccessCall) {
             changeVisualView()
             changeTextView()
             updateUpdatedDateTime()
@@ -97,7 +115,7 @@ class DropoffFragment : Fragment() {
     fun updateUpdatedDateTime() {
         var inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
         inputFormat.timeZone = TimeZone.getTimeZone("UTC")
-        val dateTime = inputFormat.parse(dropoffData.dateTimeString)
+        val dateTime = inputFormat.parse(dateTimeString)
 
         val outputFormat = SimpleDateFormat("MM.dd HH:mm", Locale.getDefault())
         binding.updatedTimeTextView.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
@@ -112,16 +130,21 @@ class DropoffFragment : Fragment() {
         }
 
         // 2. Refresh automatically
-        Handler(Looper.getMainLooper()).postDelayed({
-            try {
-                refreshData()
-                changeView()
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Log.e("MyLogChecker", "error: $e")
+        val handler = Handler(Looper.getMainLooper())
+        val refreshRunnable = object : Runnable {
+            override fun run() {
+                try {
+                    refreshData()
+                    changeView()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Log.e("MyLogChecker", "error: $e")
+                }
+                handler.postDelayed(this, 30000)
             }
-        }, 30000)
+        }
+        // Start the automatic refresh
+        handler.postDelayed(refreshRunnable, 30000)
     }
 
     override fun onDestroyView() {
