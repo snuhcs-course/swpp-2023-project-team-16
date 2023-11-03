@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'dropoff',
     'circular',
     'driverapp',
-    'timetable',
 ]
 
 MIDDLEWARE = [

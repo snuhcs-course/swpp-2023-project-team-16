@@ -20,27 +20,32 @@ class RetrieveWaitingTimeView(View):
     def get(self, request):
         current_line = CurrentLine.objects.all().values()[0]
         num_people_waiting = current_line['num_people_waiting']
+        updated_at = current_line['updated_at']
 
         try:
             if not current_line['is_executing']:
                 raise NoShuttleException
 
-            waiting_data = self.get_waiting_data(num_people_waiting)
+            waiting_data = self.get_waiting_data(num_people_waiting, updated_at)
         except NoShuttleException:
-            waiting_data = {"num_waiting_people": -1,
-                            "waiting_time": -1,
-                            "num_needed_bus": -1
-                            }
+            waiting_data = {
+                "num_waiting_people": num_people_waiting,
+                "waiting_time": -1,
+                "num_needed_bus": -1,
+                "updated_at": str(updated_at)
+            }
 
         return HttpResponse(json.dumps(waiting_data))
 
-    def get_waiting_data(self, num_people_waiting):
+    def get_waiting_data(self, num_people_waiting, updated_at):
         num_needed_bus = (num_people_waiting // MAX_NUM_OF_PEOPLE) + 1
         waiting_time = self.get_waiting_time(num_needed_bus)
-        waiting_data = {"num_waiting_people": num_people_waiting,
-                        "waiting_time": waiting_time,
-                        "num_needed_bus": num_needed_bus
-                        }
+        waiting_data = {
+            "num_waiting_people": num_people_waiting,
+            "waiting_time": waiting_time,
+            "num_needed_bus": num_needed_bus,
+            "updated_at": str(updated_at)
+        }
 
         return waiting_data
 
