@@ -1,3 +1,5 @@
+import datetime
+
 from django.views import View
 from django.http import HttpResponse
 
@@ -50,10 +52,10 @@ class RetrieveWaitingTimeView(View):
         return waiting_data
 
     def get_waiting_time(self, num_needed_bus):
-        now = time.localtime()
-        hour = now.tm_hour
-        minute = now.tm_min
-        day = now.tm_wday
+        now_kr = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
+        hour = now_kr.hour
+        minute = now_kr.minute
+        day = now_kr.weekday()
         if day > FRIDAY:
             raise NoShuttleException
 
