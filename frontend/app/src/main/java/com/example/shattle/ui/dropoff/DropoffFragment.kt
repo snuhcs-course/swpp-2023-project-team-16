@@ -39,6 +39,7 @@ class DropoffFragment : Fragment() {
         val currentLineRepository = CurrentLineRepository(currentLineDataSource)
 
         // Utils
+
         // Use Case
         val currentLineUseCase = CurrentLineUseCase(currentLineRepository)
 
@@ -71,6 +72,7 @@ class DropoffFragment : Fragment() {
             dropoffViewModel.getData(currentLineUseCase)
         }
 
+        // Toast Message
         dropoffViewModel.getToastMessage().observe(viewLifecycleOwner, Observer { message ->
             if (!message.isNullOrEmpty()) {
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -78,7 +80,7 @@ class DropoffFragment : Fragment() {
             }
         })
 
-        // Automatic Refresh (30 sec)
+        // Automatic Refresh (delay: 30 sec)
         val handler = Handler(Looper.getMainLooper())
         val refreshRunnable = object : Runnable {
             override fun run() {
@@ -97,18 +99,6 @@ class DropoffFragment : Fragment() {
         val root: View = binding.root
         return root
     }
-
-//    fun changeView() {
-//
-//        // 서버 호출이 성공한 경우에만 화면 업데이트, 호출 실패 시 toast 만 띄워주고 화면 업데이트 X
-//        if (dropoffViewModel.isSuccessCall) {
-//            changeVisualView()
-//            changeTextView()
-//            updateUpdatedDateTime()
-//        } else {
-//            Toast.makeText(activity, R.string.toast_refresh_error, Toast.LENGTH_SHORT).show()
-//        }
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

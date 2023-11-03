@@ -16,9 +16,9 @@ class CurrentLineRepository(val currentLineDataSource: CurrentLineDataSource) {
     var currentLine = currentLineDataSource.getCurrentLine()
     var currentLine_Prev = currentLineDataSource.getCurrentLine_prev()
     fun refreshCurrentLine() {
-
-        // 서버의 currentLine Data call 후 currentLine 에 저장
-        // 이후 currentLineDataSource 업데이트
+        // 서버로부터 data call
+        // 응답받은 데이터 currentLineDataSource 에 저장 (sharedPref)
+        // TODO: Log 함수 지우기
 
         Log.e("MyLogChecker", "@@ start refreshWaitingTimeData()")
 
