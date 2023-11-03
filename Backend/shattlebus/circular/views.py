@@ -17,6 +17,7 @@ class UpdateCircularBusLocationView(View):
 
         num_buses = len(running_bus_list)
         response['num_buses_running'] = num_buses
+        bus_lists = []
 
         for i in range(num_buses):
             bus = running_bus_list[i]
@@ -29,6 +30,8 @@ class UpdateCircularBusLocationView(View):
                         "is_tracked": bus['is_tracked']
                         }
 
-            response[i] = bus_data
+            bus_lists.append(bus_data)
+
+        response['buses'] = bus_lists
 
         return HttpResponse(json.dumps(response))
