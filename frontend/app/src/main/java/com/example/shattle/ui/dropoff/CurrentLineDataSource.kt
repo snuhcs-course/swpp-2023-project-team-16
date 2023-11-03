@@ -16,7 +16,6 @@ class CurrentLineDataSource(context: Context) {
     private val keyCurrentLine_prev = "CurrentLine_prev"
     private val DEFAULT_VALUE = CurrentLine(-2, -2, -2)
 
-
     fun getCurrentLine(): CurrentLine {
         // sharedPref 에서 CurrentLine Data 반환
 

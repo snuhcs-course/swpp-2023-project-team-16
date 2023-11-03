@@ -1,11 +1,10 @@
 package com.example.shattle.ui.circular;
 
-import android.graphics.Color
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.shattle.data.models.RunningBuses
-import com.example.shattle.ui.dropoff.DropoffUIState
 import com.google.android.gms.maps.GoogleMap
 
 
@@ -36,18 +35,19 @@ class CircularViewModel : ViewModel() {
         // runningBuses 가 유효하지 않을 경우 이전 값을 적용 (업데이트 X)
         // 유효하지 않은 이유 Toast로 띄워줌
         val error_value = runningBusesUseCase.getErrorId()
+        Log.e("MyLogChecker", "@@@@@@@@@@@@@@@@@@@@@@@@@@@\n${error_value}\n")
 
-        if (error_value == ERROR_BODY_IS_NULL.numBusesRunning
-            || error_value == ERROR_RESPONSE_IS_NOT_SUCCESSFUL.numBusesRunning
-            || error_value == ERROR_ON_FAILURE.numBusesRunning
+        if ((error_value == ERROR_BODY_IS_NULL.numBusesRunning)
+                    || (error_value == ERROR_RESPONSE_IS_NOT_SUCCESSFUL.numBusesRunning)
+            || (error_value == ERROR_ON_FAILURE.numBusesRunning)
         ) {
+            Log.e("MyLogChecker", "@@@@@@@@@@@@@@@@@@@@@@@@@@@")
             uiState.value = CircularUIState(googleMap, runningBusesUseCase.getRunningBuses_prev())
             showToastMessage("업데이트 중 오류가 발생했습니다. 잠시 후 다시 시도하세요2.") //TODO change
-        } else if (error_value == 0) {
-            uiState.value = CircularUIState(googleMap, runningBusesUseCase.getRunningBuses_prev())
-            showToastMessage("현재 운행중인 셔틀이 없습니다.")
         } else {
             uiState.value = CircularUIState(googleMap, runningBusesUseCase.getRunningBuses())
+            if(error_value == 0)
+                showToastMessage("현재 운행중인 셔틀이 없습니다.")
         }
     }
 

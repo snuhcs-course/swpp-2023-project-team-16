@@ -1,6 +1,7 @@
 package com.example.shattle.ui.circular
 
 import android.util.Log
+import com.example.shattle.data.models.Bus
 import com.example.shattle.data.models.RunningBuses
 import com.example.shattle.network.ServiceCreator
 import retrofit2.Call
@@ -16,10 +17,13 @@ class RunningBusesRepository(val runningBusesDataSource: RunningBusesDataSource)
     var runningBuses = runningBusesDataSource.getRunningBuses()
     var runningBuses_prev = runningBusesDataSource.getRunningBuses_prev()
 
-    fun refreshRunningBuses() {
+    fun refreshRunningBuses2() {
         // 서버로부터 data call
         // 응답받은 데이터 runningBusesDataSource 에 저장 (sharedPref)
         // TODO: Log 함수 지우기
+
+        if (runningBuses.numBusesRunning >= 0)
+            runningBuses_prev = runningBuses
 
         Log.e("MyLogChecker", "@@ start refreshRunningBuses()")
 
@@ -44,7 +48,7 @@ class RunningBusesRepository(val runningBusesDataSource: RunningBusesDataSource)
                     if (body != null) {
                         runningBuses = body
                     } else {
-                         runningBuses = ERROR_BODY_IS_NULL
+                        runningBuses = ERROR_BODY_IS_NULL
                     }
                 } else {
                     Log.e(
@@ -69,5 +73,62 @@ class RunningBusesRepository(val runningBusesDataSource: RunningBusesDataSource)
             }
         })
 
+    }
+
+    val dummy = listOf(
+        RunningBuses(
+            2, listOf(
+                Bus(0, "a", 37.46577, 126.9484, true, true),
+                Bus(1, "a", 37.45158, 126.9526, true, true),
+            )
+        ),
+        RunningBuses(
+            2, listOf(
+                Bus(0, "a", 37.46306, 126.9490, true, true),
+                Bus(1, "a", 37.45408, 126.9539, true, true),
+            )
+        ),
+        RunningBuses(
+            2, listOf(
+                Bus(0, "a", 37.46046, 126.9490, true, true),
+                Bus(1, "a", 37.45612, 126.9554, true, true),
+            )
+        ),
+        RunningBuses(
+            0, emptyList()
+        ),
+        RunningBuses(
+            -3, emptyList()
+        ),
+        RunningBuses(
+            -4, emptyList()
+        ),
+        RunningBuses(
+            0, emptyList()
+        ),
+        RunningBuses(
+            2, listOf(
+                Bus(0, "a", 37.46577, 126.9484, true, true),
+                Bus(1, "a", 37.45158, 126.9526, true, true),
+            )
+        ),
+        RunningBuses(
+            -4, emptyList()
+        ),
+        )
+
+    var cnt = 0
+    fun refreshRunningBuses() {
+
+        if(runningBuses.numBusesRunning >= 0){
+            runningBuses_prev = runningBuses
+        }
+        runningBuses = dummy[cnt]
+
+        runningBusesDataSource.storeRunningBuses(runningBuses)
+        runningBusesDataSource.storeRunningBuses_prev(runningBuses_prev)
+        cnt++
+        if(cnt >= dummy.size)
+            cnt--
     }
 }

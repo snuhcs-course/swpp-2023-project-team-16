@@ -3,6 +3,7 @@ package com.example.shattle.ui.circular
 import android.graphics.Color
 import android.widget.Button
 import android.widget.TextView
+import androidx.lifecycle.MutableLiveData
 import com.example.shattle.R
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -23,7 +24,6 @@ class CircularUI(
         showCurrentLocationsOfBus(googleMap, circularUIState)
         changeUpdatedDateTime(circularUIState)
     }
-
     fun showCurrentLocationsOfBus(googleMap: GoogleMap?, circularUIState: CircularUIState) {
 
         // Remove previous bus markers

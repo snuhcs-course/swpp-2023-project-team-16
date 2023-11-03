@@ -20,6 +20,10 @@ class CurrentLineRepository(val currentLineDataSource: CurrentLineDataSource) {
         // 응답받은 데이터 currentLineDataSource 에 저장 (sharedPref)
         // TODO: Log 함수 지우기
 
+        if(currentLine.waitingTime >= 0){
+            currentLine_prev = currentLine
+        }
+
         Log.e("MyLogChecker", "@@ start refreshCurrentLine()")
 
         val call: Call<CurrentLine> = ServiceCreator.apiService.getCurrentLine()
@@ -46,7 +50,6 @@ class CurrentLineRepository(val currentLineDataSource: CurrentLineDataSource) {
                             // 이때 prev 는 업데이트 X
                             currentLine = body
                         } else {
-                            currentLine_prev = currentLine
                             currentLine = body
                         }
                     } else {

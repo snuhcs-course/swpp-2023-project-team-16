@@ -1,6 +1,5 @@
 package com.example.shattle.ui.circular
 
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -17,12 +16,6 @@ import com.example.shattle.databinding.FragmentCircularBinding
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.TimeZone
 
 class CircularFragment : Fragment() {
 
@@ -74,6 +67,7 @@ class CircularFragment : Fragment() {
             googleMap = mMap
             circularViewModel.setGoogleMap(googleMap!!)
             circularUI.customizeGoogleMap(googleMap!!)
+            circularUI.showCurrentLocationsOfBus(googleMap, circularViewModel.getUIState().value!!)
         })
 
         // Initial Update
