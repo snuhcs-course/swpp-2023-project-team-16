@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/navigation_station"
+        android:id="@+id/navigation_dropoff"
         android:icon="@drawable/ic_station"
         android:title="@string/title_station" />
 
