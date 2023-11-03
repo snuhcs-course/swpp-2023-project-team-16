@@ -1,7 +1,6 @@
 package com.example.shattle.ui.circular
 
 import android.util.Log
-import com.example.shattle.data.models.CircularBus
 import com.example.shattle.network.ServiceCreator
 import com.google.android.gms.maps.model.LatLng
 import retrofit2.Call
@@ -9,39 +8,42 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.UUID
 
+data class BusData(val id:UUID, val location: LatLng)
 data class CircularData(val isCreated: Boolean) {
 
     data class BusStop(val position: LatLng, val title: String, val snippet: String)
 
 
-    var currentBusLocations = listOf<CircularBus>()
+    var currentBusLocations = listOf<BusData>()
 
     var dateTimeString = "2023-01-23T12:34:56Z"
 
+
+
     val dummy = listOf(
         listOf(
-            CircularBus(UUID.randomUUID(), LatLng(37.46577, 126.9484)),
-            CircularBus(UUID.randomUUID(), LatLng(37.44809, 126.9521))
+            BusData(UUID.randomUUID(), LatLng(37.46577, 126.9484)),
+            BusData(UUID.randomUUID(), LatLng(37.44809, 126.9521))
         ),
         listOf(
-            CircularBus(UUID.randomUUID(), LatLng(37.46306, 126.9490)),
-            CircularBus(UUID.randomUUID(), LatLng(37.45158, 126.9526)),
+            BusData(UUID.randomUUID(), LatLng(37.46306, 126.9490)),
+            BusData(UUID.randomUUID(), LatLng(37.45158, 126.9526)),
         ),
         listOf(
-            CircularBus(UUID.randomUUID(), LatLng(37.46046, 126.9490)),
-            CircularBus(UUID.randomUUID(), LatLng(37.45408, 126.9539)),
+            BusData(UUID.randomUUID(), LatLng(37.46046, 126.9490)),
+            BusData(UUID.randomUUID(), LatLng(37.45408, 126.9539)),
         ),
         listOf(
-            CircularBus(UUID.randomUUID(), LatLng(37.46046, 126.9490)),
-            CircularBus(UUID.randomUUID(), LatLng(37.45408, 126.9539)),
+            BusData(UUID.randomUUID(), LatLng(37.46046, 126.9490)),
+            BusData(UUID.randomUUID(), LatLng(37.45408, 126.9539)),
         ),
         listOf(
-            CircularBus(UUID.randomUUID(), LatLng(37.46046, 126.9490)),
-            CircularBus(UUID.randomUUID(), LatLng(37.45408, 126.9539)),
+            BusData(UUID.randomUUID(), LatLng(37.46046, 126.9490)),
+            BusData(UUID.randomUUID(), LatLng(37.45408, 126.9539)),
         ),
         listOf(
-            CircularBus(UUID.randomUUID(), LatLng(37.46046, 126.9490)),
-            CircularBus(UUID.randomUUID(), LatLng(37.45408, 126.9539)),
+            BusData(UUID.randomUUID(), LatLng(37.46046, 126.9490)),
+            BusData(UUID.randomUUID(), LatLng(37.45408, 126.9539)),
         ),
 
 
@@ -54,31 +56,31 @@ data class CircularData(val isCreated: Boolean) {
             currentBusLocations = dummy[cnt++]
     }
 
-    fun refreshCurrentBusLocation2() {
-        val call: Call<List<CircularBus>> = ServiceCreator.apiService.getCircularLocation()
-
-        call.enqueue(object : Callback<List<CircularBus>> {
-            override fun onResponse(
-                call: Call<List<CircularBus>>,
-                response: Response<List<CircularBus>>
-            ) {
-                if (response.isSuccessful) {
-                    val locations = response.body()
-                    if (locations == null) {
-                        Log.e("Circular", "error: response contained null data")
-                    }
-                    else {
-                        currentBusLocations = locations
-                    }
-                } else {
-
-                }
-            }
-            override fun onFailure(call: Call<List<CircularBus>>, t: Throwable) {
-                Log.e("Circular", "error: $t")
-            }
-        })
-    }
+//    fun refreshCurrentBusLocation2() {
+//        val call: Call<List<BusData>> = ServiceCreator.apiService.getCircularLocation()
+//
+//        call.enqueue(object : Callback<List<BusData>> {
+//            override fun onResponse(
+//                call: Call<List<BusData>>,
+//                response: Response<List<BusData>>
+//            ) {
+//                if (response.isSuccessful) {
+//                    val locations = response.body()
+//                    if (locations == null) {
+//                        Log.e("Circular", "error: response contained null data")
+//                    }
+//                    else {
+//                        currentBusLocations = locations
+//                    }
+//                } else {
+//
+//                }
+//            }
+//            override fun onFailure(call: Call<List<BusData>>, t: Throwable) {
+//                Log.e("Circular", "error: $t")
+//            }
+//        })
+//    }
 
     val busStops = listOf(
         BusStop(LatLng(37.46577, 126.9484), "정문", ""),
