@@ -14,18 +14,18 @@ class CurrentLineRepository(val currentLineDataSource: CurrentLineDataSource) {
     val ERROR_ON_FAILURE = CurrentLine(-5, -5, -5)
 
     var currentLine = currentLineDataSource.getCurrentLine()
-    var currentLine_Prev = currentLineDataSource.getCurrentLine_prev()
+    var currentLine_prev = currentLineDataSource.getCurrentLine_prev()
     fun refreshCurrentLine() {
         // 서버로부터 data call
         // 응답받은 데이터 currentLineDataSource 에 저장 (sharedPref)
         // TODO: Log 함수 지우기
 
-        Log.e("MyLogChecker", "@@ start refreshWaitingTimeData()")
+        Log.e("MyLogChecker", "@@ start refreshCurrentLine()")
 
         val call: Call<CurrentLine> = ServiceCreator.apiService.getCurrentLine()
         Log.e(
             "MyLogChecker",
-            "@@ val call: Call<ResponseWaitingLine> = ServiceCreator.apiService.getWaitingLine()"
+            "@@ val call: Call<CurrnetLine> = ServiceCreator.apiService.getCurrentLine()"
         )
 
         Log.e("MyLogChecker", "# start call.enqueue():")
@@ -46,7 +46,7 @@ class CurrentLineRepository(val currentLineDataSource: CurrentLineDataSource) {
                             // 이때 prev 는 업데이트 X
                             currentLine = body
                         } else {
-                            currentLine_Prev = currentLine
+                            currentLine_prev = currentLine
                             currentLine = body
                         }
                     } else {
@@ -62,7 +62,7 @@ class CurrentLineRepository(val currentLineDataSource: CurrentLineDataSource) {
                     currentLine = ERROR_RESPONSE_IS_NOT_SUCCESSFUL
                 }
                 currentLineDataSource.storeCurrentLine(currentLine)
-                currentLineDataSource.storeCurrentLine_prev(currentLine_Prev)
+                currentLineDataSource.storeCurrentLine_prev(currentLine_prev)
                 Log.e("MyLogChecker", "## end onResponse():")
             }
 
@@ -70,7 +70,7 @@ class CurrentLineRepository(val currentLineDataSource: CurrentLineDataSource) {
                 Log.e("MyLogChecker", "## start onFailure)")
                 currentLine = ERROR_ON_FAILURE
                 currentLineDataSource.storeCurrentLine(currentLine)
-                currentLineDataSource.storeCurrentLine_prev(currentLine_Prev)
+                currentLineDataSource.storeCurrentLine_prev(currentLine_prev)
                 Log.e("MyLogChecker", "## end onFailure\n\t$t")
             }
         })

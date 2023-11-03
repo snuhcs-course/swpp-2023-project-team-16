@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import com.google.android.gms.maps.GoogleMap
 
 class DropoffUI(
     val tv_numPeople: TextView,
@@ -74,6 +75,9 @@ class DropoffUI(
     }
 
     fun changeUpdatedTime(dropoffUIState: DropoffUIState){
+        // TODO
+        var dateTimeString = "2023-01-23T12:34:56Z"
+        tv_updatedTime
 //        var inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
 //        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
 //        val dateTime = inputFormat.parse(dateTimeString)

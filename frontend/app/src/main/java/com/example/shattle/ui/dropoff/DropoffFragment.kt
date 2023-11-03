@@ -16,7 +16,6 @@ import com.example.shattle.databinding.FragmentDropoffBinding
 class DropoffFragment : Fragment() {
 
     var dateTimeString: String? = null
-    var isFirstStart = true
 
     private var _binding: FragmentDropoffBinding? = null
 
