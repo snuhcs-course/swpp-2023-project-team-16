@@ -1,81 +1,49 @@
 package com.example.shattle.ui.dropoff
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.shattle.data.models.CurrentLine
-import com.example.shattle.network.ServiceCreator
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class DropoffViewModel: ViewModel() {
 
-    // 처음 클래스 만들어질 때 한 번 call
-    init {
-        refreshCurrentLineData()
+class DropoffViewModel : ViewModel() {
+
+    private val DEFAULT_VALUE = CurrentLine(-2, -2, -2)
+
+    private val uiState: MutableLiveData<DropoffUIState?> =
+        MutableLiveData<DropoffUIState?>(DropoffUIState(DEFAULT_VALUE))
+
+    fun getUIState(): MutableLiveData<DropoffUIState?> {
+        return uiState
     }
 
-    private val _numberOfPeopleWaitingLine = MutableLiveData<Int?>()
-    private val _numberOfNeededBus = MutableLiveData<Int?>()
-    private val _waitingTimeInMin = MutableLiveData<Int?>()
-    private val _dateTimeString = MutableLiveData<String?>().apply {
-        value = "2000-01-01T00:00:00Z"
+    // currentLine 이 유효하지 않을 경우 이전 값을 그대로 적용
+    // 유효하지 않은 이유 Toast로 띄워줌
+    fun getData(currentLineUseCase: CurrentLineUseCase) {
+        if (!currentLineUseCase.isValidResponse()) {
+            uiState.value = DropoffUIState(currentLineUseCase.getCurrentLine_prev())
+            showToastMessage("업데이트 중 오류가 발생했습니다. 잠시 후 다시 시도하세요.")
+
+        } else if (currentLineUseCase.isNoShuttle()) {
+            uiState.value = DropoffUIState(currentLineUseCase.getCurrentLine_prev())
+            showToastMessage("현재 셔틀 운행 시간이 아닙니다.")
+        } else {
+            uiState.value = DropoffUIState(currentLineUseCase.getCurrentLine())
+        }
     }
 
-    val numberOfPeopleWaitingLine: LiveData<Int?> get() = _numberOfPeopleWaitingLine
-    val numberOfNeededBus: LiveData<Int?> get() = _numberOfNeededBus
-    val waitingTimeInMin: LiveData<Int?> get() = _waitingTimeInMin
-    val dateTimeString: LiveData<String?> get() = _dateTimeString
-
-    var isSuccessCall = false
-
-    fun refreshCurrentLineData() {
-        // 서버의 currentLine Data call 후 전역변수에 저장
-        // call 성공 or 실패 여부 isSuccessCall 에 저장
-        Log.e("MyLogChecker", "@@ start refreshWaitingTimeData()")
-
-        val call: Call<CurrentLine> = ServiceCreator.apiService.getCurrentLine()
-        Log.e(
-            "MyLogChecker",
-            "@@ val call: Call<ResponseWaitingLine> = ServiceCreator.apiService.getWaitingLine()"
-        )
-
-        Log.e("MyLogChecker", "# start call.enqueue():")
-
-        call.enqueue(object : Callback<CurrentLine> {
-            override fun onResponse(
-                call: Call<CurrentLine>,
-                response: Response<CurrentLine>
-            ) {
-                Log.e("MyLogChecker", "## start onResponse():")
-
-                if (response.isSuccessful) {
-                    Log.e("MyLogChecker", "### response is successful")
-                    val body = response.body()
-                    _numberOfPeopleWaitingLine.value = body?.numberOfPeopleWaiting
-                    _numberOfNeededBus.value = body?.numberOfNeededBuses
-                    _waitingTimeInMin.value = body?.waitingTimeInMin
-                    //_dateTimeString.value = body?.dateTimeString
-                    isSuccessCall = true
-                } else {
-                    Log.e(
-                        "MyLogChecker",
-                        "### response is not successful\n\tresponse.code(): ${
-                            response.code().toString()
-                        }"
-                    )
-                    isSuccessCall = false
-                }
-                Log.e("MyLogChecker", "## end onResponse():")
-            }
-
-            override fun onFailure(call: Call<CurrentLine>, t: Throwable) {
-                Log.e("MyLogChecker", "## start onFailure)")
-                isSuccessCall = false
-                Log.e("MyLogChecker", "## end onFailure\n\t$t")
-            }
-        })
+    fun notifyRefresh(currentLineUseCase: CurrentLineUseCase) {
+        currentLineUseCase.refreshData()
     }
+
+    private val toastMessage = MutableLiveData<String>()
+
+    fun getToastMessage(): LiveData<String> {
+        return toastMessage
+    }
+
+    fun showToastMessage(message: String) {
+        toastMessage.value = message
+    }
+
 }

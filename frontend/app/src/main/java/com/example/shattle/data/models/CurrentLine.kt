@@ -4,9 +4,17 @@ import com.google.gson.annotations.SerializedName
 
 data class CurrentLine (
     @SerializedName("num_waiting_people")
-    val numberOfPeopleWaiting: Int,
+    val numWaitingPeople: Int,
     @SerializedName("num_needed_bus")
-    val numberOfNeededBuses: Int,
+    val numNeededBus: Int,
     @SerializedName("waiting_time")
-    val waitingTimeInMin: Int
-)
+    val waitingTime: Int) {
+
+    override fun equals(other: Any?): Boolean {
+        //if (other?.javaClass != javaClass) return false
+        other as CurrentLine
+        return ((numWaitingPeople == other.numWaitingPeople)
+                && (numNeededBus == other.numNeededBus)
+                && (waitingTime == other.waitingTime))
+    }
+}
