@@ -39,7 +39,7 @@ import retrofit2.Response
 @RunWith(MockitoJUnitRunner::class)
 class RunningBusesRepositoryTest {
     // TODO: call function test
-    // 일단 verify() 없이 coverage 100% 되게 짜기
+    // 일단 verify() 없이 coverage 100% 되게 짜기 (call method 각각의 결과 반영되게)
     // verify() 추가
 
     @Mock

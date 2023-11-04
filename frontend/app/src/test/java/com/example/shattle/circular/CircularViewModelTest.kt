@@ -20,6 +20,7 @@ import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
 class CircularViewModelTest {
+    // TODO: getData Test Assert 다시 확인하기
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
