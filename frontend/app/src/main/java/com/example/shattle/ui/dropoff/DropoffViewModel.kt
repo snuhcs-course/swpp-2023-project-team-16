@@ -13,6 +13,8 @@ class DropoffViewModel : ViewModel() {
     private val uiState: MutableLiveData<DropoffUIState?> =
         MutableLiveData<DropoffUIState?>(DropoffUIState(DEFAULT_VALUE))
 
+    private val toastMessage = MutableLiveData<String>()
+
     fun getUIState(): MutableLiveData<DropoffUIState?> {
         return uiState
     }
@@ -38,7 +40,6 @@ class DropoffViewModel : ViewModel() {
     }
 
     // Fragment 에서 Toast 를 띄워주기 위한 함수들
-    private val toastMessage = MutableLiveData<String>()
     fun getToastMessage(): LiveData<String> {
         return toastMessage
     }

@@ -15,8 +15,6 @@ import com.example.shattle.databinding.FragmentDropoffBinding
 
 class DropoffFragment : Fragment() {
 
-    var dateTimeString: String? = null
-
     private var _binding: FragmentDropoffBinding? = null
 
     // This property is only valid between onCreateView and
@@ -53,7 +51,7 @@ class DropoffFragment : Fragment() {
             binding.updatedTimeTextView,
             binding.manImageView,
             binding.visualViewLayout,
-            binding.refreshButton
+            binding.refreshButton,
         )
 
         // ViewModel tracks data changes
@@ -66,7 +64,7 @@ class DropoffFragment : Fragment() {
         dropoffViewModel.getData(currentLineUseCase)
 
         // Refresh Button
-        dropoffUI.bt_refreshButton.setOnClickListener{
+        dropoffUI.bt_refresh.setOnClickListener{
             dropoffViewModel.notifyRefresh(currentLineUseCase)
             dropoffViewModel.getData(currentLineUseCase)
         }

@@ -24,6 +24,7 @@ class CircularUI(
         showCurrentLocationsOfBus(googleMap, circularUIState)
         changeUpdatedDateTime(circularUIState)
     }
+
     fun showCurrentLocationsOfBus(googleMap: GoogleMap?, circularUIState: CircularUIState) {
 
         // Remove previous bus markers
@@ -160,7 +161,7 @@ class CircularUI(
     fun showRoute(googleMap: GoogleMap) {
         // Show the route of the circular shuttle on the map
 
-        googleMap?.addPolyline(
+        googleMap.addPolyline(
             PolylineOptions()
                 .clickable(false)
                 .addAll(roadCoordinates)

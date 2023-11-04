@@ -13,11 +13,13 @@ class CircularViewModel : ViewModel() {
 
     // GoogleMap LiveData
     private val _googleMap = MutableLiveData<GoogleMap?>()
-    val googleMap: LiveData<GoogleMap?> get() = _googleMap
 
     private val DEFAULT_VALUE = RunningBuses(-2, emptyList())
+
     private val uiState: MutableLiveData<CircularUIState?> =
-        MutableLiveData<CircularUIState?>(CircularUIState(googleMap.value, DEFAULT_VALUE))
+        MutableLiveData<CircularUIState?>(CircularUIState(DEFAULT_VALUE))
+
+    private val toastMessage = MutableLiveData<String>()
 
     fun setGoogleMap(googleMap: GoogleMap) {
         _googleMap.value = googleMap
@@ -42,10 +44,10 @@ class CircularViewModel : ViewModel() {
             || (error_value == ERROR_ON_FAILURE.numBusesRunning)
         ) {
             Log.e("MyLogChecker", "@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-            uiState.value = CircularUIState(googleMap, runningBusesUseCase.getRunningBuses_prev())
+            uiState.value = CircularUIState(runningBusesUseCase.getRunningBuses_prev())
             showToastMessage("업데이트 중 오류가 발생했습니다. 잠시 후 다시 시도하세요2.") //TODO change
         } else {
-            uiState.value = CircularUIState(googleMap, runningBusesUseCase.getRunningBuses())
+            uiState.value = CircularUIState(runningBusesUseCase.getRunningBuses())
             if(error_value == 0)
                 showToastMessage("현재 운행중인 셔틀이 없습니다.")
         }
@@ -56,7 +58,6 @@ class CircularViewModel : ViewModel() {
     }
 
     // Fragment 에서 Toast 를 띄워주기 위한 함수들
-    private val toastMessage = MutableLiveData<String>()
     fun getToastMessage(): LiveData<String> {
         return toastMessage
     }

@@ -18,7 +18,7 @@ class DropoffUI(
     val tv_updatedTime: TextView,
     val imgv_man: ImageView,
     val layout_visualView: ConstraintLayout,
-    val bt_refreshButton: Button
+    val bt_refresh: Button,
 ) {
 
     fun updateUI(dropoffUIState: DropoffUIState){
