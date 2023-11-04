@@ -64,7 +64,7 @@ class DropoffFragment : Fragment() {
         dropoffViewModel.getData(currentLineUseCase)
 
         // Refresh Button
-        dropoffUI.bt_refresh.setOnClickListener{
+        dropoffUI.bt_refresh.setOnClickListener {
             dropoffViewModel.notifyRefresh(currentLineUseCase)
             dropoffViewModel.getData(currentLineUseCase)
         }

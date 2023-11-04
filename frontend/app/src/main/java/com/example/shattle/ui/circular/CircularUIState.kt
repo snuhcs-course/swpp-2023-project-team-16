@@ -1,7 +1,6 @@
 package com.example.shattle.ui.circular
 
 import com.example.shattle.data.models.RunningBuses
-import com.google.android.gms.maps.GoogleMap
 
 class CircularUIState(
     val runningBuses: RunningBuses,

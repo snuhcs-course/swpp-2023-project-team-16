@@ -56,28 +56,29 @@ class CircularFragment : Fragment() {
         )
 
         // ViewModel tracks data changes
-        circularViewModel.getUIState().observe(viewLifecycleOwner) {newCircularUIState ->
+        circularViewModel.getUIState().observe(viewLifecycleOwner) { newCircularUIState ->
             circularUI.updateUI(googleMap, newCircularUIState!!)
         }
 
 
         // Set Google Map async
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment // mapFragment 는 onCreateView 안에서만 초기화하기!!!
+        val mapFragment =
+            childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment // mapFragment 는 onCreateView 안에서만 초기화하기!!!
         mapFragment.getMapAsync(OnMapReadyCallback { mMap ->
             googleMap = mMap
-            circularViewModel.setGoogleMap(googleMap!!)
+            //circularViewModel.setGoogleMap(googleMap!!)
             circularUI.customizeGoogleMap(googleMap!!)
             circularUI.showCurrentLocationsOfBus(googleMap, circularViewModel.getUIState().value!!)
         })
 
         // Initial Update
         circularViewModel.notifyRefresh(runningBusesUseCase)
-        circularViewModel.getData(googleMap, runningBusesUseCase)
+        circularViewModel.getData(runningBusesUseCase)
 
         // Refresh Button
-        circularUI.bt_refreshButton.setOnClickListener{
+        circularUI.bt_refreshButton.setOnClickListener {
             circularViewModel.notifyRefresh(runningBusesUseCase)
-            circularViewModel.getData(googleMap, runningBusesUseCase)
+            circularViewModel.getData(runningBusesUseCase)
         }
 
         // Toast Message
@@ -94,7 +95,7 @@ class CircularFragment : Fragment() {
             override fun run() {
                 try {
                     circularViewModel.notifyRefresh(runningBusesUseCase)
-                    circularViewModel.getData(googleMap, runningBusesUseCase)
+                    circularViewModel.getData(runningBusesUseCase)
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Log.e("MyLogChecker", "error: $e")

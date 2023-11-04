@@ -4,15 +4,15 @@ import com.example.shattle.data.models.RunningBuses
 
 class RunningBusesUseCase(val runningBusesRepository: RunningBusesRepository) {
 
-    fun refreshData(){
+    fun refreshData() {
         runningBusesRepository.refreshRunningBuses()
     }
 
-    fun getRunningBuses(): RunningBuses{
+    fun getRunningBuses(): RunningBuses {
         return runningBusesRepository.runningBusesDataSource.getRunningBuses()
     }
 
-    fun getRunningBuses_prev(): RunningBuses{
+    fun getRunningBuses_prev(): RunningBuses {
         return runningBusesRepository.runningBusesDataSource.getRunningBuses_prev()
     }
 

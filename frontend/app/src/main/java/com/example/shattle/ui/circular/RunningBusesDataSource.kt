@@ -9,7 +9,7 @@ class RunningBusesDataSource(context: Context) {
 
     private val keyFragment = "Circular"
     private var sharedPref: SharedPreferences? =
-            context.getSharedPreferences(keyFragment, Context.MODE_PRIVATE)
+        context.getSharedPreferences(keyFragment, Context.MODE_PRIVATE)
     private var editor: SharedPreferences.Editor? = sharedPref?.edit()
 
     private val keyRunningBuses = "RunningBuses"

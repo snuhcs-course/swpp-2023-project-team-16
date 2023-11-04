@@ -79,7 +79,8 @@ class CircularUI(
         showRoute(googleMap)
     }
 
-    data class BusStop(val location: LatLng, val title:String, val snippet:String)
+    data class BusStop(val location: LatLng, val title: String, val snippet: String)
+
     val busStops = listOf(
         BusStop(LatLng(37.46577, 126.9484), "정문", ""),
         BusStop(LatLng(37.46306, 126.9490), "법대, 사회대입구", ""),
