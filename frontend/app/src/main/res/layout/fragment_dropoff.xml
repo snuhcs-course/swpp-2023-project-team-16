@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.station.StationFragment">
+    tools:context=".ui.dropoff.DropoffFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topContainer"
@@ -149,7 +149,7 @@
         app:layout_constraintTop_toBottomOf="@id/visualViewLayout">
 
         <TextView
-            android:id="@+id/num_people"
+            android:id="@+id/numPeopleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="현재 ##명 대기 중입니다."
@@ -160,27 +160,26 @@
             android:layout_marginStart="30dp"/>
 
         <TextView
-            android:id="@+id/num_bus"
+            android:id="@+id/numBusTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="다음 #번째 버스 탑승 가능합니다."
             android:textColor="@color/station_text_view_color"
             android:textSize="@dimen/station_text_data_size_small"
             android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="@id/num_people"
-            app:layout_constraintTop_toBottomOf="@id/num_people"/>
+            app:layout_constraintStart_toStartOf="@id/numPeopleTextView"
+            app:layout_constraintTop_toBottomOf="@id/numPeopleTextView"/>
 
         <TextView
-            android:id="@+id/num_minute"
+            android:id="@+id/numTimeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="예상 대기시간: #분"
             android:textColor="@color/station_text_view_color"
             android:textSize="@dimen/station_text_data_size_small"
-            android:textStyle="bold"
             android:layout_marginTop="10dp"
-            app:layout_constraintTop_toBottomOf="@id/num_bus"
-            app:layout_constraintStart_toStartOf="@id/num_bus"/>
+            app:layout_constraintTop_toBottomOf="@id/numBusTextView"
+            app:layout_constraintStart_toStartOf="@id/numBusTextView"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
