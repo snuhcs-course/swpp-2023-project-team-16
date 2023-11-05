@@ -53,13 +53,16 @@ class CurrentLineRepositoryTest {
 
     private lateinit var currentLineRepository: CurrentLineRepository
 
+    val currentLine_default = CurrentLine(-2, -2, -2, "")
+    val currentLine_1 = CurrentLine(1, 1, 1, "")
+
     @Before
     fun setUp() {
         lenient().`when`(mockApiService.getCurrentLine()).thenReturn(mockCall)
         currentLineRepository = CurrentLineRepository(mockCurrentLineDataSource)
 
-        currentLineRepository.currentLine = CurrentLine(0, 0, 0, "")
-        currentLineRepository.currentLine_prev = CurrentLine(0, 0, 0, "")
+        currentLineRepository.currentLine = currentLine_default
+        currentLineRepository.currentLine_prev = currentLine_default
     }
 
     @Test

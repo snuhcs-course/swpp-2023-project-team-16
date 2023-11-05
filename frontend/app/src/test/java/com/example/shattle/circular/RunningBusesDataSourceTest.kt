@@ -33,6 +33,9 @@ class RunningBusesDataSourceTest {
 
     private lateinit var runningBusesDataSource: RunningBusesDataSource
 
+    val runningBuses_default = RunningBuses(-2, emptyList())
+    val runningBuses_1 = RunningBuses(1, listOf(Bus(0, "a", 0.0, 0.0, true, true)))
+
     @Before
     fun setup() {
         // Initialize the CurrentLineDataSource with mocked context and shared preferences
@@ -52,7 +55,7 @@ class RunningBusesDataSourceTest {
         val result = runningBusesDataSource.getRunningBuses()
 
         // Assert
-        assert(result == RunningBuses(-2, emptyList()))
+        assert(result == runningBuses_default)
     }
 
     @Test
@@ -95,7 +98,7 @@ class RunningBusesDataSourceTest {
         val result = runningBusesDataSource.getRunningBuses_prev()
 
         // Assert
-        assert(result == RunningBuses(-2, emptyList()))
+        assert(result == runningBuses_default)
     }
 
     @Test

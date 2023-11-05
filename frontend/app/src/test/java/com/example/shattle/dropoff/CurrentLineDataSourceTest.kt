@@ -32,6 +32,9 @@ class CurrentLineDataSourceTest {
 
     private lateinit var currentLineDataSource: CurrentLineDataSource
 
+    val currentLine_default = CurrentLine(-2, -2, -2, "")
+    val currentLine_1 = CurrentLine(1, 1, 1, "")
+
     @Before
     fun setup() {
         // Initialize the CurrentLineDataSource with mocked context and shared preferences
@@ -51,14 +54,14 @@ class CurrentLineDataSourceTest {
         val result = currentLineDataSource.getCurrentLine()
 
         // Assert
-        assert(result == CurrentLine(-2, -2, -2, ""))
+        assert(result == currentLine_default)
     }
 
     @Test
     fun storeCurrentLineTest() {
         // Arrange
         // When storing a CurrentLine, it should be saved to shared preferences
-        val currentLineToStore = CurrentLine(1, 1, 1, "")
+        val currentLineToStore = currentLine_1
 
         // Act
         currentLineDataSource.storeCurrentLine(currentLineToStore)
@@ -74,14 +77,14 @@ class CurrentLineDataSourceTest {
         // Arrange
         // When there is data in shared preferences, getCurrentLine should return the stored data
         val gson = Gson()
-        val storedData = gson.toJson(CurrentLine(1, 1, 1, ""))
+        val storedData = gson.toJson(currentLine_1)
         `when`(sharedPrefs.getString(eq("CurrentLine"), any())).thenReturn(storedData)
 
         // Act
         val result = currentLineDataSource.getCurrentLine()
 
         // Assert
-        assert(result == CurrentLine(1, 1, 1, ""))
+        assert(result == currentLine_1)
     }
 
     @Test
@@ -94,14 +97,14 @@ class CurrentLineDataSourceTest {
         val result = currentLineDataSource.getCurrentLine_prev()
 
         // Assert
-        assert(result == CurrentLine(-2, -2, -2, ""))
+        assert(result == currentLine_default)
     }
 
     @Test
     fun storeCurrentLine_prevTest() {
         // Arrange
         // When storing a CurrentLine, it should be saved to shared preferences
-        val currentLineToStore = CurrentLine(2, 2, 2, "")
+        val currentLineToStore = currentLine_1
 
         // Act
         currentLineDataSource.storeCurrentLine_prev(currentLineToStore)
@@ -117,13 +120,13 @@ class CurrentLineDataSourceTest {
         // Arrange
         // When there is data in shared preferences, getCurrentLine should return the stored data
         val gson = Gson()
-        val storedData = gson.toJson(CurrentLine(2, 2, 2, ""))
+        val storedData = gson.toJson(currentLine_1)
         `when`(sharedPrefs.getString(eq("CurrentLine_prev"), any())).thenReturn(storedData)
 
         // Act
         val result = currentLineDataSource.getCurrentLine_prev()
 
         // Assert
-        assert(result == CurrentLine(2, 2, 2, ""))
+        assert(result == currentLine_1)
     }
 }
