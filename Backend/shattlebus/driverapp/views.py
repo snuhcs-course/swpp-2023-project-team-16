@@ -1,3 +1,5 @@
+import datetime
+
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django.http import HttpResponse
@@ -31,7 +33,7 @@ class RetrieveCircularBusView(View):
             "longitude": float(location.longitude),
             "is_running": my_bus.is_running,
             "is_tracked": my_bus.is_tracked,
-            "updated_at": str(my_bus.updated_at)
+            "location_updated_at": str(location.updated_at+datetime.timedelta(hours=9))
         }
 
         return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1))
@@ -63,7 +65,7 @@ class UpdateCircularBusLocationView(View):
             "longitude": float(location.longitude),
             "is_running": my_bus.is_running,
             "is_tracked": my_bus.is_tracked,
-            "updated_at": str(my_bus.updated_at)
+            "location_updated_at": str(location.updated_at+datetime.timedelta(hours=9))
         }
 
         return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1))
