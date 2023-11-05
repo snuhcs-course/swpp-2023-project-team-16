@@ -36,7 +36,7 @@ class RetrieveCircularBusView(View):
             "location_updated_at": str(location.updated_at+datetime.timedelta(hours=9))
         }
 
-        return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1))
+        return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -68,4 +68,4 @@ class UpdateCircularBusLocationView(View):
             "location_updated_at": str(location.updated_at+datetime.timedelta(hours=9))
         }
 
-        return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1))
+        return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")

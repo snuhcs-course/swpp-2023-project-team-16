@@ -38,4 +38,4 @@ class RetrieveCircularBusesLocationView(View):
 
         response['buses'] = bus_lists
 
-        return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1))
+        return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")
