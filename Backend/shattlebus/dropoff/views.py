@@ -36,7 +36,7 @@ class RetrieveWaitingTimeView(View):
                 "updated_at": str(updated_at_kr)
             }
 
-        return HttpResponse(json.dumps(waiting_data, ensure_ascii=False, indent=1))
+        return HttpResponse(json.dumps(waiting_data, ensure_ascii=False, indent=1), content_type="application/json")
 
     def get_waiting_data(self, num_people_waiting, updated_at_kr):
         num_needed_bus = (num_people_waiting // MAX_NUM_OF_PEOPLE) + 1
