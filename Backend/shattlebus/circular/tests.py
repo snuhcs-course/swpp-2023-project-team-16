@@ -43,7 +43,7 @@ class RetrieveCircularBusesLocationTest(TestCase):
         self.assertEqual(data["buses"][1]["latitude"], 22.2222)
         self.assertEqual(data["buses"][1]["longitude"], 22.2222)
 
-        print("\n- 순환 셔틀 버스 Location 리스트 얻기 success")
+        print("\n---circular) 순환 셔틀 버스 Location 리스트 얻기 success---")
 
 
 

@@ -27,7 +27,7 @@ class RetrieveWaitingTimeTest(TestCase):
         self.assertEqual(CurrentLine.objects.count(), 1)
         self.assertEqual(data["num_waiting_people"], CurrentLine.objects.all()[0].num_people_waiting)
         self.assertEqual(data["num_waiting_people"], 1616)
-        print("\n- is_executing=True 일 때 하교 셔틀 대기 시간 얻기 success")
+        print("\n---dropoff) is_executing=True 일 때 하교 셔틀 대기 시간 얻기 success---")
 
     def test_get_num_waiting_people_for_shuttle_when_not_executing(self):
         # Given
@@ -46,7 +46,7 @@ class RetrieveWaitingTimeTest(TestCase):
         self.assertEqual(data["num_waiting_people"], 6161)
         self.assertEqual(data["waiting_time"], -1)
         self.assertEqual(data["num_needed_bus"], -1)
-        print("\n- is_executing=False 일 때 하교 셔틀 대기 시간 얻기 success")
+        print("\n---dropoff) is_executing=False 일 때 하교 셔틀 대기 시간 얻기 success---")
 
     def test_get_waiting_time_for_shuttle_including_no_shuttle_time(self):
         # Given
@@ -81,4 +81,4 @@ class RetrieveWaitingTimeTest(TestCase):
         else:
             self.assertNotEquals(data["waiting_time"], -1)
             self.assertNotEquals(data["num_needed_bus"], -1)
-        print("\n- 셔틀이 없는 시간에 하교 셔틀 대기 시간 얻기 success")
+        print("\n---dropoff) 셔틀이 없는 시간에 하교 셔틀 대기 시간 얻기 success---")
