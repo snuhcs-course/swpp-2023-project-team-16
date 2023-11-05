@@ -38,7 +38,7 @@ class RetrieveCircularBusTest(TestCase):
         self.assertEqual(data["is_tracked"], True)
         self.assertIsNotNone(data["location_updated_at"])
 
-        print("\n- 내 순환 셔틀 버스 정보 얻기 success")
+        print("\n---driverapp) 내 순환 셔틀 버스 정보 얻기 success---")
 
     def test_get_circular_bus_404(self):
         # Given
@@ -56,7 +56,7 @@ class RetrieveCircularBusTest(TestCase):
         # Then
         self.assertEqual(response.status_code, 404)
 
-        print("\n- 내 순환 셔틀 버스 정보 얻기(404 fail) success")
+        print("\n---driverapp) 내 순환 셔틀 버스 정보 얻기(404 fail) success---")
 
 
 class UpdateCircularBusLocationTest(TestCase):
@@ -97,7 +97,7 @@ class UpdateCircularBusLocationTest(TestCase):
         self.assertEqual(data["is_tracked"], True)
         self.assertNotEquals(data["location_updated_at"], str(original_updated_at_kr))
 
-        print("\n- 순환 셔틀 버스 location update success")
+        print("\n---driverapp) 순환 셔틀 버스 location update success---")
 
     def test_put_circular_bus_location_404(self):
         # Given
@@ -115,4 +115,4 @@ class UpdateCircularBusLocationTest(TestCase):
         # Then
         self.assertEqual(response.status_code, 404)
 
-        print("\n- 순환 셔틀 버스 location update(404 fail) success")
+        print("\n---driverapp) 순환 셔틀 버스 location update(404 fail) success---")
