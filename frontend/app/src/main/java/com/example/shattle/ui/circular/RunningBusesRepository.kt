@@ -95,15 +95,6 @@ class RunningBusesRepository(val runningBusesDataSource: RunningBusesDataSource)
             )
         ),
         RunningBuses(
-            0, emptyList()
-        ),
-        RunningBuses(
-            -3, emptyList()
-        ),
-        RunningBuses(
-            0, emptyList()
-        ),
-        RunningBuses(
             2, listOf(
                 Bus(0, "a", 37.46577, 126.9484, true, true),
                 Bus(1, "a", 37.45158, 126.9526, true, true),
