@@ -18,10 +18,10 @@ class DropoffUI(
     val tv_updatedTime: TextView,
     val imgv_man: ImageView,
     val layout_visualView: ConstraintLayout,
-    val bt_refreshButton: Button
+    val bt_refresh: Button,
 ) {
 
-    fun updateUI(dropoffUIState: DropoffUIState){
+    fun updateUI(dropoffUIState: DropoffUIState) {
         changeTextView(dropoffUIState)
         changeVisualView(dropoffUIState)
         changeUpdatedTime(dropoffUIState)
@@ -48,9 +48,24 @@ class DropoffUI(
         val startIndexTime = numTimeText.indexOf(dropoffUIState.numTime.toString())
         val endIndexTime = startIndexTime + dropoffUIState.numTime.toString().length
 
-        spannableNumPeople.setSpan(boldStyle, startIndexPeople, endIndexPeople, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        spannableNumBus.setSpan(boldStyle, startIndexBus, endIndexBus, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        spannableNumTime.setSpan(boldStyle, startIndexTime, endIndexTime, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableNumPeople.setSpan(
+            boldStyle,
+            startIndexPeople,
+            endIndexPeople,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannableNumBus.setSpan(
+            boldStyle,
+            startIndexBus,
+            endIndexBus,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannableNumTime.setSpan(
+            boldStyle,
+            startIndexTime,
+            endIndexTime,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
 
         tv_numPeople.text = spannableNumPeople
         tv_numBus.text = spannableNumBus
@@ -67,17 +82,17 @@ class DropoffUI(
         // Change the bias values as desired.
         var bias = (dropoffUIState.numPeople / 120.0).toFloat()
         // 정류장 이미지랑 겹쳐서 최소 bias 0.15로 설정
-        if(bias < 0.15F)
+        if (bias < 0.15F)
             bias = 0.15F
         constraintSet.setHorizontalBias(imgv_man.id, (bias))
         // Apply the updated constraints to the ConstraintLayout.
         constraintSet.applyTo(constraintLayout)
     }
 
-    fun changeUpdatedTime(dropoffUIState: DropoffUIState){
+    fun changeUpdatedTime(dropoffUIState: DropoffUIState) {
         // TODO
         var dateTimeString = "2023-01-23T12:34:56Z"
-        tv_updatedTime
+        tv_updatedTime.text = dropoffUIState.updatedAt
 //        var inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
 //        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
 //        val dateTime = inputFormat.parse(dateTimeString)

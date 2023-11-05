@@ -8,10 +8,12 @@ import com.example.shattle.data.models.CurrentLine
 
 class DropoffViewModel : ViewModel() {
 
-    private val DEFAULT_VALUE = CurrentLine(-2, -2, -2)
+    private val DEFAULT_VALUE = CurrentLine(-2, -2, -2, "")
 
     private val uiState: MutableLiveData<DropoffUIState?> =
         MutableLiveData<DropoffUIState?>(DropoffUIState(DEFAULT_VALUE))
+
+    private val toastMessage = MutableLiveData<String>()
 
     fun getUIState(): MutableLiveData<DropoffUIState?> {
         return uiState
@@ -38,10 +40,10 @@ class DropoffViewModel : ViewModel() {
     }
 
     // Fragment 에서 Toast 를 띄워주기 위한 함수들
-    private val toastMessage = MutableLiveData<String>()
     fun getToastMessage(): LiveData<String> {
         return toastMessage
     }
+
     fun showToastMessage(message: String) {
         toastMessage.value = message
     }

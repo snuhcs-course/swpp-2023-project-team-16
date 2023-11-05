@@ -95,32 +95,17 @@ class RunningBusesRepository(val runningBusesDataSource: RunningBusesDataSource)
             )
         ),
         RunningBuses(
-            0, emptyList()
-        ),
-        RunningBuses(
-            -3, emptyList()
-        ),
-        RunningBuses(
-            -4, emptyList()
-        ),
-        RunningBuses(
-            0, emptyList()
-        ),
-        RunningBuses(
             2, listOf(
                 Bus(0, "a", 37.46577, 126.9484, true, true),
                 Bus(1, "a", 37.45158, 126.9526, true, true),
             )
         ),
-        RunningBuses(
-            -4, emptyList()
-        ),
-        )
+    )
 
     var cnt = 0
     fun refreshRunningBuses() {
 
-        if(runningBuses.numBusesRunning >= 0){
+        if (runningBuses.numBusesRunning >= 0) {
             runningBuses_prev = runningBuses
         }
         runningBuses = dummy[cnt]
@@ -128,7 +113,7 @@ class RunningBusesRepository(val runningBusesDataSource: RunningBusesDataSource)
         runningBusesDataSource.storeRunningBuses(runningBuses)
         runningBusesDataSource.storeRunningBuses_prev(runningBuses_prev)
         cnt++
-        if(cnt >= dummy.size)
+        if (cnt >= dummy.size)
             cnt--
     }
 }
