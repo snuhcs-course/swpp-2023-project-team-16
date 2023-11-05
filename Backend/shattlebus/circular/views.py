@@ -11,7 +11,7 @@ from .models import CircularBus
 # Create your views here.
 
 
-class UpdateCircularBusLocationView(View):
+class RetrieveCircularBusesLocationView(View):
 
     def get(self, request):
         running_bus_list = CircularBus.objects.filter(is_running=True, is_tracked=True)
