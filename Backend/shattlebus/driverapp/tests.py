@@ -40,6 +40,25 @@ class RetrieveCircularBusTest(TestCase):
 
         print("\n- 내 순환 셔틀 버스 정보 얻기 success")
 
+    def test_get_circular_bus_404(self):
+        # Given
+        location = Location.objects.create(latitude=37.1111, longitude=126.1111)
+        location.save()
+        circular_bus = CircularBus.objects.create(
+            license_plate="16가1616", location_id=location.id, is_running=True, is_tracked=True
+        )
+        circular_bus.save()
+
+        # When
+        client = Client()
+        response = client.get('/driverapp/circular/buses?license_plate=1가1616', secure=True)
+
+        # Then
+        self.assertEqual(response.status_code, 404)
+
+        print("\n- 내 순환 셔틀 버스 정보 얻기(404 fail) success")
+
+
 class UpdateCircularBusLocationTest(TestCase):
 
     def setup(self):
@@ -80,3 +99,20 @@ class UpdateCircularBusLocationTest(TestCase):
 
         print("\n- 순환 셔틀 버스 location update success")
 
+    def test_put_circular_bus_location_404(self):
+        # Given
+        location = Location.objects.create(latitude=37.1111, longitude=126.1111)
+        location.save()
+        circular_bus = CircularBus.objects.create(
+            license_plate="16가1616", location_id=location.id, is_running=True, is_tracked=True
+        )
+        circular_bus.save()
+
+        # When
+        client = Client()
+        response = client.put('/driverapp/update?license_plate=16가 1616&latitude=27.1111&longitude=136.1111', secure=True)
+
+        # Then
+        self.assertEqual(response.status_code, 404)
+
+        print("\n- 순환 셔틀 버스 location update(404 fail) success")
