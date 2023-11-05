@@ -5,8 +5,6 @@ from django.http import HttpResponse
 
 import json
 
-import time
-
 from .models import CurrentLine
 
 HOUR_SHUTTLE_START = 7
@@ -20,13 +18,13 @@ FRIDAY = 4
 class RetrieveWaitingTimeView(View):
 
     def get(self, request):
-        current_line = CurrentLine.objects.all().values()[0]
-        num_people_waiting = current_line['num_people_waiting']
-        updated_at = current_line['updated_at']
+        current_line = CurrentLine.objects.all()[0]
+        num_people_waiting = current_line.num_people_waiting
+        updated_at = current_line.updated_at
         updated_at_kr = updated_at + datetime.timedelta(hours=9)
 
         try:
-            if not current_line['is_executing']:
+            if not current_line.is_executing:
                 raise NoShuttleException
 
             waiting_data = self.get_waiting_data(num_people_waiting, updated_at_kr)
@@ -38,7 +36,7 @@ class RetrieveWaitingTimeView(View):
                 "updated_at": str(updated_at_kr)
             }
 
-        return HttpResponse(json.dumps(waiting_data))
+        return HttpResponse(json.dumps(waiting_data, ensure_ascii=False, indent=1))
 
     def get_waiting_data(self, num_people_waiting, updated_at_kr):
         num_needed_bus = (num_people_waiting // MAX_NUM_OF_PEOPLE) + 1
