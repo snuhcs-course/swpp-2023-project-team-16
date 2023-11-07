@@ -10,6 +10,9 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.google.android.gms.maps.GoogleMap
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 class DropoffUI(
     val tv_numPeople: TextView,
@@ -28,6 +31,7 @@ class DropoffUI(
     }
 
     fun changeTextView(dropoffUIState: DropoffUIState) {
+        // 숫자 bold 적용
 
         val boldStyle = StyleSpan(Typeface.BOLD)
 
@@ -70,7 +74,6 @@ class DropoffUI(
         tv_numPeople.text = spannableNumPeople
         tv_numBus.text = spannableNumBus
         tv_numTime.text = spannableNumTime
-
     }
 
     fun changeVisualView(dropoffUIState: DropoffUIState) {
@@ -81,24 +84,21 @@ class DropoffUI(
 
         // Change the bias values as desired.
         var bias = (dropoffUIState.numPeople / 120.0).toFloat()
-        // 정류장 이미지랑 겹쳐서 최소 bias 0.15로 설정
-        if (bias < 0.15F)
-            bias = 0.15F
+        // 정류장 이미지랑 겹쳐서 최소 bias 0.0625 로 설정
+        if (bias < 0.0625F)
+            bias = 0.0625F
         constraintSet.setHorizontalBias(imgv_man.id, (bias))
         // Apply the updated constraints to the ConstraintLayout.
         constraintSet.applyTo(constraintLayout)
     }
 
     fun changeUpdatedTime(dropoffUIState: DropoffUIState) {
-        // TODO
-        var dateTimeString = "2023-01-23T12:34:56Z"
-        tv_updatedTime.text = dropoffUIState.updatedAt
-//        var inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-//        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
-//        val dateTime = inputFormat.parse(dateTimeString)
-//
-//        val outputFormat = SimpleDateFormat("MM.dd HH:mm", Locale.getDefault())
-//        binding.updatedTimeTextView.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
+        val dateTimeString = dropoffUIState.updatedTime
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSSXXX", Locale.getDefault())
+        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val dateTime = inputFormat.parse(dateTimeString)
+        val outputFormat = SimpleDateFormat("MM.dd hh:mm:ss (a)", Locale.getDefault()) //(hh 대신 HH 하면 24시간기준)
+        tv_updatedTime.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
     }
 
 }

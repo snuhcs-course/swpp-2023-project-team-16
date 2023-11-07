@@ -8,5 +8,5 @@ data class DropoffUIState(
     val numPeople = currentLine.numWaitingPeople
     val numBus = currentLine.numNeededBus
     val numTime = currentLine.waitingTime
-    val updatedAt = currentLine.updatedTime
+    val updatedTime = currentLine.updatedTime
 }
