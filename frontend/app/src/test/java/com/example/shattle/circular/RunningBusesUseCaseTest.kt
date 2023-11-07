@@ -5,6 +5,7 @@ import com.example.shattle.data.models.RunningBuses
 import com.example.shattle.ui.circular.RunningBusesDataSource
 import com.example.shattle.ui.circular.RunningBusesRepository
 import com.example.shattle.ui.circular.RunningBusesUseCase
+import com.google.android.gms.maps.model.LatLng
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
@@ -29,10 +30,12 @@ class RunningBusesUseCaseTest {
 
     private lateinit var runningBusesUseCase: RunningBusesUseCase
 
-    val ERROR_BODY_IS_NULL = RunningBuses(-3, emptyList())
-    val ERROR_RESPONSE_IS_NOT_SUCCESSFUL = RunningBuses(-4, emptyList())
-    val ERROR_ON_FAILURE = RunningBuses(-5, emptyList())
-    val DEFAULT_VALUE = RunningBuses(-2, emptyList())
+    val ERROR_BODY_IS_NULL = RunningBuses(true, -3)
+    val ERROR_RESPONSE_IS_NOT_SUCCESSFUL = RunningBuses(true, -4)
+    val ERROR_ON_FAILURE = RunningBuses(true, -5)
+    val DEFAULT_VALUE = RunningBuses(true, -2)
+
+    val runningBuses_1 = RunningBuses(1, listOf(Bus(0, LatLng(0.0,0.0))))
 
     @Before
     fun setUp() {
@@ -59,7 +62,7 @@ class RunningBusesUseCaseTest {
     @Test
     fun getRunningBusesTest() {
         // Arrange
-        val expectedRunningBuses = RunningBuses(1, listOf(Bus(0, "a", 0.0, 0.0, true, true)))
+        val expectedRunningBuses = runningBuses_1
         `when`(mockRunningBusesRepository.runningBusesDataSource.getRunningBuses()).thenReturn(
             expectedRunningBuses
         )
@@ -74,7 +77,7 @@ class RunningBusesUseCaseTest {
     @Test
     fun getRunningBuses_prevTest() {
         // Arrange
-        val expectedRunningBuses = RunningBuses(1, listOf(Bus(0, "a", 0.0, 0.0, true, true)))
+        val expectedRunningBuses = runningBuses_1
         `when`(mockRunningBusesRepository.runningBusesDataSource.getRunningBuses_prev()).thenReturn(
             expectedRunningBuses
         )

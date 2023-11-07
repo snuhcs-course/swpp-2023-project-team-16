@@ -68,7 +68,7 @@ class CircularFragment : Fragment() {
             googleMap = mMap
             //circularViewModel.setGoogleMap(googleMap!!)
             circularUI.customizeGoogleMap(googleMap!!)
-            circularUI.showCurrentLocationsOfBus(googleMap, circularViewModel.getUIState().value!!)
+            circularUI.showCurrentLocationsOfBus(googleMap!!, circularViewModel.getUIState().value!!)
         })
 
         // Initial Update

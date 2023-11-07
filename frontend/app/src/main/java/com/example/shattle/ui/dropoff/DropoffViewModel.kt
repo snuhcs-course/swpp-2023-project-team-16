@@ -8,7 +8,7 @@ import com.example.shattle.data.models.CurrentLine
 
 class DropoffViewModel : ViewModel() {
 
-    private val DEFAULT_VALUE = CurrentLine(-2, -2, -2, "")
+    private val DEFAULT_VALUE = CurrentLine(true, -2)
 
     private val uiState: MutableLiveData<DropoffUIState?> =
         MutableLiveData<DropoffUIState?>(DropoffUIState(DEFAULT_VALUE))

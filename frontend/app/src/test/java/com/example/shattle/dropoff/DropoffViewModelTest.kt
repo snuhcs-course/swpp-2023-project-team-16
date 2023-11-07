@@ -33,6 +33,8 @@ class DropoffViewModelTest {
 
     private lateinit var viewModel: DropoffViewModel
 
+    val currentLine_123 = CurrentLine(1,2,3,"")
+
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
@@ -45,7 +47,7 @@ class DropoffViewModelTest {
     @Test
     fun getDataWithInvalidResponse() {
         // Arrange
-        val currentLine_prev = CurrentLine(1, 2, 3, "")
+        val currentLine_prev = currentLine_123
         `when`(mockCurrentLineUseCase.isValidResponse()).thenReturn(false) // response 가 -3 or -4 or -5
         `when`(mockCurrentLineUseCase.getCurrentLine_prev()).thenReturn(currentLine_prev)
 
@@ -60,7 +62,7 @@ class DropoffViewModelTest {
     @Test
     fun getDataWithNoShuttle() {
         // Arrange
-        val previousLine = CurrentLine(1, 2, 3, "")
+        val previousLine = currentLine_123
         `when`(mockCurrentLineUseCase.isValidResponse()).thenReturn(true) // response 는 성공적
         `when`(mockCurrentLineUseCase.isNoShuttle()).thenReturn(true)
         `when`(mockCurrentLineUseCase.getCurrentLine_prev()).thenReturn(previousLine)
@@ -76,7 +78,7 @@ class DropoffViewModelTest {
     @Test
     fun getDataWithSuccessfulResponse() {
         // Arrange
-        val currentLine = CurrentLine(1, 2, 3, "")
+        val currentLine = currentLine_123
         `when`(mockCurrentLineUseCase.isValidResponse()).thenReturn(true)
         `when`(mockCurrentLineUseCase.getCurrentLine()).thenReturn(currentLine)
 

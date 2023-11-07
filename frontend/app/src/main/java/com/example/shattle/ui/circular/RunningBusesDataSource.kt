@@ -14,7 +14,7 @@ class RunningBusesDataSource(context: Context) {
 
     private val keyRunningBuses = "RunningBuses"
     private val keyRunningBuses_prev = "RunningBuses_prev"
-    private val DEFAULT_VALUE = RunningBuses(-2, emptyList())
+    private val DEFAULT_VALUE = RunningBuses(true, -2)
 
     fun getRunningBuses(): RunningBuses {
         // sharedPref 에서 Running Buses Data 반환
@@ -43,27 +43,22 @@ class RunningBusesDataSource(context: Context) {
     }
 
     fun getRunningBuses_prev(): RunningBuses {
-        // sharedPref 에서 Running Buses Data 반환
 
         val lambdaSerialized = sharedPref?.getString(keyRunningBuses_prev, null)
 
         return if (lambdaSerialized != null) {
-            // 이전에 저장된 데이터가 있는 경우 reverse serialize 해서 반환
             val gson = Gson()
             gson.fromJson(lambdaSerialized, RunningBuses::class.java)
         } else {
-            // 저장된 데이터가 없는 경우 기본값 반환
             DEFAULT_VALUE
         }
     }
 
     fun storeRunningBuses_prev(runningBuses: RunningBuses) {
-        // sharedPref 에 Running Buses Data 저장
 
         val gson = Gson()
         val lambdaSerialized = gson.toJson(runningBuses)
 
-        // 데이터를 SharedPreferences에 저장
         editor?.putString(keyRunningBuses_prev, lambdaSerialized)
         editor?.apply()
     }

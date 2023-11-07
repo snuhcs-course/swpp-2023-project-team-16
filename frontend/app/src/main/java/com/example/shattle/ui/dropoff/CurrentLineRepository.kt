@@ -9,28 +9,25 @@ import retrofit2.Response
 
 class CurrentLineRepository(val currentLineDataSource: CurrentLineDataSource) {
 
-    val ERROR_BODY_IS_NULL = CurrentLine(-3, -3, -3, "")
-    val ERROR_RESPONSE_IS_NOT_SUCCESSFUL = CurrentLine(-4, -4, -4, "")
-    val ERROR_ON_FAILURE = CurrentLine(-5, -5, -5, "")
+    val ERROR_BODY_IS_NULL = CurrentLine(true, -3)
+    val ERROR_RESPONSE_IS_NOT_SUCCESSFUL = CurrentLine(true, -4)
+    val ERROR_ON_FAILURE = CurrentLine(true, -5)
 
     var currentLine = currentLineDataSource.getCurrentLine()
     var currentLine_prev = currentLineDataSource.getCurrentLine_prev()
     fun refreshCurrentLine() {
         // 서버로부터 data call
         // 응답받은 데이터 currentLineDataSource 에 저장 (sharedPref)
+        //Log.e("MyLogChecker", "@@ start refreshCurrentLine()")
 
-
+        // currentLine_prev 에는 항상 유효한 값만 저장됨 (화면 업데이트용)
         if (currentLine.waitingTime >= 0) {
             currentLine_prev = currentLine
         }
 
-        //Log.e("MyLogChecker", "@@ start refreshCurrentLine()")
-
         val call: Call<CurrentLine> = ServiceCreator.apiService.getCurrentLine()
-        //Log.e(            "MyLogChecker",            "@@ val call: Call<CurrnetLine> = ServiceCreator.apiService.getCurrentLine()"        )
 
         //Log.e("MyLogChecker", "# start call.enqueue():")
-
         call.enqueue(object : Callback<CurrentLine> {
             override fun onResponse(
                 call: Call<CurrentLine>,

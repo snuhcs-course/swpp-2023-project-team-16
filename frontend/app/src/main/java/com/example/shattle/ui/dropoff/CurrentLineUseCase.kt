@@ -4,9 +4,9 @@ import com.example.shattle.data.models.CurrentLine
 
 class CurrentLineUseCase(val currentLineRepository: CurrentLineRepository) {
 
-    val ERROR_BODY_IS_NULL = CurrentLine(-3, -3, -3, "")
-    val ERROR_RESPONSE_IS_NOT_SUCCESSFUL = CurrentLine(-4, -4, -4, "")
-    val ERROR_ON_FAILURE = CurrentLine(-5, -5, -5, "")
+    val ERROR_BODY_IS_NULL = CurrentLine(true, -3)
+    val ERROR_RESPONSE_IS_NOT_SUCCESSFUL = CurrentLine(true, -4)
+    val ERROR_ON_FAILURE = CurrentLine(true, -5)
 
     fun refreshData() {
         currentLineRepository.refreshCurrentLine()

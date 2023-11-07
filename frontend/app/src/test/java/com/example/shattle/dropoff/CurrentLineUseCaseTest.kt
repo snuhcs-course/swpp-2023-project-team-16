@@ -28,10 +28,14 @@ class CurrentLineUseCaseTest {
 
     private lateinit var currentLineUseCase: CurrentLineUseCase
 
-    val ERROR_BODY_IS_NULL = CurrentLine(-3, -3, -3, "")
-    val ERROR_RESPONSE_IS_NOT_SUCCESSFUL = CurrentLine(-4, -4, -4, "")
-    val ERROR_ON_FAILURE = CurrentLine(-5, -5, -5, "")
-    val DEFAULT_VALUE = CurrentLine(-2, -2, -2, "")
+    val ERROR_BODY_IS_NULL = CurrentLine(true, -3)
+    val ERROR_RESPONSE_IS_NOT_SUCCESSFUL = CurrentLine(true, -4)
+    val ERROR_ON_FAILURE = CurrentLine(true, -5)
+    val DEFAULT_VALUE = CurrentLine(true, -2)
+
+    val currentLine_123 = CurrentLine(1,2,3,"")
+
+    val currentLine_noShuttle = CurrentLine(70, -1, -1, "")
 
     @Before
     fun setUp() {
@@ -56,7 +60,7 @@ class CurrentLineUseCaseTest {
     @Test
     fun getCurrentLineTest() {
         // Arrange
-        val expectedCurrentLine = CurrentLine(1, 2, 3, "")
+        val expectedCurrentLine = currentLine_123
         `when`(mockCurrentLineRepository.currentLineDataSource.getCurrentLine()).thenReturn(
             expectedCurrentLine
         )
@@ -71,7 +75,7 @@ class CurrentLineUseCaseTest {
     @Test
     fun getCurrentLine_prevTest() {
         // Arrange
-        val expectedCurrentLine = CurrentLine(1, 2, 3, "")
+        val expectedCurrentLine = currentLine_123
         `when`(mockCurrentLineRepository.currentLineDataSource.getCurrentLine_prev()).thenReturn(
             expectedCurrentLine
         )
@@ -129,7 +133,7 @@ class CurrentLineUseCaseTest {
     fun isValidResponseWithVailidValue() {
         // Arrange
         `when`(mockCurrentLineRepository.currentLineDataSource.getCurrentLine()).thenReturn(
-            CurrentLine(1, 2, 3, "")
+            currentLine_123
         )
 
         // Act
@@ -143,7 +147,7 @@ class CurrentLineUseCaseTest {
     fun isNoShuttleWithInvalidValue() {
         // Arrange
         `when`(mockCurrentLineRepository.currentLineDataSource.getCurrentLine()).thenReturn(
-            CurrentLine(70, -1, -1, "")
+            currentLine_noShuttle
         )
 
         // Act
@@ -157,7 +161,7 @@ class CurrentLineUseCaseTest {
     fun isNoShuttleWithValidValue() {
         // Arrange
         `when`(mockCurrentLineRepository.currentLineDataSource.getCurrentLine()).thenReturn(
-            CurrentLine(1, 2, 3, "")
+            currentLine_123
         )
 
         // Act
