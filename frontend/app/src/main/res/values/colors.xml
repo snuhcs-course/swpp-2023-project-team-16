@@ -10,7 +10,7 @@
     <color name="updated_time">@color/dark</color>
 
     <!-- info button -->
-    <color name="gray_400_transparent">#80AAAAAA</color>
+    <color name="gray_transparent">#80CECFCD</color>
 
     <color name="green_100">#DAEDD5</color>
     <color name="green_200">#B8D6B0</color>
