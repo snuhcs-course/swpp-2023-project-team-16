@@ -8,5 +8,5 @@ data class RunningBuses(
     @SerializedName("buses")
     val buses: List<Bus>
 ) {
-
+    constructor(isErrorClass: Boolean, errorCode: Int) : this(errorCode, emptyList())
 }

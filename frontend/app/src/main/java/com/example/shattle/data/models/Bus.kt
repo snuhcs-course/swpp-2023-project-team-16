@@ -1,5 +1,6 @@
 package com.example.shattle.data.models
 
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.annotations.SerializedName
 
 data class Bus(
@@ -14,5 +15,18 @@ data class Bus(
     @SerializedName("is_running")
     val isRunning: Boolean,
     @SerializedName("is_tracked")
-    val isTracked: Boolean
-)
+    val isTracked: Boolean,
+    @SerializedName("updated_at")
+    val updatedTime: String
+
+) {
+    constructor(id: Int, location: LatLng) : this(
+        id,
+        "",
+        location.latitude,
+        location.longitude,
+        true,
+        true,
+        ""
+    )
+}
