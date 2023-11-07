@@ -1,9 +1,9 @@
 package com.example.shattle.ui.circular
 
 import android.graphics.Color
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
-import androidx.lifecycle.MutableLiveData
 import com.example.shattle.R
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -12,6 +12,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.Locale
+import java.util.TimeZone
 
 class CircularUI(
     val bt_refreshButton: Button,
@@ -44,6 +48,7 @@ class CircularUI(
                 MarkerOptions()
                     .position(location) // Set the bus's initial position
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.img_circular_bus)) // Use a custom bus icon
+                    .zIndex(1f)
                 // 20~50픽셀
             )
             if (busMarker != null) {
@@ -54,23 +59,20 @@ class CircularUI(
     }
 
     fun changeUpdatedDateTime(circularUIState: CircularUIState) {
-        // TODO
-        var dateTimeString = "2023-01-23T12:34:56Z"
-        tv_updatedTime
-//        var inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-//        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
-//        val dateTime = inputFormat.parse(circularData.dateTimeString)
-//
-//        val outputFormat = SimpleDateFormat("MM.dd HH:mm", Locale.getDefault())
-//        binding.updatedTimeTextView.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
+        //val dateTimeString = circularUIState.updatedTime
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSSXXX", Locale.getDefault())
+        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+        //val dateTime = inputFormat.parse(dateTimeString)
+        val outputFormat = SimpleDateFormat("MM.dd hh:mm:ss (a)", Locale.getDefault()) //(hh 대신 HH 하면 24시간기준)
+        //tv_updatedTime.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
     }
 
-    fun customizeGoogleMap(googleMap: GoogleMap) {
+    fun customizeGoogleMap(googleMap: GoogleMap?) {
 
         // set initial camera location
         val initialLocation = LatLng(37.45800, 126.9531)
         val zoomLevel = 14.70f
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(initialLocation, zoomLevel))
+        googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(initialLocation, zoomLevel))
 
         // Show the bus stop locations on the map
         showBusStopLocations(googleMap)
@@ -98,7 +100,7 @@ class CircularUI(
         BusStop(LatLng(37.46602, 126.9522), "경영대", ""),
     )
 
-    fun showBusStopLocations(googleMap: GoogleMap) {
+    fun showBusStopLocations(googleMap: GoogleMap?) {
         // Show the bus stop locations on the map
 
         // 기본 마커로도 할 수 있고, 마커 이미지 커스텀 가능 (20~50 픽셀)
@@ -112,6 +114,7 @@ class CircularUI(
                     .title(busStop.title) // Set a title for the marker
                     .snippet(busStop.snippet) // Set additional information
                     .icon(customMarkerIcon) // Set a custom marker icon (optional)
+                    .zIndex(0f)
             )
         }
     }
@@ -159,10 +162,10 @@ class CircularUI(
         LatLng(37.46577, 126.9484), //정문`
     )
 
-    fun showRoute(googleMap: GoogleMap) {
+    fun showRoute(googleMap: GoogleMap?) {
         // Show the route of the circular shuttle on the map
 
-        googleMap.addPolyline(
+        googleMap?.addPolyline(
             PolylineOptions()
                 .clickable(false)
                 .addAll(roadCoordinates)
