@@ -53,7 +53,7 @@ class CurrentLineRepositoryTest {
 
     private lateinit var currentLineRepository: CurrentLineRepository
 
-    val currentLine_default = CurrentLine(-2, -2, -2, "")
+    val currentLine_default = CurrentLine(true, -2)
     val currentLine_1 = CurrentLine(1, 1, 1, "")
 
     @Before

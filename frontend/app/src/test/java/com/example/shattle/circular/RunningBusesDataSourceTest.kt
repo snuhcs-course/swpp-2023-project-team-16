@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.example.shattle.data.models.Bus
 import com.example.shattle.data.models.RunningBuses
 import com.example.shattle.ui.circular.RunningBusesDataSource
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import org.junit.Before
 import org.junit.Test
@@ -33,8 +34,8 @@ class RunningBusesDataSourceTest {
 
     private lateinit var runningBusesDataSource: RunningBusesDataSource
 
-    val runningBuses_default = RunningBuses(-2, emptyList())
-    val runningBuses_1 = RunningBuses(1, listOf(Bus(0, "a", 0.0, 0.0, true, true)))
+    val runningBuses_default = RunningBuses(true, -2)
+    val runningBuses_1 = RunningBuses(1, listOf(Bus(0, LatLng(0.0, 0.0))))
 
     @Before
     fun setup() {
@@ -62,7 +63,7 @@ class RunningBusesDataSourceTest {
     fun storeRunningBusesTest() {
         // Arrange
         // When storing a CurrentLine, it should be saved to shared preferences
-        val runningBusesToStore = RunningBuses(1, listOf(Bus(0, "a", 0.0, 0.0, true, true)))
+        val runningBusesToStore = runningBuses_1
 
         // Act
         runningBusesDataSource.storeRunningBuses(runningBusesToStore)
@@ -78,14 +79,14 @@ class RunningBusesDataSourceTest {
         // Arrange
         // When there is data in shared preferences, getCurrentLine should return the stored data
         val gson = Gson()
-        val storedData = gson.toJson(RunningBuses(1, listOf(Bus(1, "a", 1.0, 1.0, true, true))))
+        val storedData = gson.toJson(runningBuses_1)
         `when`(sharedPrefs.getString(eq("RunningBuses"), any())).thenReturn(storedData)
 
         // Act
         val result = runningBusesDataSource.getRunningBuses()
 
         // Assert
-        assert(result == RunningBuses(1, listOf(Bus(1, "a", 1.0, 1.0, true, true))))
+        assert(result == runningBuses_1)
     }
 
     @Test
@@ -105,7 +106,7 @@ class RunningBusesDataSourceTest {
     fun storeRunningBuses_prevTest() {
         // Arrange
         // When storing a CurrentLine, it should be saved to shared preferences
-        val runningBusesToStore = RunningBuses(1, listOf(Bus(0, "a", 0.0, 0.0, true, true)))
+        val runningBusesToStore = runningBuses_1
 
         // Act
         runningBusesDataSource.storeRunningBuses_prev(runningBusesToStore)
@@ -121,13 +122,13 @@ class RunningBusesDataSourceTest {
         // Arrange
         // When there is data in shared preferences, getCurrentLine should return the stored data
         val gson = Gson()
-        val storedData = gson.toJson(RunningBuses(1, listOf(Bus(1, "a", 1.0, 1.0, true, true))))
+        val storedData = gson.toJson(runningBuses_1)
         `when`(sharedPrefs.getString(eq("RunningBuses_prev"), any())).thenReturn(storedData)
 
         // Act
         val result = runningBusesDataSource.getRunningBuses_prev()
 
         // Assert
-        assert(result == RunningBuses(1, listOf(Bus(1, "a", 1.0, 1.0, true, true))))
+        assert(result == runningBuses_1)
     }
 }
