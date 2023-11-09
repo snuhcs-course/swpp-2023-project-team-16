@@ -105,7 +105,7 @@ class CircularFragment : Fragment() {
                 LOCATION_PERMISSION_REQUEST_CODE
             )
             if (!circularUI.isUserLocationInBound()) {
-                Toast.makeText(requireContext(), "현재 학교 밖입니다.", Toast.LENGTH_SHORT).show()
+                circularViewModel.showToastMessage("현재 학교 밖입니다.")
             }
 
         }

@@ -2,23 +2,33 @@
 <resources>
     <color name="title_text">@color/dark</color>
 
-    <!-- #22A400 -->
-    <color name="green_primary">#22A400</color>
+    <!--
+    초록 #22A400
+    초록(스벅) #01A862
+    파랑(zoom) #0A5CFE
+    파랑(My SNU) #0F3E8E
+    파랑(SNU Map) #2D72D9
+
+    주황(당근) #FE6E0E, 검정 #141514
+    -->
+    <color name="green_primary">#0F3E8E</color>
 
     <!-- staiton -->
     <color name="station_text_view_color">@color/dark</color>
 
     <!-- circular -->
-    <!-- #A0FFB602 -->
-    <color name="polyline_route_color">#99FFB602</color>
-    <color name="circular_bus">#001DD3</color>
+    <!-- 주황 #A0FFB602, 초록 #0ABB0B, 파랑 #057FEE-->
+    <color name="polyline_route_color">#A00ABB0B</color>
+    <!-- 파랑 #1A73E9 -->
+    <color name="circular_bus">#1A73E9</color>
     <color name="circular_bus_extra">#FFFFFF</color>
     <color name="direction_arrow">#FFFFFF</color>
     <color name="bus_stop_marker_fill">#FFFFFF</color>
     <color name="bus_stop_marker_bg">#80000000</color>
     <color name="gps">#000000</color>
     <color name="gps_bg">#A0ffffff</color>
-    <color name="user_location">#FF0000</color>
+    <!-- 빨강 #FF4931 -->
+    <color name="user_location">#FF4931</color>
     <color name="user_location_extra">#FFFFFF</color>
 
     <!-- refresh button -->

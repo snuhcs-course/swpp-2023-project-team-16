@@ -13,6 +13,7 @@ import android.Manifest
 import android.app.Activity
 import androidx.core.app.ActivityCompat.requestPermissions
 import com.example.shattle.R
+import com.example.shattle.data.models.RunningBuses
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -124,7 +125,7 @@ class CircularUI(
             .bearing(bearing)
             .tilt(tilt)
             .build()
-        
+
         googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
@@ -171,13 +172,13 @@ class CircularUI(
     }
 
     fun changeUpdatedDateTime(circularUIState: CircularUIState) {
+        val dateTimeString = RunningBuses(true, -1).updatedTime
         //val dateTimeString = circularUIState.updatedTime
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSSXXX", Locale.getDefault())
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
         inputFormat.timeZone = TimeZone.getTimeZone("UTC")
-        //val dateTime = inputFormat.parse(dateTimeString)
-        val outputFormat =
-            SimpleDateFormat("MM.dd hh:mm:ss (a)", Locale.getDefault()) //(hh 대신 HH 하면 24시간기준)
-        //tv_updatedTime.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
+        val dateTime = inputFormat.parse(dateTimeString)
+        val outputFormat = SimpleDateFormat("MM.dd hh:mm:ss (a)", Locale.getDefault()) //(hh 대신 HH 하면 24시간기준)
+        tv_updatedTime.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
     }
 
     fun customizeGoogleMap(googleMap: GoogleMap?, context: Context) {
@@ -292,5 +293,4 @@ class CircularUI(
                 .zIndex(-1.0f)
         )
     }
-
 }

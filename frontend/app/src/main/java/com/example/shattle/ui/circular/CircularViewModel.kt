@@ -9,7 +9,7 @@ import com.example.shattle.data.models.RunningBuses
 class CircularViewModel : ViewModel() {
 
 
-    private val DEFAULT_VALUE = RunningBuses(-2, emptyList())
+    private val DEFAULT_VALUE = RunningBuses(true, -2)
 
     private val uiState: MutableLiveData<CircularUIState?> =
         MutableLiveData<CircularUIState?>(CircularUIState(DEFAULT_VALUE))
@@ -20,9 +20,9 @@ class CircularViewModel : ViewModel() {
         return uiState
     }
 
-    val ERROR_BODY_IS_NULL = RunningBuses(-3, emptyList())
-    val ERROR_RESPONSE_IS_NOT_SUCCESSFUL = RunningBuses(-4, emptyList())
-    val ERROR_ON_FAILURE = RunningBuses(-5, emptyList())
+    val ERROR_BODY_IS_NULL = RunningBuses(true, -3)
+    val ERROR_RESPONSE_IS_NOT_SUCCESSFUL = RunningBuses(true, -4)
+    val ERROR_ON_FAILURE = RunningBuses(true, -5)
     fun getData(runningBusesUseCase: RunningBusesUseCase) {
         // (useCase 의) repository 에서 RunningBuses 데이터를 uiState 에 저장
         // runningBuses 가 유효하지 않을 경우 이전 값을 적용 (업데이트 X)
