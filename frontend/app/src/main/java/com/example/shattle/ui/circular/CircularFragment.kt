@@ -1,5 +1,10 @@
 package com.example.shattle.ui.circular
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,14 +13,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.shattle.R
 import com.example.shattle.databinding.FragmentCircularBinding
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 
 class CircularFragment : Fragment() {
 
@@ -26,6 +38,7 @@ class CircularFragment : Fragment() {
     private val binding get() = _binding!!
 
     var googleMap: GoogleMap? = null
+    private lateinit var circularUI: CircularUI
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,15 +63,16 @@ class CircularFragment : Fragment() {
         val circularViewModel = ViewModelProvider(this).get(CircularViewModel::class.java)
 
         // UI elements
-        val circularUI = CircularUI(
+        circularUI = CircularUI(
             binding.refreshButton,
             binding.updatedTimeTextView,
-            context
+            binding.gpsImageButton,
+            binding.homeImageButton,
         )
 
         // ViewModel tracks data changes
         circularViewModel.getUIState().observe(viewLifecycleOwner) { newCircularUIState ->
-            circularUI.updateUI(googleMap, newCircularUIState!!)
+            circularUI.updateUI(googleMap, newCircularUIState!!, requireContext())
         }
 
         // Set Google Map async
@@ -68,16 +82,41 @@ class CircularFragment : Fragment() {
             googleMap = mMap
 
             //circularViewModel.setGoogleMap(googleMap!!)
-            circularUI.customizeGoogleMap(googleMap)
-            circularUI.drawCurrentLocationsOfBus(googleMap, circularViewModel.getUIState().value!!)
+            circularUI.customizeGoogleMap(googleMap, requireContext())
+            circularUI.drawCurrentLocationsOfBus(
+                googleMap,
+                circularViewModel.getUIState().value!!,
+                requireContext()
+            )
         })
 
         // Initial Update
         circularViewModel.notifyRefresh(runningBusesUseCase)
         circularViewModel.getData(runningBusesUseCase)
 
+        // GPS Button
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        circularUI.bt_gps.setOnClickListener {
+            circularUI.drawUserLocation(
+                googleMap,
+                requireContext(),
+                requireActivity(),
+                fusedLocationClient,
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+            if (!circularUI.isUserLocationInBound()) {
+                Toast.makeText(requireContext(), "현재 학교 밖입니다.", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+        // home button
+        circularUI.bt_home.setOnClickListener{
+            circularUI.resetCamera(googleMap)
+        }
+
         // Refresh Button
-        circularUI.bt_refreshButton.setOnClickListener {
+        circularUI.bt_refresh.setOnClickListener {
             circularViewModel.notifyRefresh(runningBusesUseCase)
             circularViewModel.getData(runningBusesUseCase)
         }
@@ -113,6 +152,32 @@ class CircularFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var LOCATION_PERMISSION_REQUEST_CODE = 1000
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            LOCATION_PERMISSION_REQUEST_CODE -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    // 권한이 승인되면 현재 위치를 가져옵니다.
+                    circularUI.drawUserLocation(
+                        googleMap,
+                        requireContext(),
+                        requireActivity(),
+                        fusedLocationClient,
+                        LOCATION_PERMISSION_REQUEST_CODE
+                    )
+                } else {
+                    // 권한이 거부되면 처리 로직을 여기에 추가...
+                }
+                return
+            }
+        }
     }
 
 

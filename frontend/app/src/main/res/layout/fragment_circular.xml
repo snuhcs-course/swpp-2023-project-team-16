@@ -66,4 +66,26 @@
         app:layout_constraintEnd_toEndOf="@id/refreshButton"
         app:layout_constraintTop_toBottomOf="@id/refreshButton"/>
 
+    <ImageButton
+        android:id="@+id/gpsImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/btn_circular_gps"
+        android:background="@color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/refreshButton"
+        app:layout_constraintTop_toTopOf="@id/refreshButton"
+        android:layout_marginEnd="30dp" />
+
+    <ImageButton
+        android:id="@+id/homeImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/btn_circular_home"
+        android:background="@color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/gpsImageButton"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="30dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

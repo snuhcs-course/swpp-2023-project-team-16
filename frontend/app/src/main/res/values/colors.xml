@@ -16,6 +16,10 @@
     <color name="direction_arrow">#FFFFFF</color>
     <color name="bus_stop_marker_fill">#FFFFFF</color>
     <color name="bus_stop_marker_bg">#80000000</color>
+    <color name="gps">#000000</color>
+    <color name="gps_bg">#A0ffffff</color>
+    <color name="user_location">#FF0000</color>
+    <color name="user_location_extra">#FFFFFF</color>
 
     <!-- refresh button -->
     <color name="on_refresh_button">@color/creme_white</color>

@@ -56,5 +56,4 @@ class CircularViewModel : ViewModel() {
         toastMessage.value = message
     }
 
-
 }
