@@ -40,6 +40,7 @@ class RetrieveCircularBusesLocationView(View):
             location_updated_at_lists.sort()
 
         response['buses'] = bus_lists
-        response['latest_location_updated_at'] = location_updated_at_lists[-1]
+        latest_location_updated_at = location_updated_at_lists[-1] if num_buses != 0 else None
+        response['latest_location_updated_at'] = latest_location_updated_at
 
         return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")
