@@ -18,13 +18,14 @@
 
     <!-- circular -->
     <!-- 주황 #A0FFB602, 초록 #0ABB0B, 파랑 #057FEE-->
-    <color name="polyline_route_color">#002D57</color>
+    <color name="polyline_route">#057FEE</color>
+    <color name="polyline_route_stroke">#FFFFFF</color>
     <!-- 파랑 #1A73E9 -->
     <color name="circular_bus">#1A73E9</color>
     <color name="circular_bus_extra">#FFFFFF</color>
     <color name="direction_arrow">#FFFFFF</color>
     <color name="bus_stop_marker_fill">#FFFFFF</color>
-    <color name="bus_stop_marker_bg">#80000000</color>
+    <color name="bus_stop_marker_bg">#A0000000</color>
     <color name="gps">#000000</color>
     <color name="gps_bg">#A0ffffff</color>
     <!-- 빨강 #FF4931 -->
