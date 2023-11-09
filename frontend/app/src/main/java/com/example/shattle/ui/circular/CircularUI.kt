@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.Manifest
 import android.app.Activity
+import android.graphics.Color
 import androidx.core.app.ActivityCompat.requestPermissions
 import com.example.shattle.R
 import com.example.shattle.data.models.RunningBuses
@@ -88,6 +89,7 @@ class CircularUI(
                         MarkerOptions()
                             .position(userLatLng)
                             .icon(customMarkerIcon)
+                            .zIndex(2.1f)
                         // 아이콘 설정 등...
                     )
                     // 카메라를 기본 위치로 이동
@@ -162,7 +164,7 @@ class CircularUI(
                 MarkerOptions()
                     .position(location) // Set the bus's initial position
                     .icon(customMarkerIcon) // Use a custom bus icon
-                    .zIndex(1.0f)
+                    .zIndex(2.0f)
             )
             if (busMarker != null) {
                 busMarkers.add(busMarker)
@@ -172,14 +174,17 @@ class CircularUI(
     }
 
     fun changeUpdatedDateTime(circularUIState: CircularUIState) {
-        if(circularUIState.updatedTime != null){
+        try {
             val dateTimeString = circularUIState.updatedTime
             val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
-            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+            inputFormat.timeZone = TimeZone.getTimeZone("Asia/Seoul")
             val dateTime = inputFormat.parse(dateTimeString)
-            val outputFormat = SimpleDateFormat("MM.dd hh:mm:ss (a)", Locale.getDefault()) //(hh 대신 HH 하면 24시간기준)
+            val outputFormat = SimpleDateFormat("MM.dd HH:mm:ss", Locale.getDefault())
             tv_updatedTime.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
+        } catch (e: Exception){
+            tv_updatedTime.text = ""
         }
+
     }
 
     fun customizeGoogleMap(googleMap: GoogleMap?, context: Context) {
@@ -201,19 +206,12 @@ class CircularUI(
         // 버스 경로 표시
         drawRouteOfBus(googleMap, context)
 
-        // 버스 정류장 표시
-        drawBusStopLocations(googleMap, context)
-
         // 경로 위에 화살표 그리기
         drawRouteDirections(googleMap, context)
 
-        // 예상 소요시간 표시
-        //drawSectionDuration(googleMap)
-
+        // 버스 정류장 표시
+        drawBusStopLocations(googleMap, context)
     }
-
-
-
 
 
 
@@ -229,33 +227,29 @@ class CircularUI(
                 .color(
                     ContextCompat.getColor(
                         context,
-                        R.color.polyline_route_color
+                        R.color.polyline_route
                     )
                 ) // Set the color of the line
-                .zIndex(-3.0f)
+                .zIndex(1.0f)
+        )
+
+        // 경로 위 흰색 테두리
+        googleMap?.addPolyline(
+            PolylineOptions()
+                .clickable(false)
+                .addAll(circularUtils.roadCoordinates)
+                .width(28.0f) // Set the width of the line
+                .color(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.polyline_route_stroke
+                    )
+                ) // Set the color of the line
+                .zIndex(0.9f)
         )
 
     }
 
-    fun drawBusStopLocations(googleMap: GoogleMap?, context: Context) {
-        // Show the bus stop locations on the map
-
-        // 해당 벡터 파일을 bitmap 이미지로 변경 (마커 이미지가 bitmap 만 지원됨)
-        val customMarkerIcon =
-            circularUtils.bitmapDescriptorFromVector(context, R.drawable.img_circular_bus_stop)
-        // 현재 18 dp 이미지 사용중
-
-        for (busStop in circularUtils.busStops) {
-            googleMap?.addMarker(
-                MarkerOptions()
-                    .position(busStop.location)
-                    .title(busStop.title) // Set a title for the marker
-                    //.snippet(busStop.snippet) // Set additional information
-                    .icon(customMarkerIcon) // Set a custom marker icon (optional)
-                    .zIndex(-1.0f)
-            )
-        }
-    }
 
     fun drawRouteDirections(googleMap: GoogleMap?, context: Context) {
 
@@ -276,27 +270,28 @@ class CircularUI(
                     //.snippet(busStop.snippet) // Set additional information
                     .icon(customMarkerIcon) // Set a custom marker icon (optional)
                     .rotation(bearing)
-                    .zIndex(-2.0f)
+                    .zIndex(1.1f)
             )
         }
     }
 
-    fun drawSectionDuration(googleMap: GoogleMap?, context: Context) {
-        // 커스텀 레이아웃을 사용하여 TextView를 생성합니다.
-        val textView = TextView(context).apply {
-            text = "Hello World!"
-            textSize = 40f
+    fun drawBusStopLocations(googleMap: GoogleMap?, context: Context) {
+        // Show the bus stop locations on the map
+
+        // 해당 벡터 파일을 bitmap 이미지로 변경 (마커 이미지가 bitmap 만 지원됨)
+        val customMarkerIcon =
+            circularUtils.bitmapDescriptorFromVector(context, R.drawable.img_circular_bus_stop)
+        // 현재 18 dp 이미지 사용중
+
+        for (busStop in circularUtils.busStops) {
+            googleMap?.addMarker(
+                MarkerOptions()
+                    .position(busStop.location)
+                    .title(busStop.title) // Set a title for the marker
+                    //.snippet(busStop.snippet) // Set additional information
+                    .icon(customMarkerIcon) // Set a custom marker icon (optional)
+                    .zIndex(1.2f)
+            )
         }
-
-        // TextView를 Bitmap으로 변환합니다.
-        val bitmap = circularUtils.createBitmapFromView(context, textView)
-
-        // Bitmap을 사용하여 마커를 생성합니다.
-        val marker = googleMap?.addMarker(
-            MarkerOptions()
-                .position(LatLng(37.45800, 126.9531))
-                .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
-                .zIndex(-1.0f)
-        )
     }
 }

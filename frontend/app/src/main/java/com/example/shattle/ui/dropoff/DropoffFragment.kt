@@ -70,9 +70,14 @@ class DropoffFragment : Fragment() {
         }
 
         // Toast Message
+        var toast: Toast? = null
+        // Toast Message
         dropoffViewModel.getToastMessage().observe(viewLifecycleOwner, Observer { message ->
             if (!message.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                toast?.cancel()
+                toast = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).apply {
+                    show()
+                }
                 dropoffViewModel.showToastMessage("") // Toast를 띄운 후 메시지 초기화
             }
         })

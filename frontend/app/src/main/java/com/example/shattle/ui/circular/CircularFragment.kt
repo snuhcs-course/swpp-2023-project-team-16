@@ -111,7 +111,7 @@ class CircularFragment : Fragment() {
         }
 
         // home button
-        circularUI.bt_home.setOnClickListener{
+        circularUI.bt_home.setOnClickListener {
             circularUI.resetCamera(googleMap)
         }
 
@@ -121,10 +121,14 @@ class CircularFragment : Fragment() {
             circularViewModel.getData(runningBusesUseCase)
         }
 
+        var toast: Toast? = null
         // Toast Message
         circularViewModel.getToastMessage().observe(viewLifecycleOwner, Observer { message ->
             if (!message.isNullOrEmpty()) {
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                toast?.cancel()
+                toast = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).apply {
+                    show()
+                }
                 circularViewModel.showToastMessage("") // Toast를 띄운 후 메시지 초기화
             }
         })
@@ -138,7 +142,7 @@ class CircularFragment : Fragment() {
                     circularViewModel.getData(runningBusesUseCase)
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Log.e("MyLogChecker", "error: $e")
+                    Log.e("MyLogChecker", "error on refreshRunnable.run(): \n\t $e")
                 }
                 handler.postDelayed(this, 30000)
             }
