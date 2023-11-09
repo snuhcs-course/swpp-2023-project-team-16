@@ -9,9 +9,9 @@ import retrofit2.Response
 
 class RunningBusesRepository(val runningBusesDataSource: RunningBusesDataSource) {
 
-    val ERROR_BODY_IS_NULL = RunningBuses(-3, emptyList())
-    val ERROR_RESPONSE_IS_NOT_SUCCESSFUL = RunningBuses(-4, emptyList())
-    val ERROR_ON_FAILURE = RunningBuses(-5, emptyList())
+    val ERROR_BODY_IS_NULL = RunningBuses(true, -3)
+    val ERROR_RESPONSE_IS_NOT_SUCCESSFUL = RunningBuses(true, -4)
+    val ERROR_ON_FAILURE = RunningBuses(true, -5)
 
     var runningBuses = runningBusesDataSource.getRunningBuses()
     var runningBuses_prev = runningBusesDataSource.getRunningBuses_prev()

@@ -94,7 +94,7 @@ class DropoffUI(
 
     fun changeUpdatedTime(dropoffUIState: DropoffUIState) {
         val dateTimeString = dropoffUIState.updatedTime
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSSXXX", Locale.getDefault())
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
         inputFormat.timeZone = TimeZone.getTimeZone("UTC")
         val dateTime = inputFormat.parse(dateTimeString)
         val outputFormat = SimpleDateFormat("MM.dd hh:mm:ss (a)", Locale.getDefault()) //(hh 대신 HH 하면 24시간기준)
