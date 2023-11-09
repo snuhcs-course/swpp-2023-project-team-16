@@ -20,10 +20,12 @@ class RetrieveCircularBusesLocationView(View):
         num_buses = len(running_bus_list)
         response['num_buses_running'] = num_buses
         bus_lists = []
+        location_updated_at_lists = []
 
         for i in range(num_buses):
             bus = running_bus_list[i]
             bus_location = get_object_or_404(Location, id=bus.location_id)
+            location_updated_at_lists.append(str(bus_location.updated_at + datetime.timedelta(hours=9)))
             bus_data = {
                 "id": bus.id,
                 "license_plate": bus.license_plate,
@@ -35,7 +37,10 @@ class RetrieveCircularBusesLocationView(View):
             }
 
             bus_lists.append(bus_data)
+            location_updated_at_lists.sort()
 
         response['buses'] = bus_lists
+        latest_location_updated_at = location_updated_at_lists[-1] if num_buses != 0 else None
+        response['latest_location_updated_at'] = latest_location_updated_at
 
         return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")
