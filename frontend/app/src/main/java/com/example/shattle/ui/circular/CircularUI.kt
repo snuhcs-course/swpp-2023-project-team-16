@@ -172,13 +172,14 @@ class CircularUI(
     }
 
     fun changeUpdatedDateTime(circularUIState: CircularUIState) {
-        val dateTimeString = RunningBuses(true, -1).updatedTime
-        //val dateTimeString = circularUIState.updatedTime
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
-        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
-        val dateTime = inputFormat.parse(dateTimeString)
-        val outputFormat = SimpleDateFormat("MM.dd hh:mm:ss (a)", Locale.getDefault()) //(hh 대신 HH 하면 24시간기준)
-        tv_updatedTime.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
+        if(circularUIState.updatedTime != null){
+            val dateTimeString = circularUIState.updatedTime
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
+            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+            val dateTime = inputFormat.parse(dateTimeString)
+            val outputFormat = SimpleDateFormat("MM.dd hh:mm:ss (a)", Locale.getDefault()) //(hh 대신 HH 하면 24시간기준)
+            tv_updatedTime.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
+        }
     }
 
     fun customizeGoogleMap(googleMap: GoogleMap?, context: Context) {
@@ -210,6 +211,11 @@ class CircularUI(
         //drawSectionDuration(googleMap)
 
     }
+
+
+
+
+
 
     fun drawRouteOfBus(googleMap: GoogleMap?, context: Context) {
         // Show the route of the circular shuttle on the map
@@ -261,7 +267,7 @@ class CircularUI(
             // 경로 사이사이에 방향 표시
             val customMarkerIcon =
                 circularUtils.bitmapDescriptorFromVector(
-                    context!!,
+                    context,
                     R.drawable.img_circular_load_direction
                 )
             googleMap?.addMarker(

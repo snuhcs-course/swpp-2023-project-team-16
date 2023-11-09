@@ -18,7 +18,7 @@
 
     <!-- circular -->
     <!-- 주황 #A0FFB602, 초록 #0ABB0B, 파랑 #057FEE-->
-    <color name="polyline_route_color">#A00ABB0B</color>
+    <color name="polyline_route_color">#002D57</color>
     <!-- 파랑 #1A73E9 -->
     <color name="circular_bus">#1A73E9</color>
     <color name="circular_bus_extra">#FFFFFF</color>
