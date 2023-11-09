@@ -6,8 +6,6 @@ import com.example.shattle.data.models.RunningBuses
 import com.example.shattle.ui.circular.CircularUIState
 import com.example.shattle.ui.circular.CircularViewModel
 import com.example.shattle.ui.circular.RunningBusesUseCase
-import com.example.shattle.ui.dropoff.DropoffUIState
-import com.google.android.gms.maps.GoogleMap
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -48,7 +46,7 @@ class CircularViewModelTest {
     @Test
     fun getDataWithInvalidResponse() {
         // Arrange
-        val runningBuses_prev = RunningBuses(2, emptyList())
+        val runningBuses_prev = RunningBuses(true, 2)
         `when`(mockRunningBusesUseCase.getErrorId()).thenReturn(-3)
         `when`(mockRunningBusesUseCase.getRunningBuses_prev()).thenReturn(runningBuses_prev)
 
@@ -63,7 +61,7 @@ class CircularViewModelTest {
     @Test
     fun getDataWithSuccessfulResponse() {
         // Arrange
-        val runningBuses = RunningBuses(2, emptyList())
+        val runningBuses = RunningBuses(true, 2)
         `when`(mockRunningBusesUseCase.getRunningBuses()).thenReturn(runningBuses)
 
         // Act
@@ -76,7 +74,7 @@ class CircularViewModelTest {
     @Test
     fun getDataWithNoRunningBuses() {
         // Arrange
-        val runningBuses = RunningBuses(0, emptyList())
+        val runningBuses = RunningBuses(true, 0)
         `when`(mockRunningBusesUseCase.getErrorId()).thenReturn(runningBuses.numBusesRunning)
         `when`(mockRunningBusesUseCase.getRunningBuses()).thenReturn(runningBuses)
 

@@ -51,6 +51,10 @@ class CurrentLineRepositoryTest {
     @Mock
     private lateinit var mockCall: Call<CurrentLine>
 
+    @Captor
+    private lateinit var callbackCaptor: ArgumentCaptor<Callback<CurrentLine>>
+
+
     private lateinit var currentLineRepository: CurrentLineRepository
 
     val currentLine_default = CurrentLine(true, -2)
@@ -59,12 +63,14 @@ class CurrentLineRepositoryTest {
     @Before
     fun setUp() {
         lenient().`when`(mockApiService.getCurrentLine()).thenReturn(mockCall)
+
         currentLineRepository = CurrentLineRepository(mockCurrentLineDataSource)
 
         currentLineRepository.currentLine = currentLine_default
         currentLineRepository.currentLine_prev = currentLine_default
     }
 
+    var cnt = 0
     @Test
     fun refreshCurrentLineWithSuccessfulResponse() {
         // Arrange

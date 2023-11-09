@@ -7,4 +7,5 @@ class CircularUIState(
 ) {
     val numBusesRunning = runningBuses.numBusesRunning
     val buses = runningBuses.buses
+    val updatedTime = runningBuses.updatedTime
 }

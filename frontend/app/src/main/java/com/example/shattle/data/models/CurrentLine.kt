@@ -12,7 +12,6 @@ data class CurrentLine(
     @SerializedName("updated_at")
     val updatedTime: String
 ) {
-    constructor(isErrorClass: Boolean, errorCode: Int) : this(errorCode, errorCode, errorCode, "")
-
+    constructor(isErrorClass: Boolean, errorCode: Int) : this(errorCode, errorCode, errorCode, "2000-01-01 00:00:00.000000000")
 
 }
