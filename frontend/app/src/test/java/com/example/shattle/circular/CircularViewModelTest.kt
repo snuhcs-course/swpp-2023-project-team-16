@@ -6,8 +6,6 @@ import com.example.shattle.data.models.RunningBuses
 import com.example.shattle.ui.circular.CircularUIState
 import com.example.shattle.ui.circular.CircularViewModel
 import com.example.shattle.ui.circular.RunningBusesUseCase
-import com.example.shattle.ui.dropoff.DropoffUIState
-import com.google.android.gms.maps.GoogleMap
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

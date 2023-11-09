@@ -52,7 +52,8 @@ class CircularFragment : Fragment() {
         // UI elements
         val circularUI = CircularUI(
             binding.refreshButton,
-            binding.updatedTimeTextView
+            binding.updatedTimeTextView,
+            context
         )
 
         // ViewModel tracks data changes
@@ -60,15 +61,15 @@ class CircularFragment : Fragment() {
             circularUI.updateUI(googleMap, newCircularUIState!!)
         }
 
-
         // Set Google Map async
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment // mapFragment 는 onCreateView 안에서만 초기화하기!!!
         mapFragment.getMapAsync(OnMapReadyCallback { mMap ->
             googleMap = mMap
+
             //circularViewModel.setGoogleMap(googleMap!!)
-            circularUI.customizeGoogleMap(googleMap!!)
-            circularUI.showCurrentLocationsOfBus(googleMap!!, circularViewModel.getUIState().value!!)
+            circularUI.customizeGoogleMap(googleMap)
+            circularUI.drawCurrentLocationsOfBus(googleMap, circularViewModel.getUIState().value!!)
         })
 
         // Initial Update

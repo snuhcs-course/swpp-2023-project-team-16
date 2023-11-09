@@ -18,7 +18,6 @@ data class Bus(
     val isTracked: Boolean,
     @SerializedName("updated_at")
     val updatedTime: String
-
 ) {
     constructor(id: Int, location: LatLng) : this(
         id,

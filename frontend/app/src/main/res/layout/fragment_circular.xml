@@ -44,7 +44,7 @@
         android:id="@+id/refreshButton"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/refresh_btn_height"
-        android:background="@drawable/bck_refresh_button_rounded"
+        android:background="@drawable/bg_refresh_button_rounded"
         android:text="버스 위치 업데이트"
         android:textSize="@dimen/refresh_btn_text_size"
         android:textStyle="normal"

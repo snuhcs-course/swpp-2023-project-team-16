@@ -2,8 +2,20 @@
 <resources>
     <color name="title_text">@color/dark</color>
 
+    <!-- #22A400 -->
+    <color name="green_primary">#22A400</color>
+
     <!-- staiton -->
     <color name="station_text_view_color">@color/dark</color>
+
+    <!-- circular -->
+    <!-- #A0FFB602 -->
+    <color name="polyline_route_color">#99FFB602</color>
+    <color name="circular_bus">#001DD3</color>
+    <color name="circular_bus_extra">#FFFFFF</color>
+    <color name="direction_arrow">#FFFFFF</color>
+    <color name="bus_stop_marker_fill">#FFFFFF</color>
+    <color name="bus_stop_marker_bg">#80000000</color>
 
     <!-- refresh button -->
     <color name="on_refresh_button">@color/creme_white</color>
@@ -20,7 +32,6 @@
     <color name="green_600">#155A03</color>
     <color name="green_700">#104502</color>
     <color name="green_800">#0B2E02</color>
-    <color name="green_Primary">@color/green_400</color>
 
     <color name="creme_white">#FCFBFA</color>
     <color name="gray_100">#E5E5E5</color>

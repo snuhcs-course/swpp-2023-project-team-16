@@ -1,35 +1,38 @@
 package com.example.shattle.ui.circular
 
-import android.graphics.Color
-import android.util.Log
+import android.content.Context
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.example.shattle.R
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.Locale
 import java.util.TimeZone
 
 class CircularUI(
     val bt_refreshButton: Button,
-    val tv_updatedTime: TextView
+    val tv_updatedTime: TextView,
+    val context: Context?
 ) {
     var busMarkers: MutableList<Marker> = mutableListOf()
 
+    val circularUtils = CircularUtils();
+
     fun updateUI(googleMap: GoogleMap?, circularUIState: CircularUIState) {
 
-        showCurrentLocationsOfBus(googleMap, circularUIState)
+        drawCurrentLocationsOfBus(googleMap, circularUIState)
         changeUpdatedDateTime(circularUIState)
     }
 
-    fun showCurrentLocationsOfBus(googleMap: GoogleMap?, circularUIState: CircularUIState) {
+    fun drawCurrentLocationsOfBus(googleMap: GoogleMap?, circularUIState: CircularUIState) {
 
         // Remove previous bus markers
         if (busMarkers.size != 0) {
@@ -41,15 +44,18 @@ class CircularUI(
 
         val buses = circularUIState.buses
 
+        val customMarkerIcon =
+            circularUtils.bitmapDescriptorFromVector(context!!, R.drawable.img_circular_bus)
+        // 20dp
+
         // Add bus markers on the map ("currentBusLocations" holds the locations)
         for (bus in buses) {
             val location = LatLng(bus.latitude, bus.longitude)
             val busMarker = googleMap?.addMarker(
                 MarkerOptions()
                     .position(location) // Set the bus's initial position
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.img_circular_bus)) // Use a custom bus icon
-                    .zIndex(1f)
-                // 20~50픽셀
+                    .icon(customMarkerIcon) // Use a custom bus icon
+                    .zIndex(1.0f)
             )
             if (busMarker != null) {
                 busMarkers.add(busMarker)
@@ -63,7 +69,8 @@ class CircularUI(
         val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSSXXX", Locale.getDefault())
         inputFormat.timeZone = TimeZone.getTimeZone("UTC")
         //val dateTime = inputFormat.parse(dateTimeString)
-        val outputFormat = SimpleDateFormat("MM.dd hh:mm:ss (a)", Locale.getDefault()) //(hh 대신 HH 하면 24시간기준)
+        val outputFormat =
+            SimpleDateFormat("MM.dd hh:mm:ss (a)", Locale.getDefault()) //(hh 대신 HH 하면 24시간기준)
         //tv_updatedTime.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
     }
 
@@ -74,105 +81,112 @@ class CircularUI(
         val zoomLevel = 14.70f
         googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(initialLocation, zoomLevel))
 
-        // Show the bus stop locations on the map
-        showBusStopLocations(googleMap)
+        // 카메라 zoom level 설정
+        googleMap?.setMaxZoomPreference(15.90f)
+        googleMap?.setMinZoomPreference(14.50f)
 
-        // Show the route of the circular shuttle on the map
-        showRoute(googleMap)
+        // 카메라 경계 설정 (남서, 북동)
+        val bounds = LatLngBounds(
+            LatLng(37.452692, 126.951310),
+            LatLng(37.465542, 126.959983)
+        )
+        googleMap?.setLatLngBoundsForCameraTarget(bounds)
+
+        // 버스 경로 표시
+        drawRouteOfBus(googleMap)
+
+        // 버스 정류장 표시
+        drawBusStopLocations(googleMap)
+
+        // 경로 위에 화살표 그리기
+        drawRouteDirections(googleMap)
+
+        // 예상 소요시간 표시
+        //drawSectionDuration(googleMap)
+
     }
 
-    data class BusStop(val location: LatLng, val title: String, val snippet: String)
+    fun drawRouteOfBus(googleMap: GoogleMap?) {
+        // Show the route of the circular shuttle on the map
 
-    val busStops = listOf(
-        BusStop(LatLng(37.46577, 126.9484), "정문", ""),
-        BusStop(LatLng(37.46306, 126.9490), "법대, 사회대입구", ""),
-        BusStop(LatLng(37.46046, 126.9490), "자연대, 행정관입구", ""),
-        BusStop(LatLng(37.45703, 126.9493), "농생대", ""),
-        BusStop(LatLng(37.45502, 126.9498), "38동, 공대입구", ""),
-        BusStop(LatLng(37.45356, 126.9502), "신소재", ""),
-        BusStop(LatLng(37.44809, 126.9521), "제2공학관", ""),
-        BusStop(LatLng(37.45158, 126.9526), "301동, 유회진학술정보관", ""),
-        BusStop(LatLng(37.45408, 126.9539), "유전공학연구소", ""),
-        BusStop(LatLng(37.45612, 126.9554), "교수회관입구", ""),
-        BusStop(LatLng(37.46103, 126.9565), "기숙사삼거리", ""),
-        BusStop(LatLng(37.46418, 126.9553), "국제대학원", ""),
-        BusStop(LatLng(37.46606, 126.9546), "수의대", ""),
-        BusStop(LatLng(37.46602, 126.9522), "경영대", ""),
-    )
+        // 경로 선 표시
+        googleMap?.addPolyline(
+            PolylineOptions()
+                .clickable(false)
+                .addAll(circularUtils.roadCoordinates)
+                .width(20.0f) // Set the width of the line
+                .color(
+                    ContextCompat.getColor(
+                        context!!,
+                        R.color.polyline_route_color
+                    )
+                ) // Set the color of the line
+                .zIndex(-3.0f)
+        )
 
-    fun showBusStopLocations(googleMap: GoogleMap?) {
+    }
+
+    fun drawBusStopLocations(googleMap: GoogleMap?) {
         // Show the bus stop locations on the map
 
-        // 기본 마커로도 할 수 있고, 마커 이미지 커스텀 가능 (20~50 픽셀)
+        // 해당 벡터 파일을 bitmap 이미지로 변경 (마커 이미지가 bitmap 만 지원됨)
         val customMarkerIcon =
-            BitmapDescriptorFactory.fromResource(R.drawable.img_circular_bus_stop)
+            circularUtils.bitmapDescriptorFromVector(context!!, R.drawable.img_circular_bus_stop)
+        // 현재 18 dp 이미지 사용중
 
-        for (busStop in busStops) {
+        for (busStop in circularUtils.busStops) {
             googleMap?.addMarker(
                 MarkerOptions()
                     .position(busStop.location)
                     .title(busStop.title) // Set a title for the marker
-                    .snippet(busStop.snippet) // Set additional information
+                    //.snippet(busStop.snippet) // Set additional information
                     .icon(customMarkerIcon) // Set a custom marker icon (optional)
-                    .zIndex(0f)
+                    .zIndex(-1.0f)
             )
         }
     }
 
-    val roadCoordinates = listOf(
-        LatLng(37.46577, 126.9484), //정문
-        LatLng(37.46306, 126.9490), //법대, 사회대입구
-        LatLng(37.461501, 126.949363),
-        LatLng(37.46046, 126.9490), //자연대, 행정관입구
-        LatLng(37.459559, 126.948701),
-        LatLng(37.45703, 126.9493), //농생대
-        LatLng(37.45502, 126.9498), //38동, 공대입구
-        LatLng(37.45356, 126.9502), //신소재
-        LatLng(37.452703, 126.950310),
-        LatLng(37.452005, 126.949935),
-        LatLng(37.450779, 126.949784),
-        LatLng(37.449544, 126.949784),
-        LatLng(37.448044, 126.949162),
-        LatLng(37.447695, 126.949216),
-        LatLng(37.447312, 126.949505),
-        LatLng(37.447056, 126.951190),
-        LatLng(37.447389, 126.951823),
-        LatLng(37.447789, 126.952048),
-        LatLng(37.44809, 126.9521), //제2공학관
-        LatLng(37.450446, 126.951968),
-        LatLng(37.45158, 126.9526), //301동, 유회진학술정보관
-        LatLng(37.45408, 126.9539), //유전공학연구소
-        LatLng(37.45612, 126.9554), //교수회관입구
-        LatLng(37.457299, 126.956277),
-        LatLng(37.458582, 126.956641),
-        LatLng(37.459546, 126.957172),
-        LatLng(37.46103, 126.9565), //기숙사삼거리
-        LatLng(37.461288, 126.956138),
-        LatLng(37.461556, 126.954807),
-        LatLng(37.461862, 126.954544),
-        LatLng(37.463199, 126.954695),
-        LatLng(37.46418, 126.9553), //국제대학원
-        LatLng(37.465545, 126.955139),
-        LatLng(37.465784, 126.954967),
-        LatLng(37.46606, 126.9546), //수의대
-        LatLng(37.466197, 126.954146),
-        LatLng(37.46602, 126.9522), //경영대
-        LatLng(37.465959, 126.950842),
-        LatLng(37.465546, 126.948513),
-        LatLng(37.46577, 126.9484), //정문`
-    )
+    fun drawRouteDirections(googleMap: GoogleMap?) {
 
-    fun showRoute(googleMap: GoogleMap?) {
-        // Show the route of the circular shuttle on the map
+        for (directionData in circularUtils.arrowData){
+            val start = directionData.position
+            val end = directionData.direction
+            val bearing = circularUtils.bearingBetweenLocations(start, end)
 
-        googleMap?.addPolyline(
-            PolylineOptions()
-                .clickable(false)
-                .addAll(roadCoordinates)
-                .width(10f) // Set the width of the line
-                .color(Color.BLACK) // Set the color of the line
-        )
+            // 경로 사이사이에 방향 표시
+            val customMarkerIcon =
+                circularUtils.bitmapDescriptorFromVector(
+                    context!!,
+                    R.drawable.img_circular_load_direction
+                )
+            googleMap?.addMarker(
+                MarkerOptions()
+                    .position(directionData.position)
+                    //.snippet(busStop.snippet) // Set additional information
+                    .icon(customMarkerIcon) // Set a custom marker icon (optional)
+                    .rotation(bearing)
+                    .zIndex(-2.0f)
+            )
+        }
     }
 
+    fun drawSectionDuration(googleMap: GoogleMap?) {
+        // 커스텀 레이아웃을 사용하여 TextView를 생성합니다.
+        val textView = TextView(context).apply {
+            text = "Hello World!"
+            textSize = 40f
+        }
+
+        // TextView를 Bitmap으로 변환합니다.
+        val bitmap = circularUtils.createBitmapFromView(context!!, textView)
+
+        // Bitmap을 사용하여 마커를 생성합니다.
+        val marker = googleMap?.addMarker(
+            MarkerOptions()
+                .position(LatLng(37.45800, 126.9531))
+                .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+                .zIndex(-1.0f)
+        )
+    }
 
 }
