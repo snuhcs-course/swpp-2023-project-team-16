@@ -35,7 +35,7 @@ class RunningBusesUseCaseTest {
     val ERROR_ON_FAILURE = RunningBuses(true, -5)
     val DEFAULT_VALUE = RunningBuses(true, -2)
 
-    val runningBuses_1 = RunningBuses(1, listOf(Bus(0, LatLng(0.0,0.0))))
+    val runningBuses_1 = RunningBuses(1, listOf(Bus(0, LatLng(0.0,0.0))), "")
 
     @Before
     fun setUp() {
@@ -93,7 +93,7 @@ class RunningBusesUseCaseTest {
     fun getErrorIdTest() {
         // Arrange
         val expectedNumBusesRunning = 5
-        val runningBuses = RunningBuses(expectedNumBusesRunning, emptyList())
+        val runningBuses = RunningBuses(expectedNumBusesRunning, emptyList(), "")
         `when`(mockRunningBusesRepository.runningBusesDataSource.getRunningBuses()).thenReturn(runningBuses)
 
         // Act

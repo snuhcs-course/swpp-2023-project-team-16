@@ -35,7 +35,7 @@ class RunningBusesDataSourceTest {
     private lateinit var runningBusesDataSource: RunningBusesDataSource
 
     val runningBuses_default = RunningBuses(true, -2)
-    val runningBuses_1 = RunningBuses(1, listOf(Bus(0, LatLng(0.0, 0.0))))
+    val runningBuses_1 = RunningBuses(1, listOf(Bus(0, LatLng(0.0, 0.0))), "")
 
     @Before
     fun setup() {
