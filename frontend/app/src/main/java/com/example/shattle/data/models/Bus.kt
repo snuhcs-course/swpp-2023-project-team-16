@@ -26,6 +26,6 @@ data class Bus(
         location.longitude,
         true,
         true,
-        ""
+        "2000-01-01 00:00:00.000000000"
     )
 }
