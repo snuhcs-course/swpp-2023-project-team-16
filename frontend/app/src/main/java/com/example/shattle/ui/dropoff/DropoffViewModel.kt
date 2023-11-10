@@ -32,6 +32,7 @@ class DropoffViewModel : ViewModel() {
             showToastMessage("현재 셔틀 운행 시간이 아닙니다.")
         } else {
             uiState.value = DropoffUIState(currentLineUseCase.getCurrentLine())
+            showToastMessage("업데이트 성공!")
         }
     }
 

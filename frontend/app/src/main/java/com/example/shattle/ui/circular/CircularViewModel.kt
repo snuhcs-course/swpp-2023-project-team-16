@@ -41,8 +41,12 @@ class CircularViewModel : ViewModel() {
             showToastMessage("업데이트 중 오류가 발생했습니다. 잠시 후 다시 시도하세요.")
         } else {
             uiState.value = CircularUIState(runningBusesUseCase.getRunningBuses())
-            if (error_value == 0)
+            if (error_value == 0){
                 showToastMessage("현재 운행중인 셔틀이 없습니다.")
+            } else {
+                showToastMessage("업데이트 성공!")
+            }
+
         }
     }
 
