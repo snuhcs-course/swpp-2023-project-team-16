@@ -20,6 +20,7 @@ class DropoffFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     val binding get() = _binding!!
+    var toast: Toast? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,8 +71,6 @@ class DropoffFragment : Fragment() {
         }
 
         // Toast Message
-        var toast: Toast? = null
-        // Toast Message
         dropoffViewModel.getToastMessage().observe(viewLifecycleOwner, Observer { message ->
             if (!message.isNullOrEmpty()) {
                 toast?.cancel()
@@ -104,6 +103,7 @@ class DropoffFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        toast?.cancel()
         _binding = null
     }
 

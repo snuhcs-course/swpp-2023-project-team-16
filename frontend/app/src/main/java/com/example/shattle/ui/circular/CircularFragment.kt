@@ -40,6 +40,7 @@ class CircularFragment : Fragment() {
     var googleMap: GoogleMap? = null
     private lateinit var circularUI: CircularUI
     private lateinit var circularViewModel: CircularViewModel
+    var toast: Toast? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -116,7 +117,6 @@ class CircularFragment : Fragment() {
             circularViewModel.getData(runningBusesUseCase)
         }
 
-        var toast: Toast? = null
         // Toast Message
         circularViewModel.getToastMessage().observe(viewLifecycleOwner, Observer { message ->
             if (!message.isNullOrEmpty()) {
@@ -148,11 +148,6 @@ class CircularFragment : Fragment() {
         return root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     lateinit var fusedLocationClient: FusedLocationProviderClient
     private var LOCATION_PERMISSION_REQUEST_CODE = 1000
     override fun onRequestPermissionsResult(
@@ -182,5 +177,10 @@ class CircularFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        toast?.cancel()
+        _binding = null
+    }
 
 }
