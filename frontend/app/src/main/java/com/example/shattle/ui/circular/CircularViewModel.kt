@@ -1,9 +1,11 @@
 package com.example.shattle.ui.circular;
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.shattle.data.models.RunningBuses
+import com.google.android.gms.maps.model.LatLng
 
 
 class CircularViewModel : ViewModel() {
@@ -20,9 +22,11 @@ class CircularViewModel : ViewModel() {
         return uiState
     }
 
+
     val ERROR_BODY_IS_NULL = RunningBuses(true, -3)
     val ERROR_RESPONSE_IS_NOT_SUCCESSFUL = RunningBuses(true, -4)
     val ERROR_ON_FAILURE = RunningBuses(true, -5)
+
     fun getData(runningBusesUseCase: RunningBusesUseCase) {
         // (useCase 의) repository 에서 RunningBuses 데이터를 uiState 에 저장
         // runningBuses 가 유효하지 않을 경우 이전 값을 적용 (업데이트 X)

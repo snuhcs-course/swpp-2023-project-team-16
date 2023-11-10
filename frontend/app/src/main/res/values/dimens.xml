@@ -11,13 +11,16 @@
     <dimen name="title_size">30sp</dimen>
     <dimen name="title_marzin_left">20dp</dimen>
 
-    <!-- station -->
+    <!-- Dropoff -->
     <dimen name="station_text_data_size_small">20sp</dimen>
     <dimen name="station_text_data_size_big">25sp</dimen>
 
+    <!-- Circular -->
+
+
     <!-- refresh button -->
     <dimen name="refresh_btn_height">38dp</dimen>
-    <dimen name="refresh_btn_margin_bottom">30dp</dimen>
+    <dimen name="refresh_btn_margin_bottom">65dp</dimen>
     <dimen name="refresh_btn_margin_end">30dp</dimen>
     <dimen name="refresh_btn_text_size">15sp</dimen>
     <dimen name="refresh_text_updated_time">12sp</dimen>

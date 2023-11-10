@@ -39,6 +39,7 @@ class CircularFragment : Fragment() {
 
     var googleMap: GoogleMap? = null
     private lateinit var circularUI: CircularUI
+    private lateinit var circularViewModel: CircularViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,14 +61,13 @@ class CircularFragment : Fragment() {
         val runningBusesUseCase = RunningBusesUseCase(runningBusesRepository)
 
         // View Model
-        val circularViewModel = ViewModelProvider(this).get(CircularViewModel::class.java)
+        circularViewModel = ViewModelProvider(this).get(CircularViewModel::class.java)
 
         // UI elements
         circularUI = CircularUI(
             binding.refreshButton,
             binding.updatedTimeTextView,
             binding.gpsImageButton,
-            binding.homeImageButton,
         )
 
         // ViewModel tracks data changes
@@ -108,11 +108,6 @@ class CircularFragment : Fragment() {
                 circularViewModel.showToastMessage("현재 학교 밖입니다.")
             }
 
-        }
-
-        // home button
-        circularUI.bt_home.setOnClickListener {
-            circularUI.resetCamera(googleMap)
         }
 
         // Refresh Button
@@ -176,6 +171,9 @@ class CircularFragment : Fragment() {
                         fusedLocationClient,
                         LOCATION_PERMISSION_REQUEST_CODE
                     )
+                    if (!circularUI.isUserLocationInBound()) {
+                        circularViewModel.showToastMessage("현재 학교 밖입니다.")
+                    }
                 } else {
                     // 권한이 거부되면 처리 로직을 여기에 추가...
                 }
