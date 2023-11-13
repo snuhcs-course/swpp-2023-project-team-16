@@ -10,8 +10,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.Manifest
 import android.app.Activity
+import android.content.IntentSender
 import com.example.shattle.R
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.location.SettingsClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition
@@ -21,6 +28,7 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.tasks.Task
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
@@ -44,7 +52,7 @@ class CircularUI(
     val initialLocation = LatLng(37.45500, 126.9531)
     val initialZoomLevel = 14.70f
 
-    val maxZoomLevel = 17.50f
+    val maxZoomLevel = 18.50f // 17.50f
     val minZoomLevel = 14.50f
 
     var userLocation: LatLng? = null
@@ -72,41 +80,54 @@ class CircularUI(
 
         // 위치 서비스 활성화 확인 및 처리 로직은 여기에 추가...
 
-        val customMarkerIcon =
-            circularUtils.bitmapDescriptorFromVector(context, R.drawable.img_user_loaction)
         // 마지막 알려진 위치 가져오기
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                // Got last known location. In some rare situations this can be null.
-                location?.let {
-                    // 이전 마커 제거
-                    userLocationMarker?.remove()
-                    // 사용자의 현재 위치에 마커 추가
-                    val userLatLng = LatLng(it.latitude, it.longitude)
-                    userLocationMarker = googleMap?.addMarker(
-                        MarkerOptions()
-                            .position(userLatLng)
-                            .icon(customMarkerIcon)
-                            .zIndex(2.1f)
-                        // 아이콘 설정 등...
-                    )
-                    // 카메라 설정 초기화
-                    val zoomLevel = initialZoomLevel
-                    val tilt = 0.0f
-                    val bearing = 0.0f
+        val locationRequest = LocationRequest.create().apply {
+            interval = 10000
+            fastestInterval = 5000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
 
-                    val cameraPosition = CameraPosition.Builder()
-                        .target(userLatLng)
-                        .zoom(zoomLevel)
-                        .bearing(bearing)
-                        .tilt(tilt)
-                        .build()
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
 
-                    googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+        val client: SettingsClient = LocationServices.getSettingsClient(activity)
+        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
 
-                    userLocation = LatLng(it.latitude, it.longitude)
+        task.addOnSuccessListener { locationSettingsResponse ->
+            // 위치 설정이 충족됨. 위치 업데이트를 요청할 수 있음.
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    // Got last known location. In some rare situations this can be null.
+                    location?.let {
+                        // 이전 마커 제거
+                        userLocationMarker?.remove()
+                        // 사용자의 현재 위치에 마커 추가
+                        val userLatLng = LatLng(it.latitude, it.longitude)
+                        val customMarkerIcon =
+                            circularUtils.bitmapDescriptorFromVector(context, R.drawable.img_user_loaction)
+                        userLocationMarker = googleMap?.addMarker(
+                            MarkerOptions()
+                                .position(userLatLng)
+                                .icon(customMarkerIcon)
+                                .anchor(0.5f, 0.5f)
+                                .zIndex(2.1f)
+                            // 아이콘 설정 등...
+                        )
+
+                        val currentCameraPosition = googleMap?.cameraPosition
+                        val cameraPosition = CameraPosition.Builder()
+                            .target(userLatLng)
+                            .zoom(currentCameraPosition?.zoom ?: initialZoomLevel)
+                            .bearing(currentCameraPosition?.bearing ?: 0f)
+                            .tilt(currentCameraPosition?.tilt ?: 0f)
+                            .build()
+
+                        googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
+                        userLocation = LatLng(it.latitude, it.longitude)
+                    }
                 }
-            }
+        }
     }
 
 
@@ -143,6 +164,7 @@ class CircularUI(
                 MarkerOptions()
                     .position(location) // Set the bus's initial position
                     .icon(customMarkerIcon) // Use a custom bus icon
+                    .anchor(0.5f, 0.5f)
                     .zIndex(2.0f)
             )
             if (busMarker != null) {
@@ -254,14 +276,15 @@ class CircularUI(
                     R.drawable.img_circular_route_direction
                 )
             val marker = googleMap?.addMarker(
-                            MarkerOptions()
-                                .position(directionData.position)
-                                //.snippet(busStop.snippet) // Set additional information
-                                .icon(customMarkerIcon) // Set a custom marker icon (optional)
-                                .rotation(bearing)
-                                .zIndex(1.1f)
+                MarkerOptions()
+                    .position(directionData.position)
+                    //.snippet(busStop.snippet) // Set additional information
+                    .icon(customMarkerIcon) // Set a custom marker icon (optional)
+                    .anchor(0.5f, 0.5f)
+                    .rotation(bearing)
+                    .zIndex(1.1f)
             )
-            if(marker != null){
+            if (marker != null) {
                 markersWithInitialRotation.add(Pair(marker, bearing))
             }
 
@@ -291,6 +314,7 @@ class CircularUI(
                     .title(busStop.title) // Set a title for the marker
                     //.snippet(busStop.snippet) // Set additional information
                     .icon(customMarkerIcon) // Set a custom marker icon (optional)
+                    .anchor(0.5f, 0.5f)
                     .zIndex(1.2f)
             )
         }

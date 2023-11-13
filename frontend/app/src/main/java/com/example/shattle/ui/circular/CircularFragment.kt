@@ -3,6 +3,8 @@ package com.example.shattle.ui.circular
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -20,14 +22,24 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.shattle.R
 import com.example.shattle.databinding.FragmentCircularBinding
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.location.SettingsClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.tasks.Task
 
 class CircularFragment : Fragment() {
 
@@ -38,6 +50,9 @@ class CircularFragment : Fragment() {
     private val binding get() = _binding!!
 
     var googleMap: GoogleMap? = null
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var locationCallback: LocationCallback
+
     private lateinit var circularUI: CircularUI
     private lateinit var circularViewModel: CircularViewModel
     var toast: Toast? = null
@@ -95,7 +110,8 @@ class CircularFragment : Fragment() {
         circularViewModel.notifyRefresh(runningBusesUseCase)
         circularViewModel.getData(runningBusesUseCase)
 
-        // GPS Button
+
+        // User Location
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         circularUI.bt_gps.setOnClickListener {
             circularUI.drawUserLocation(
@@ -147,6 +163,11 @@ class CircularFragment : Fragment() {
         val root: View = binding.root
         return root
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        toast?.cancel()
+        _binding = null
+    }
 
     lateinit var fusedLocationClient: FusedLocationProviderClient
     private var LOCATION_PERMISSION_REQUEST_CODE = 1000
@@ -177,10 +198,5 @@ class CircularFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        toast?.cancel()
-        _binding = null
-    }
 
 }
