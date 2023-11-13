@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import android.Manifest
 import android.app.Activity
 import android.content.IntentSender
+import android.util.Log
 import com.example.shattle.R
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -64,21 +65,16 @@ class CircularUI(
         context: Context,
         activity: Activity,
         fusedLocationClient: FusedLocationProviderClient,
-        permissionCode: Int
     ) {
+
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED
         ) {
-            // 위치 권한 요청
-            ActivityCompat.requestPermissions(
-                activity,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                permissionCode
-            )
             return
+        } else {
+            //
         }
 
-        // 위치 서비스 활성화 확인 및 처리 로직은 여기에 추가...
 
         // 마지막 알려진 위치 가져오기
         val locationRequest = LocationRequest.create().apply {
@@ -111,7 +107,6 @@ class CircularUI(
                                 .icon(customMarkerIcon)
                                 .anchor(0.5f, 0.5f)
                                 .zIndex(2.1f)
-                            // 아이콘 설정 등...
                         )
 
                         val currentCameraPosition = googleMap?.cameraPosition
@@ -186,18 +181,6 @@ class CircularUI(
             tv_updatedTime.text = ""
         }
 
-    }
-
-    fun isUserLocationInBound(): Boolean {
-        if (userLocation != null) {
-            if (userLocation!!.latitude > bounds.northeast.latitude ||
-                userLocation!!.longitude > bounds.northeast.longitude ||
-                userLocation!!.latitude < bounds.southwest.latitude ||
-                userLocation!!.longitude < bounds.southwest.longitude
-            )
-                return false
-        }
-        return true
     }
 
     fun customizeGoogleMap(googleMap: GoogleMap?, context: Context) {

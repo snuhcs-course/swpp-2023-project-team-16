@@ -114,17 +114,18 @@ class CircularFragment : Fragment() {
         // User Location
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         circularUI.bt_gps.setOnClickListener {
-            circularUI.drawUserLocation(
-                googleMap,
-                requireContext(),
-                requireActivity(),
-                fusedLocationClient,
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-            if (!circularUI.isUserLocationInBound()) {
-                circularViewModel.showToastMessage("현재 학교 밖입니다.")
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                circularViewModel.showToastMessage("사용자의 현재 위치를 확인하려면 위치 권한을 허용해 주세요.")
+            } else {
+                circularUI.drawUserLocation(
+                    googleMap,
+                    requireContext(),
+                    requireActivity(),
+                    fusedLocationClient
+                )
             }
-
         }
 
         // Refresh Button
@@ -170,33 +171,4 @@ class CircularFragment : Fragment() {
     }
 
     lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var LOCATION_PERMISSION_REQUEST_CODE = 1000
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        when (requestCode) {
-            LOCATION_PERMISSION_REQUEST_CODE -> {
-                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    // 권한이 승인되면 현재 위치를 가져옵니다.
-                    circularUI.drawUserLocation(
-                        googleMap,
-                        requireContext(),
-                        requireActivity(),
-                        fusedLocationClient,
-                        LOCATION_PERMISSION_REQUEST_CODE
-                    )
-                    if (!circularUI.isUserLocationInBound()) {
-                        circularViewModel.showToastMessage("현재 학교 밖입니다.")
-                    }
-                } else {
-                    // 권한이 거부되면 처리 로직을 여기에 추가...
-                }
-                return
-            }
-        }
-    }
-
-
 }
