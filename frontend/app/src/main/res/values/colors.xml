@@ -20,13 +20,13 @@
     <!-- circular -->
     <!-- #E6F4F1 (연한민트), #DEF2F0 (중간민트) #70FACB (쌔파란민트), #8190BB (죠스바), -->
     <!-- #FFEECA (연한노랑), #E5F0FF (연하늘) #8BF186 (연두) #EE7405 (주황)-->
-    <color name="circular_bus_fill">#E5F0FF</color>
-    <color name="circular_bus_line">#000000</color>
+    <color name="circular_bus_fill">#000000</color>
+    <color name="circular_bus_background">#FFFFFF</color>
     <color name="polyline_route">#057FEE</color>
-    <color name="polyline_route_stroke">#FFFFFF</color>
+    <color name="polyline_route_stroke">#003EFA</color>
     <color name="direction_arrow">#80FFFFFF</color>
-    <color name="bus_stop_marker">#000000</color>
-    <color name="bus_stop_marker_extra">#FFFFFF</color>
+    <color name="bus_stop_marker">#FFFFFF</color>
+    <color name="bus_stop_marker_stroke">#057FEE</color>
     <color name="gps">#000000</color>
     <color name="gps_bg">#A0ffffff</color>
     <!-- 빨강 #FF4931 -->
