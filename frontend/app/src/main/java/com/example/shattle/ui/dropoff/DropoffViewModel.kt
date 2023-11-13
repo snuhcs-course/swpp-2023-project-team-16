@@ -36,6 +36,16 @@ class DropoffViewModel : ViewModel() {
         }
     }
 
+    fun getDataInit(currentLineUseCase: CurrentLineUseCase) {
+        if (!currentLineUseCase.isValidResponse()) {
+            uiState.value = DropoffUIState(currentLineUseCase.getCurrentLine_prev())
+        } else if (currentLineUseCase.isNoShuttle()) {
+            uiState.value = DropoffUIState(currentLineUseCase.getCurrentLine_prev())
+        } else {
+            uiState.value = DropoffUIState(currentLineUseCase.getCurrentLine())
+        }
+    }
+
     fun notifyRefresh(currentLineUseCase: CurrentLineUseCase) {
         currentLineUseCase.refreshData()
     }

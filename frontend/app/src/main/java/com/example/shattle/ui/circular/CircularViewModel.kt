@@ -50,6 +50,25 @@ class CircularViewModel : ViewModel() {
         }
     }
 
+    fun getDataInit(runningBusesUseCase: RunningBusesUseCase) {
+        val error_value = runningBusesUseCase.getErrorId()
+
+        if ((error_value == ERROR_BODY_IS_NULL.numBusesRunning)
+            || (error_value == ERROR_RESPONSE_IS_NOT_SUCCESSFUL.numBusesRunning)
+            || (error_value == ERROR_ON_FAILURE.numBusesRunning)
+        ) {
+            uiState.value = CircularUIState(runningBusesUseCase.getRunningBuses_prev())
+        } else {
+            uiState.value = CircularUIState(runningBusesUseCase.getRunningBuses())
+            if (error_value == 0){
+                //
+            } else {
+                //
+            }
+
+        }
+    }
+
     fun notifyRefresh(runningBusesUseCase: RunningBusesUseCase) {
         runningBusesUseCase.refreshData()
     }

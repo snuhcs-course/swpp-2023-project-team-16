@@ -50,8 +50,12 @@ class CircularFragment : Fragment() {
     private val binding get() = _binding!!
 
     var googleMap: GoogleMap? = null
+    lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
+
+    private var handler = Handler(Looper.getMainLooper())
+    private lateinit var refreshRunnable: Runnable
 
     private lateinit var circularUI: CircularUI
     private lateinit var circularViewModel: CircularViewModel
@@ -108,8 +112,7 @@ class CircularFragment : Fragment() {
 
         // Initial Update
         circularViewModel.notifyRefresh(runningBusesUseCase)
-        circularViewModel.getData(runningBusesUseCase)
-
+        circularViewModel.getDataInit(runningBusesUseCase)
 
         // User Location
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
@@ -146,8 +149,7 @@ class CircularFragment : Fragment() {
         })
 
         // Automatic Refresh (delay: 30 sec)
-        val handler = Handler(Looper.getMainLooper())
-        val refreshRunnable = object : Runnable {
+        refreshRunnable = object : Runnable {
             override fun run() {
                 try {
                     circularViewModel.notifyRefresh(runningBusesUseCase)
@@ -159,16 +161,22 @@ class CircularFragment : Fragment() {
                 handler.postDelayed(this, 30000)
             }
         }
-        handler.postDelayed(refreshRunnable, 30000)
+        handler.postDelayed(refreshRunnable, 500)
+        // 화면 전환 0.5초 후 새로고침, 이후 30초마다 자동 새로고침
 
         val root: View = binding.root
         return root
     }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(refreshRunnable)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         toast?.cancel()
+        handler.removeCallbacks(refreshRunnable)
         _binding = null
     }
-
-    lateinit var fusedLocationClient: FusedLocationProviderClient
 }

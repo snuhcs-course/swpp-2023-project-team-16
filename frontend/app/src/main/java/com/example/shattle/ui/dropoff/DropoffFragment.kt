@@ -17,6 +17,12 @@ class DropoffFragment : Fragment() {
 
     private var _binding: FragmentDropoffBinding? = null
 
+    lateinit var dropoffViewModel: DropoffViewModel
+    lateinit var currentLineUseCase: CurrentLineUseCase
+
+    private var handler = Handler(Looper.getMainLooper())
+    private lateinit var refreshRunnable: Runnable
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     val binding get() = _binding!!
@@ -55,14 +61,14 @@ class DropoffFragment : Fragment() {
             binding.refreshButton,
         )
 
+        // Initial update
+        dropoffViewModel.notifyRefresh(currentLineUseCase)
+        dropoffViewModel.getDataInit(currentLineUseCase)
+
         // ViewModel tracks data changes
         dropoffViewModel.getUIState().observe(viewLifecycleOwner) { newDropoffUIState ->
             dropoffUI.updateUI(newDropoffUIState!!)
         }
-
-        // Initial Update
-        dropoffViewModel.notifyRefresh(currentLineUseCase)
-        dropoffViewModel.getData(currentLineUseCase)
 
         // Refresh Button
         dropoffUI.bt_refresh.setOnClickListener {
@@ -82,8 +88,7 @@ class DropoffFragment : Fragment() {
         })
 
         // Automatic Refresh (delay: 30 sec)
-        val handler = Handler(Looper.getMainLooper())
-        val refreshRunnable = object : Runnable {
+        refreshRunnable = object : Runnable {
             override fun run() {
                 try {
                     dropoffViewModel.notifyRefresh(currentLineUseCase)
@@ -95,15 +100,22 @@ class DropoffFragment : Fragment() {
                 handler.postDelayed(this, 30000)
             }
         }
-        handler.postDelayed(refreshRunnable, 30000)
+        handler.postDelayed(refreshRunnable, 500)
+        // 화면 전환 후 0.5초 뒤 새로고침, 이후 30초마다 새로고침
 
         val root: View = binding.root
         return root
     }
 
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(refreshRunnable)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         toast?.cancel()
+        handler.removeCallbacks(refreshRunnable)
         _binding = null
     }
 
