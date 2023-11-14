@@ -1,6 +1,7 @@
 package com.example.shattle.dropoff
 
 import com.example.shattle.data.models.CurrentLine
+import com.example.shattle.network.NetworkCallback
 import com.example.shattle.ui.dropoff.CurrentLineDataSource
 import com.example.shattle.ui.dropoff.CurrentLineRepository
 import com.example.shattle.ui.dropoff.CurrentLineUseCase
@@ -11,6 +12,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
@@ -47,14 +49,14 @@ class CurrentLineUseCaseTest {
     @Test
     fun refreshDataTest() {
         // Arrange
-        // No arrangement needed for this test
+        val callback = mock(NetworkCallback::class.java)
 
         // Act
-        currentLineUseCase.refreshData()
+        currentLineUseCase.refreshData(callback)
 
         // Assert
         // Verify that the refreshCurrentLine method is called on the repository
-        verify(mockCurrentLineRepository).refreshCurrentLine()
+        verify(mockCurrentLineRepository).refreshCurrentLine(callback)
     }
 
     @Test

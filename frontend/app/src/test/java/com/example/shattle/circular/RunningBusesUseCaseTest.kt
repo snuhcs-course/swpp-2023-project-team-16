@@ -2,6 +2,7 @@ package com.example.shattle.circular
 
 import com.example.shattle.data.models.Bus
 import com.example.shattle.data.models.RunningBuses
+import com.example.shattle.network.NetworkCallback
 import com.example.shattle.ui.circular.RunningBusesDataSource
 import com.example.shattle.ui.circular.RunningBusesRepository
 import com.example.shattle.ui.circular.RunningBusesUseCase
@@ -13,6 +14,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
@@ -49,14 +51,14 @@ class RunningBusesUseCaseTest {
     @Test
     fun refreshDataTest() {
         // Arrange
-        // No arrangement needed for this test
+        val callback = Mockito.mock(NetworkCallback::class.java)
 
         // Act
-        runningBusesUseCase.refreshData()
+        runningBusesUseCase.refreshData(callback)
 
         // Assert
         // Verify that the refreshRunningBuses method is called on the repository
-        verify(mockRunningBusesRepository).refreshRunningBuses()
+        verify(mockRunningBusesRepository).refreshRunningBuses(callback)
     }
 
     @Test

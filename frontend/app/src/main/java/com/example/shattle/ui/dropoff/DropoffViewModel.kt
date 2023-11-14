@@ -18,7 +18,7 @@ class DropoffViewModel : ViewModel() {
 
     private val toastMessage = MutableLiveData<String>()
 
-    val networkRequestFinished = MutableLiveData<Boolean>()
+    private val networkRequestFinished = MutableLiveData<Boolean>()
 
     fun getUIState(): MutableLiveData<DropoffUIState?> {
         return uiState
