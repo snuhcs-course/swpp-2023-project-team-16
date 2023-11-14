@@ -59,6 +59,7 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     implementation ("com.google.android.gms:play-services-location:21.0.1")
 
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
     testImplementation("junit:junit:4.13.2")
     testImplementation ("org.mockito:mockito-core:5.5.0")
     testImplementation ("androidx.arch.core:core-testing:2.2.0")

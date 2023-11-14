@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import android.Manifest
 import android.app.Activity
 import android.content.IntentSender
+import android.os.Looper
 import android.util.Log
 import com.example.shattle.R
 import com.google.android.gms.common.api.ResolvableApiException
@@ -44,6 +45,7 @@ class CircularUI(
     val circularUtils = CircularUtils();
 
     var userLocationMarker: Marker? = null
+    var userLocation: LatLng? = null
 
     val bounds = LatLngBounds(
         LatLng(37.445656, 126.945219), // 남서
@@ -56,73 +58,39 @@ class CircularUI(
     val maxZoomLevel = 18.50f // 17.50f
     val minZoomLevel = 14.50f
 
-    var userLocation: LatLng? = null
-
     val markersWithInitialRotation = mutableListOf<Pair<Marker, Float>>()
 
     fun drawUserLocation(
         googleMap: GoogleMap?,
         context: Context,
-        activity: Activity,
-        fusedLocationClient: FusedLocationProviderClient,
+        location: Location
     ) {
 
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        } else {
-            //
-        }
+        // 이전 마커 제거
+        userLocationMarker?.remove()
 
+        // 사용자의 현재 위치에 마커 추가
+        val userLatLng = LatLng(location.latitude, location.longitude)
+        val customMarkerIcon =
+            circularUtils.bitmapDescriptorFromVector(context, R.drawable.img_user_loaction)
+        userLocationMarker = googleMap?.addMarker(
+            MarkerOptions()
+                .position(userLatLng)
+                .icon(customMarkerIcon)
+                .anchor(0.5f, 0.5f)
+                .zIndex(2.1f)
+        )
 
-        // 마지막 알려진 위치 가져오기
-        val locationRequest = LocationRequest.create().apply {
-            interval = 10000
-            fastestInterval = 5000
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
+        // 지도 카메라 업데이트
+        val cameraPosition = CameraPosition.Builder()
+            .target(userLatLng)
+            .zoom(initialZoomLevel)
+            .build()
 
-        val builder = LocationSettingsRequest.Builder()
-            .addLocationRequest(locationRequest)
+        googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
 
-        val client: SettingsClient = LocationServices.getSettingsClient(activity)
-        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
-
-        task.addOnSuccessListener { locationSettingsResponse ->
-            // 위치 설정이 충족됨. 위치 업데이트를 요청할 수 있음.
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location: Location? ->
-                    // Got last known location. In some rare situations this can be null.
-                    location?.let {
-                        // 이전 마커 제거
-                        userLocationMarker?.remove()
-                        // 사용자의 현재 위치에 마커 추가
-                        val userLatLng = LatLng(it.latitude, it.longitude)
-                        val customMarkerIcon =
-                            circularUtils.bitmapDescriptorFromVector(context, R.drawable.img_user_loaction)
-                        userLocationMarker = googleMap?.addMarker(
-                            MarkerOptions()
-                                .position(userLatLng)
-                                .icon(customMarkerIcon)
-                                .anchor(0.5f, 0.5f)
-                                .zIndex(2.1f)
-                        )
-
-                        val currentCameraPosition = googleMap?.cameraPosition
-                        val cameraPosition = CameraPosition.Builder()
-                            .target(userLatLng)
-                            .zoom(currentCameraPosition?.zoom ?: initialZoomLevel)
-                            .bearing(currentCameraPosition?.bearing ?: 0f)
-                            .tilt(currentCameraPosition?.tilt ?: 0f)
-                            .build()
-
-                        googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-
-                        userLocation = LatLng(it.latitude, it.longitude)
-                    }
-                }
-        }
+        // 현재 위치 저장
+        userLocation = LatLng(location.latitude, location.longitude)
     }
 
 

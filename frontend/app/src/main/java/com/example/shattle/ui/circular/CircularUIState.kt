@@ -1,7 +1,7 @@
 package com.example.shattle.ui.circular
 
 import com.example.shattle.data.models.RunningBuses
-class CircularUIState(
+data class CircularUIState(
     val runningBuses: RunningBuses,
 ) {
     val numBusesRunning = runningBuses.numBusesRunning

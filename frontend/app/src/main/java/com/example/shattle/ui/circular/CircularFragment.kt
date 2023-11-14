@@ -50,9 +50,6 @@ class CircularFragment : Fragment() {
     private val binding get() = _binding!!
 
     var googleMap: GoogleMap? = null
-    lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationRequest: LocationRequest
-    private lateinit var locationCallback: LocationCallback
 
     private var handler = Handler(Looper.getMainLooper())
     private lateinit var refreshRunnable: Runnable
@@ -68,6 +65,12 @@ class CircularFragment : Fragment() {
     ): View {
 
         _binding = FragmentCircularBinding.inflate(inflater, container, false)
+
+        locationRequest = LocationRequest.create().apply {
+            interval = 10000 // 10초 간격
+            fastestInterval = 5000 // 가장 빠른 간격 5초
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
 
         // Data Source
         val runningBusesDataSource = RunningBusesDataSource(requireContext())
@@ -90,9 +93,19 @@ class CircularFragment : Fragment() {
             binding.gpsImageButton,
         )
 
+        // init refresh
+        circularViewModel.getData(runningBusesUseCase)
+
         // ViewModel tracks data changes
         circularViewModel.getUIState().observe(viewLifecycleOwner) { newCircularUIState ->
             circularUI.updateUI(googleMap, newCircularUIState!!, requireContext())
+        }
+
+        // call 호출이 끝난 경우에만 uiState 의 데이터 및 화면 업데이트
+        circularViewModel.getNetworkRequestStatus().observe(viewLifecycleOwner) { isFinished ->
+            if (isFinished == true) {
+                circularViewModel.getData(runningBusesUseCase)
+            }
         }
 
         // Set Google Map async
@@ -109,30 +122,6 @@ class CircularFragment : Fragment() {
                 requireContext()
             )
         })
-
-        // call 호출이 끝난 경우에만 uiState 의 데이터 및 화면 업데이트
-        circularViewModel.getNetworkRequestStatus().observe(viewLifecycleOwner) { isFinished ->
-            if (isFinished == true) {
-                circularViewModel.getData(runningBusesUseCase)
-            }
-        }
-
-        // User Location
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        circularUI.bt_gps.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-                circularViewModel.showToastMessage("사용자의 현재 위치를 확인하려면 위치 권한을 허용해 주세요.")
-            } else {
-                circularUI.drawUserLocation(
-                    googleMap,
-                    requireContext(),
-                    requireActivity(),
-                    fusedLocationClient
-                )
-            }
-        }
 
         // Refresh Button
         circularUI.bt_refresh.setOnClickListener {
@@ -165,6 +154,25 @@ class CircularFragment : Fragment() {
         handler.postDelayed(refreshRunnable, 0)
         // 화면 전환 직후 새로고침, 이후 30초마다 자동 새로고침
 
+        // User Location
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        circularUI.bt_gps.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                circularViewModel.showToastMessage("사용자의 현재 위치를 확인하려면 위치 권한을 허용해 주세요.")
+            } else {
+                fusedLocationClient.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    Looper.getMainLooper()
+                )
+            }
+        }
+
         val root: View = binding.root
         return root
     }
@@ -172,6 +180,7 @@ class CircularFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         handler.removeCallbacks(refreshRunnable)
+        fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
     override fun onDestroyView() {
@@ -179,5 +188,22 @@ class CircularFragment : Fragment() {
         toast?.cancel()
         handler.removeCallbacks(refreshRunnable)
         _binding = null
+    }
+
+
+    lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationRequest: LocationRequest
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            locationResult ?: return
+            for (location in locationResult.locations) {
+                circularUI.drawUserLocation(
+                    googleMap,
+                    requireContext(),
+                    location
+                )
+            }
+        }
     }
 }
