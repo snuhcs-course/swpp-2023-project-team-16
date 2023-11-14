@@ -2,30 +2,33 @@
 <resources>
     <color name="title_text">@color/dark</color>
 
-    <!--
-    초록 #22A400
-    초록(스벅) #01A862
-    파랑(zoom) #0A5CFE
-    파랑(My SNU) #0F3E8E
-    파랑(SNU Map) #2D72D9
+    <color name="primary">#0F3E8E</color>
 
-    주황(당근) #FE6E0E, 검정 #141514
-    -->
-    <color name="green_primary">#0F3E8E</color>
+    <!--
+   초록 #22A400
+   초록(스벅) #01A862
+   파랑(zoom) #0A5CFE
+   파랑(My SNU) #0F3E8E
+   파랑(SNU Map) #2D72D9
+
+   주황(당근) #FE6E0E, 검정 #141514
+   -->
 
     <!-- staiton -->
     <color name="station_text_view_color">@color/dark</color>
 
     <!-- circular -->
-    <!-- 주황 #A0FFB602, 초록 #0ABB0B, 파랑 #057FEE-->
-    <color name="polyline_route_color">#002D57</color>
-    <!-- 파랑 #1A73E9 -->
-    <color name="circular_bus">#1A73E9</color>
-    <color name="circular_bus_extra">#FFFFFF</color>
-    <color name="direction_arrow">#FFFFFF</color>
-    <color name="bus_stop_marker_fill">#FFFFFF</color>
-    <color name="bus_stop_marker_bg">#80000000</color>
-    <color name="gps">#000000</color>
+    <!-- #E6F4F1 (연한민트), #DEF2F0 (중간민트) #70FACB (쌔파란민트), #8190BB (죠스바), -->
+    <!-- #FFEECA (연한노랑), #E5F0FF (연하늘) #8BF186 (연두) #EE7405 (주황)-->
+    <color name="circular_bus_fill">#000000</color>
+    <color name="circular_bus_background">#FFFFFF</color>
+    <color name="polyline_route">#057FEE</color>
+    <color name="polyline_route_stroke">#003EFA</color>
+    <color name="direction_arrow">#80FFFFFF</color>
+    <color name="bus_stop_marker">#FFFFFF</color>
+    <color name="bus_stop_marker_stroke">#057FEE</color>
+    <color name="gps_on">@color/primary</color>
+    <color name="gps_off">#000000</color>
     <color name="gps_bg">#A0ffffff</color>
     <!-- 빨강 #FF4931 -->
     <color name="user_location">#FF4931</color>

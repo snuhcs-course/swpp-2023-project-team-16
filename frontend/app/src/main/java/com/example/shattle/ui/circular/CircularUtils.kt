@@ -15,7 +15,8 @@ import kotlin.math.sin
 class CircularUtils {
 
     fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor {
-        // Vector Drawable 리소스를 BitmapDescriptor 로 변환
+        // 프로젝트의 Drawable 리소스를 BitmapDescriptor 로 변환
+        // (GoogleMap Marker 아이콘으로 쓰기 위함)
 
         val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)
 
@@ -36,26 +37,10 @@ class CircularUtils {
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 
-    fun createBitmapFromView(context: Context, view: View): Bitmap {
-        // 뷰 크기를 측정 및 레이아웃을 재배치
-        view.measure(
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        )
-        view.layout(0, 0, view.measuredWidth, view.measuredHeight)
-
-        // 해당 뷰 크기의 Bitmap 생성
-        val bitmap =
-            Bitmap.createBitmap(view.measuredWidth, view.measuredHeight, Bitmap.Config.ARGB_8888)
-
-        // Bitmap 을 캔버스로 뷰의 내용 그림
-        val canvas = Canvas(bitmap)
-        view.draw(canvas)
-
-        return bitmap
-    }
-
     fun bearingBetweenLocations(start: LatLng, end: LatLng): Float {
+        // 시작점과 끝점으로 bearing 반환
+        // (google Map route 위 화살표 회전용)
+
         val lat1 = Math.toRadians(start.latitude)
         val long1 = Math.toRadians(start.longitude)
         val lat2 = Math.toRadians(end.latitude)
@@ -71,57 +56,110 @@ class CircularUtils {
     }
 
     data class ArrowDirection(val position: LatLng, val direction: LatLng)
-    data class BusStop(val location: LatLng, val title: String, val snippet: String)
 
     val arrowData = listOf(
-        //ArrowDirection(LatLng(), LatLng()),
         // 정문
-        ArrowDirection(LatLng(37.464301, 126.948773), LatLng(37.464253, 126.948782)),
+        ArrowDirection(LatLng(37.465526, 126.948502), LatLng(37.465319, 126.948548)),
+        ArrowDirection(LatLng(37.464867, 126.948649), LatLng(37.464776, 126.948672)),
+        ArrowDirection(LatLng(37.464252, 126.948782), LatLng(37.464131, 126.948807)),
+        ArrowDirection(LatLng(37.463608, 126.948909), LatLng(37.463476, 126.948934)),
         // 법대
-        ArrowDirection(LatLng(37.461939, 126.949260), LatLng(37.461891, 126.949273)),
+        ArrowDirection(LatLng(37.462742, 126.949081), LatLng(37.462616, 126.949107)),
+        ArrowDirection(LatLng(37.462114, 126.949222), LatLng(37.461981, 126.949251)),
+        ArrowDirection(LatLng(37.461522, 126.949337), LatLng(37.461413, 126.949328)),
+        ArrowDirection(LatLng(37.460854, 126.94917), LatLng(37.460731, 126.949132)),
         // 자연대
-        ArrowDirection(LatLng(37.459107, 126.948758), LatLng(37.459057, 126.948770)),
+        ArrowDirection(LatLng(37.460286, 126.948973), LatLng(37.460174, 126.948929)),
+        ArrowDirection(LatLng(37.459569, 126.948709), LatLng(37.459469, 126.948689)),
+        ArrowDirection(LatLng(37.458954, 126.948795), LatLng(37.458758, 126.948844)),
+        ArrowDirection(LatLng(37.458201, 126.948984), LatLng(37.458041, 126.949027)),
+        ArrowDirection(LatLng(37.457490, 126.949164), LatLng(37.457329, 126.949204)),
         // 농생대
-        ArrowDirection(LatLng(37.455955, 126.949568), LatLng(37.455918, 126.949580)),
+        ArrowDirection(LatLng(37.456770, 126.949344), LatLng(37.456646, 126.949373)),
+        ArrowDirection(LatLng(37.456135, 126.949515), LatLng(37.456032, 126.949545)),
+        ArrowDirection(LatLng(37.455460, 126.949716), LatLng(37.455288, 126.949768)),
         // 공대입구
-        ArrowDirection(LatLng(37.454329, 126.950065), LatLng(37.454301, 126.950074)),
+        ArrowDirection(LatLng(37.454737, 126.949938), LatLng(37.454572, 126.949990)),
+        ArrowDirection(LatLng(37.454059, 126.950151), LatLng(37.453935, 126.950187)),
         // 신소재
-        ArrowDirection(LatLng(37.451498, 126.949867), LatLng(37.451428, 126.949855)),
-        ArrowDirection(LatLng(37.449186, 126.949663), LatLng(37.449093, 126.949622)),
-        ArrowDirection(LatLng(37.447161, 126.949995), LatLng(37.447133, 126.950170)),
+        ArrowDirection(LatLng(37.453234, 126.950280), LatLng(37.453092, 126.950298)),
+        ArrowDirection(LatLng(37.452603, 126.950286), LatLng(37.452512, 126.950247)),
+        ArrowDirection(LatLng(37.451901, 126.949955), LatLng(37.451819, 126.949928)),
+        ArrowDirection(LatLng(37.451142, 126.949809), LatLng(37.451010, 126.949788)),
+        ArrowDirection(LatLng(37.450296, 126.949811), LatLng(37.450207, 126.949818)),
+        ArrowDirection(LatLng(37.449434, 126.949749), LatLng(37.449331, 126.949719)),
+        ArrowDirection(LatLng(37.448522, 126.949357), LatLng(37.448435, 126.949316)),
+        ArrowDirection(LatLng(37.447641, 126.949196), LatLng(37.447580, 126.949236)),
+        ArrowDirection(LatLng(37.447180, 126.949916), LatLng(37.447157, 126.950028)),
+        ArrowDirection(LatLng(37.447047, 126.950859), LatLng(37.447040, 126.951001)),
+        ArrowDirection(LatLng(37.447312, 126.951735), LatLng(37.447398, 126.951810)),
+        ArrowDirection(LatLng(37.447857, 126.952043), LatLng(37.448003, 126.952039)),
+        ArrowDirection(LatLng(37.448521, 126.952021), LatLng(37.448633, 126.952019)),
         // 제2공학관
-        ArrowDirection(LatLng(37.450203, 126.951970), LatLng(37.450330, 126.951967)),
+        ArrowDirection(LatLng(37.449071, 126.952005), LatLng(37.449165, 126.952001)),
+        ArrowDirection(LatLng(37.449769, 126.951983), LatLng(37.449909, 126.951979)),
+        ArrowDirection(LatLng(37.450536, 126.952044), LatLng(37.450620, 126.952105)),
+        ArrowDirection(LatLng(37.451252, 126.952437), LatLng(37.451324, 126.952471)),
         // 301동
-        ArrowDirection(LatLng(37.452662, 126.953090), LatLng(37.452817, 126.953164)),
+        ArrowDirection(LatLng(37.451807, 126.952695), LatLng(37.451920, 126.952747)),
+        ArrowDirection(LatLng(37.452569, 126.953046), LatLng(37.452660, 126.953089)),
+        ArrowDirection(LatLng(37.453137, 126.953309), LatLng(37.453397, 126.953430)),
+        ArrowDirection(LatLng(37.453740, 126.953590), LatLng(37.453818, 126.953647)),
         // 유전공학연구소
-        ArrowDirection(LatLng(37.455201, 126.954599), LatLng(37.455376, 126.954729)),
+        ArrowDirection(LatLng(37.454249, 126.953942), LatLng(37.454337, 126.954003)),
+        ArrowDirection(LatLng(37.454855, 126.954354), LatLng(37.454965, 126.954429)),
+        ArrowDirection(LatLng(37.455424, 126.954763), LatLng(37.455544, 126.954853)),
+        ArrowDirection(LatLng(37.455903, 126.955113), LatLng(37.455976, 126.955174)),
         // 교수회관
-        ArrowDirection(LatLng(37.457038, 126.956060), LatLng(37.457110, 126.956123)),
-        ArrowDirection(LatLng(37.458706, 126.956711), LatLng(37.458802, 126.956782)),
+        ArrowDirection(LatLng(37.456330, 126.955470), LatLng(37.456425, 126.955548)),
+        ArrowDirection(LatLng(37.456955, 126.955989), LatLng(37.457107, 126.956121)),
+        ArrowDirection(LatLng(37.457564, 126.956309), LatLng(37.457673, 126.956336)),
+        ArrowDirection(LatLng(37.458250, 126.956476), LatLng(37.458340, 126.956519)),
+        ArrowDirection(LatLng(37.458769, 126.956756), LatLng(37.458840, 126.956806)),
+        ArrowDirection(LatLng(37.459581, 126.957160), LatLng(37.459662, 126.957145)),
+        ArrowDirection(LatLng(37.460289, 126.956854), LatLng(37.460347, 126.956823)),
         // 긱삼
+        ArrowDirection(LatLng(37.461401, 126.955716), LatLng(37.461423, 126.955555)),
+        ArrowDirection(LatLng(37.461886, 126.954537), LatLng(37.461999, 126.954546)),
+        ArrowDirection(LatLng(37.462813, 126.954624), LatLng(37.462926, 126.954635)),
+        ArrowDirection(LatLng(37.463747, 126.955000), LatLng(37.463853, 126.955063)),
         // 국제대학원
+        ArrowDirection(LatLng(37.464468, 126.955217), LatLng(37.464575, 126.955211)),
+        ArrowDirection(LatLng(37.465143, 126.955178), LatLng(37.465241, 126.955170)),
+        ArrowDirection(LatLng(37.465750, 126.955011), LatLng(37.465788, 126.954960)),
         // 수의대
+        ArrowDirection(LatLng(37.466198, 126.953895), LatLng(37.466172, 126.953716)),
+        ArrowDirection(LatLng(37.466100, 126.953200), LatLng(37.466072, 126.953068)),
         // 경영대
+        ArrowDirection(LatLng(37.465978, 126.952164), LatLng(37.465976, 126.951998)),
+        ArrowDirection(LatLng(37.465962, 126.951414), LatLng(37.465958, 126.951266)),
+        ArrowDirection(LatLng(37.465915, 126.950530), LatLng(37.465879, 126.950312)),
+        ArrowDirection(LatLng(37.465745, 126.949650), LatLng(37.465715, 126.949510)),
+        //ArrowDirection(LatLng(), LatLng()),
     )
 
+    data class BusStop(val location: LatLng, val title: String, val snippet: String)
+
     val busStops = listOf(
-        BusStop(LatLng(37.465785, 126.948377), "정문", ""),
-        BusStop(LatLng(37.463036, 126.948985), "법대, 사회대입구", ""),
-        BusStop(LatLng(37.460449, 126.949008), "자연대, 행정관입구", ""),
-        BusStop(LatLng(37.457004, 126.949248), "농생대", ""),
-        BusStop(LatLng(37.455026, 126.949811), "38동, 공대입구", ""),
-        BusStop(LatLng(37.453577, 126.950206), "신소재", ""),
-        BusStop(LatLng(37.448880, 126.952040), "제2공학관", ""),
-        BusStop(LatLng(37.451618, 126.952649), "301동, 유회진학술정보관", ""),
-        BusStop(LatLng(37.454115, 126.953885), "유전공학연구소", ""),
-        BusStop(LatLng(37.456148, 126.955365), "교수회관입구", ""),
-        BusStop(LatLng(37.461044, 126.956481), "관악사삼거리", ""),
-        BusStop(LatLng(37.464217, 126.955298), "국제대학원", ""),
-        BusStop(LatLng(37.466103, 126.954632), "수의대, 보건대학원", ""),
-        BusStop(LatLng(37.466011, 126.952116), "경영대, 행정대학원", ""),
+        BusStop(LatLng(37.465783, 126.948402), "정문", ""),
+        BusStop(LatLng(37.463030, 126.949023), "법대, 사회대입구", ""),
+        BusStop(LatLng(37.460456, 126.949038), "자연대, 행정관입구", ""),
+        BusStop(LatLng(37.457013, 126.949282), "농생대", ""),
+        BusStop(LatLng(37.455034, 126.949846), "38동, 공대입구", ""),
+        BusStop(LatLng(37.453581, 126.950239), "신소재", ""),
+        BusStop(LatLng(37.448886, 126.952013), "제2공학관", ""),
+        BusStop(LatLng(37.451623, 126.952611), "301동, 유회진학술정보관", ""),
+        BusStop(LatLng(37.454127, 126.953861), "유전공학연구소", ""),
+        BusStop(LatLng(37.456163, 126.955330), "교수회관입구", ""),
+        BusStop(LatLng(37.461003, 126.956469), "관악사삼거리", ""),
+        BusStop(LatLng(37.464251, 126.955216), "국제대학원", ""),
+        BusStop(LatLng(37.466041, 126.954568), "수의대, 보건대학원", ""),
+        BusStop(LatLng(37.465978, 126.952121), "경영대, 행정대학원", ""),
     )
 
     val roadCoordinates = listOf(
+        LatLng(37.466229, 126.948175),
+        LatLng(37.465851, 126.948367),
         LatLng(37.465783, 126.948402), //정문 앞
         LatLng(37.465733, 126.948429),
         LatLng(37.465527, 126.948501),

@@ -1,6 +1,9 @@
 package com.example.shattle.ui.dropoff
 
+import android.net.ConnectivityManager
+import android.util.Log
 import com.example.shattle.data.models.CurrentLine
+import com.example.shattle.network.NetworkCallback
 
 class CurrentLineUseCase(val currentLineRepository: CurrentLineRepository) {
 
@@ -8,8 +11,9 @@ class CurrentLineUseCase(val currentLineRepository: CurrentLineRepository) {
     val ERROR_RESPONSE_IS_NOT_SUCCESSFUL = CurrentLine(true, -4)
     val ERROR_ON_FAILURE = CurrentLine(true, -5)
 
-    fun refreshData() {
-        currentLineRepository.refreshCurrentLine()
+
+    fun refreshData(callback: NetworkCallback) {
+        currentLineRepository.refreshCurrentLine(callback)
     }
 
     fun getCurrentLine(): CurrentLine {

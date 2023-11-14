@@ -3,7 +3,6 @@ package com.example.shattle.ui.circular
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -11,14 +10,19 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.Manifest
 import android.app.Activity
-import androidx.core.app.ActivityCompat.requestPermissions
+import android.content.IntentSender
+import android.os.Looper
+import android.util.Log
 import com.example.shattle.R
-import com.example.shattle.data.models.RunningBuses
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.location.SettingsClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
@@ -26,6 +30,7 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.tasks.Task
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
@@ -34,100 +39,63 @@ class CircularUI(
     val bt_refresh: Button,
     val tv_updatedTime: TextView,
     val bt_gps: ImageButton,
-    val bt_home: ImageButton,
 ) {
     var busMarkers: MutableList<Marker> = mutableListOf()
 
     val circularUtils = CircularUtils();
 
     var userLocationMarker: Marker? = null
+    var userLocation: LatLng? = null
 
     val bounds = LatLngBounds(
         LatLng(37.445656, 126.945219), // 남서
-        LatLng(37.469107, 126.958641) // 북동
+        LatLng(37.468911, 126.959790) // 북동
     )
 
-    val initialLocation = LatLng(37.45800, 126.9531)
+    val initialLocation = LatLng(37.45500, 126.9531)
     val initialZoomLevel = 14.70f
 
-    var userLocation: LatLng? = null
+    val maxZoomLevel = 18.50f // 17.50f
+    val minZoomLevel = 14.50f
+
+    val markersWithInitialRotation = mutableListOf<Pair<Marker, Float>>()
 
     fun drawUserLocation(
         googleMap: GoogleMap?,
         context: Context,
-        activity: Activity,
-        fusedLocationClient: FusedLocationProviderClient,
-        permissionCode: Int
+        location: Location
     ) {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            // 위치 권한 요청
-            ActivityCompat.requestPermissions(
-                activity,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                permissionCode
-            )
-            return
-        }
 
-        // 위치 서비스 활성화 확인 및 처리 로직은 여기에 추가...
+        // 이전 마커 제거
+        userLocationMarker?.remove()
 
+        // 사용자의 현재 위치에 마커 추가
+        val userLatLng = LatLng(location.latitude, location.longitude)
         val customMarkerIcon =
             circularUtils.bitmapDescriptorFromVector(context, R.drawable.img_user_loaction)
-        // 마지막 알려진 위치 가져오기
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                // Got last known location. In some rare situations this can be null.
-                location?.let {
-                    // 이전 마커 제거
-                    userLocationMarker?.remove()
-                    // 사용자의 현재 위치에 마커 추가
-                    val userLatLng = LatLng(it.latitude, it.longitude)
-                    userLocationMarker = googleMap?.addMarker(
-                        MarkerOptions()
-                            .position(userLatLng)
-                            .icon(customMarkerIcon)
-                        // 아이콘 설정 등...
-                    )
-                    // 카메라를 기본 위치로 이동
-                    googleMap?.moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            userLatLng,
-                            initialZoomLevel
-                        )
-                    )
-                    userLocation = LatLng(it.latitude, it.longitude)
-                }
-            }
-    }
+        userLocationMarker = googleMap?.addMarker(
+            MarkerOptions()
+                .position(userLatLng)
+                .icon(customMarkerIcon)
+                .anchor(0.5f, 0.5f)
+                .zIndex(2.1f)
+        )
 
-    fun isUserLocationInBound(): Boolean {
-        if (userLocation != null) {
-            if (userLocation!!.latitude > bounds.northeast.latitude ||
-                userLocation!!.longitude > bounds.northeast.longitude ||
-                userLocation!!.latitude < bounds.southwest.latitude ||
-                userLocation!!.longitude < bounds.southwest.longitude)
-                return false
-        }
-        return true
-    }
-
-    fun resetCamera(googleMap: GoogleMap?){
-        val currentLatLng = initialLocation
-        val zoomLevel = initialZoomLevel
-        val tilt = 0.0f
-        val bearing = 0.0f
-
+        // 지도 카메라 업데이트
+        val currentCameraPosition = googleMap?.cameraPosition
         val cameraPosition = CameraPosition.Builder()
-            .target(currentLatLng)
-            .zoom(zoomLevel)
-            .bearing(bearing)
-            .tilt(tilt)
+            .target(userLatLng)
+            .zoom(currentCameraPosition?.zoom ?: initialZoomLevel)
+            .bearing(currentCameraPosition?.bearing ?: 0f)
+            .tilt(currentCameraPosition?.tilt ?: 0f)
             .build()
 
         googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
+        // 현재 위치 저장
+        userLocation = LatLng(location.latitude, location.longitude)
     }
+
 
     fun updateUI(googleMap: GoogleMap?, circularUIState: CircularUIState, context: Context) {
 
@@ -162,24 +130,28 @@ class CircularUI(
                 MarkerOptions()
                     .position(location) // Set the bus's initial position
                     .icon(customMarkerIcon) // Use a custom bus icon
-                    .zIndex(1.0f)
+                    .anchor(0.5f, 0.5f)
+                    .zIndex(2.0f)
             )
             if (busMarker != null) {
                 busMarkers.add(busMarker)
             }
         }
-
     }
 
+
     fun changeUpdatedDateTime(circularUIState: CircularUIState) {
-        if(circularUIState.updatedTime != null){
+        try {
             val dateTimeString = circularUIState.updatedTime
             val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
-            inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+            inputFormat.timeZone = TimeZone.getTimeZone("Asia/Seoul")
             val dateTime = inputFormat.parse(dateTimeString)
-            val outputFormat = SimpleDateFormat("MM.dd hh:mm:ss (a)", Locale.getDefault()) //(hh 대신 HH 하면 24시간기준)
+            val outputFormat = SimpleDateFormat("MM.dd HH:mm:ss", Locale.getDefault())
             tv_updatedTime.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
+        } catch (e: Exception) {
+            tv_updatedTime.text = ""
         }
+
     }
 
     fun customizeGoogleMap(googleMap: GoogleMap?, context: Context) {
@@ -191,30 +163,21 @@ class CircularUI(
         googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(initialLocation, initialZoomLevel))
 
         // 카메라 zoom level 설정
-        //googleMap?.setMaxZoomPreference(15.90f)
-        googleMap?.setMinZoomPreference(14.50f)
+        googleMap?.setMaxZoomPreference(maxZoomLevel)
+        googleMap?.setMinZoomPreference(minZoomLevel)
 
         // 카메라 경계 설정 (남서, 북동)
-
         googleMap?.setLatLngBoundsForCameraTarget(bounds)
 
         // 버스 경로 표시
         drawRouteOfBus(googleMap, context)
 
-        // 버스 정류장 표시
-        drawBusStopLocations(googleMap, context)
-
         // 경로 위에 화살표 그리기
         drawRouteDirections(googleMap, context)
 
-        // 예상 소요시간 표시
-        //drawSectionDuration(googleMap)
-
+        // 버스 정류장 표시
+        drawBusStopLocations(googleMap, context)
     }
-
-
-
-
 
 
     fun drawRouteOfBus(googleMap: GoogleMap?, context: Context) {
@@ -225,37 +188,33 @@ class CircularUI(
             PolylineOptions()
                 .clickable(false)
                 .addAll(circularUtils.roadCoordinates)
-                .width(20.0f) // Set the width of the line
+                .width(23.0f) // Set the width of the line
                 .color(
                     ContextCompat.getColor(
                         context,
-                        R.color.polyline_route_color
+                        R.color.polyline_route
                     )
                 ) // Set the color of the line
-                .zIndex(-3.0f)
+                .zIndex(1.0f)
+        )
+
+        // 경로 위 흰색 테두리
+        googleMap?.addPolyline(
+            PolylineOptions()
+                .clickable(false)
+                .addAll(circularUtils.roadCoordinates)
+                .width(31.0f) // Set the width of the line
+                .color(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.polyline_route_stroke
+                    )
+                ) // Set the color of the line
+                .zIndex(0.9f)
         )
 
     }
 
-    fun drawBusStopLocations(googleMap: GoogleMap?, context: Context) {
-        // Show the bus stop locations on the map
-
-        // 해당 벡터 파일을 bitmap 이미지로 변경 (마커 이미지가 bitmap 만 지원됨)
-        val customMarkerIcon =
-            circularUtils.bitmapDescriptorFromVector(context, R.drawable.img_circular_bus_stop)
-        // 현재 18 dp 이미지 사용중
-
-        for (busStop in circularUtils.busStops) {
-            googleMap?.addMarker(
-                MarkerOptions()
-                    .position(busStop.location)
-                    .title(busStop.title) // Set a title for the marker
-                    //.snippet(busStop.snippet) // Set additional information
-                    .icon(customMarkerIcon) // Set a custom marker icon (optional)
-                    .zIndex(-1.0f)
-            )
-        }
-    }
 
     fun drawRouteDirections(googleMap: GoogleMap?, context: Context) {
 
@@ -268,35 +227,50 @@ class CircularUI(
             val customMarkerIcon =
                 circularUtils.bitmapDescriptorFromVector(
                     context,
-                    R.drawable.img_circular_load_direction
+                    R.drawable.img_circular_route_direction
                 )
-            googleMap?.addMarker(
+            val marker = googleMap?.addMarker(
                 MarkerOptions()
                     .position(directionData.position)
                     //.snippet(busStop.snippet) // Set additional information
                     .icon(customMarkerIcon) // Set a custom marker icon (optional)
+                    .anchor(0.5f, 0.5f)
                     .rotation(bearing)
-                    .zIndex(-2.0f)
+                    .zIndex(1.1f)
             )
+            if (marker != null) {
+                markersWithInitialRotation.add(Pair(marker, bearing))
+            }
+
         }
+
+        googleMap?.setOnCameraMoveListener {
+            val mapRotation = googleMap.cameraPosition.bearing
+            for ((marker, initialRotation) in markersWithInitialRotation) {
+                // 마커의 최종 회전 각도는 지도의 회전 각도와 초기 회전 각도의 합입니다.
+                marker.rotation = -mapRotation + initialRotation
+            }
+        }
+
     }
 
-    fun drawSectionDuration(googleMap: GoogleMap?, context: Context) {
-        // 커스텀 레이아웃을 사용하여 TextView를 생성합니다.
-        val textView = TextView(context).apply {
-            text = "Hello World!"
-            textSize = 40f
+    fun drawBusStopLocations(googleMap: GoogleMap?, context: Context) {
+        // Show the bus stop locations on the map
+
+        // 해당 벡터 파일을 bitmap 이미지로 변경 (마커 이미지가 bitmap 만 지원됨)
+        val customMarkerIcon =
+            circularUtils.bitmapDescriptorFromVector(context, R.drawable.img_circular_bus_stop)
+
+        for (busStop in circularUtils.busStops) {
+            googleMap?.addMarker(
+                MarkerOptions()
+                    .position(busStop.location)
+                    .title(busStop.title) // Set a title for the marker
+                    //.snippet(busStop.snippet) // Set additional information
+                    .icon(customMarkerIcon) // Set a custom marker icon (optional)
+                    .anchor(0.5f, 0.5f)
+                    .zIndex(1.2f)
+            )
         }
-
-        // TextView를 Bitmap으로 변환합니다.
-        val bitmap = circularUtils.createBitmapFromView(context, textView)
-
-        // Bitmap을 사용하여 마커를 생성합니다.
-        val marker = googleMap?.addMarker(
-            MarkerOptions()
-                .position(LatLng(37.45800, 126.9531))
-                .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
-                .zIndex(-1.0f)
-        )
     }
 }

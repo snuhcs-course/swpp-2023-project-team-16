@@ -4,6 +4,7 @@ import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -93,12 +94,18 @@ class DropoffUI(
     }
 
     fun changeUpdatedTime(dropoffUIState: DropoffUIState) {
-        val dateTimeString = dropoffUIState.updatedTime
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
-        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
-        val dateTime = inputFormat.parse(dateTimeString)
-        val outputFormat = SimpleDateFormat("MM.dd hh:mm:ss (a)", Locale.getDefault()) //(hh 대신 HH 하면 24시간기준)
-        tv_updatedTime.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
+
+        try {
+            val dateTimeString = dropoffUIState.updatedTime
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
+            inputFormat.timeZone = TimeZone.getTimeZone("Asia/Seoul")
+            val dateTime = inputFormat.parse(dateTimeString)
+            val outputFormat = SimpleDateFormat("MM.dd HH:mm:ss", Locale.getDefault())
+            tv_updatedTime.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
+
+        } catch (e: Exception){
+            tv_updatedTime.text = ""
+        }
     }
 
 }
