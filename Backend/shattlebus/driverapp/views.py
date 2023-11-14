@@ -43,9 +43,10 @@ class RetrieveCircularBusView(View):
 class UpdateCircularBusLocationView(View):
 
     def put(self, request):
-        license_plate = request.GET['license_plate']
-        latitude = request.GET['latitude']
-        longitude = request.GET['longitude']
+        request = json.loads(request.body)
+        license_plate = request['license_plate']
+        latitude = request['latitude']
+        longitude = request['longitude']
 
         # 해당하는 CircularBus 없으면 404
         my_bus = get_object_or_404(CircularBus, license_plate=license_plate)
@@ -66,6 +67,29 @@ class UpdateCircularBusLocationView(View):
             "is_running": my_bus.is_running,
             "is_tracked": my_bus.is_tracked,
             "location_updated_at": str(location.updated_at+datetime.timedelta(hours=9))
+        }
+
+        return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class UpdateCircularBusIsRunningView(View):
+    def put(self, request):
+        request = json.loads(request.body)
+        license_plate = request['license_plate']
+        is_running = request['is_running']
+
+        # 해당하는 CircularBus 없으면 404
+        my_bus = get_object_or_404(CircularBus, license_plate=license_plate)
+
+        my_bus.is_running = is_running
+        my_bus.save()
+
+        response = {
+            "id": my_bus.id,
+            "license_plate": my_bus.license_plate,
+            "is_running": my_bus.is_running,
+            "is_tracked": my_bus.is_tracked,
         }
 
         return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")
