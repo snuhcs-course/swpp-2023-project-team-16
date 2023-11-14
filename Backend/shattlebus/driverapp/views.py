@@ -74,4 +74,22 @@ class UpdateCircularBusLocationView(View):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class UpdateCircularBusIsRunningView(View):
-    pass
+    def put(self, request):
+        request = json.loads(request.body)
+        license_plate = request['license_plate']
+        is_running = request['is_running']
+
+        # 해당하는 CircularBus 없으면 404
+        my_bus = get_object_or_404(CircularBus, license_plate=license_plate)
+
+        my_bus.is_running = is_running
+        my_bus.save()
+
+        response = {
+            "id": my_bus.id,
+            "license_plate": my_bus.license_plate,
+            "is_running": my_bus.is_running,
+            "is_tracked": my_bus.is_tracked,
+        }
+
+        return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")
