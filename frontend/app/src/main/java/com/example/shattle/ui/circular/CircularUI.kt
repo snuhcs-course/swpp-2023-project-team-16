@@ -82,9 +82,12 @@ class CircularUI(
         )
 
         // 지도 카메라 업데이트
+        val currentCameraPosition = googleMap?.cameraPosition
         val cameraPosition = CameraPosition.Builder()
             .target(userLatLng)
-            .zoom(initialZoomLevel)
+            .zoom(currentCameraPosition?.zoom ?: initialZoomLevel)
+            .bearing(currentCameraPosition?.bearing ?: 0f)
+            .tilt(currentCameraPosition?.tilt ?: 0f)
             .build()
 
         googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))

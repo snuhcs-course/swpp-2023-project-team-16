@@ -70,7 +70,7 @@
         android:id="@+id/gpsImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/btn_circular_gps"
+        android:src="@drawable/btn_circular_gps_false"
         android:background="@color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/refreshButton"

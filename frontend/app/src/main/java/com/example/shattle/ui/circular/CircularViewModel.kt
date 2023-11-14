@@ -19,14 +19,24 @@ class CircularViewModel : ViewModel() {
 
     private val toastMessage = MutableLiveData<String>()
 
-    val networkRequestFinished = MutableLiveData<Boolean>()
+    private val networkRequestFinished = MutableLiveData<Boolean>()
+
+    private val gpsTrackingStatus = MutableLiveData<Boolean>()
+
+    fun getUIState(): MutableLiveData<CircularUIState?> {
+        return uiState
+    }
+
+    fun getToastMessage(): LiveData<String> {
+        return toastMessage
+    }
 
     fun getNetworkRequestStatus(): LiveData<Boolean?> {
         return networkRequestFinished
     }
 
-    fun getUIState(): MutableLiveData<CircularUIState?> {
-        return uiState
+    fun getGpsTrackingStatus(): LiveData<Boolean?> {
+        return gpsTrackingStatus
     }
 
     val ERROR_BODY_IS_NULL = RunningBuses(true, -3)
@@ -39,6 +49,7 @@ class CircularViewModel : ViewModel() {
             override fun onCompleted() {
                 networkRequestFinished.postValue(true)
             }
+
             override fun onFailure(t: Throwable) {
                 networkRequestFinished.postValue(true)
             }
@@ -59,7 +70,7 @@ class CircularViewModel : ViewModel() {
             showToastMessage("업데이트 중 오류가 발생했습니다. 잠시 후 다시 시도하세요.")
         } else {
             uiState.value = CircularUIState(runningBusesUseCase.getRunningBuses())
-            if (error_value == 0){
+            if (error_value == 0) {
                 showToastMessage("현재 운행중인 셔틀이 없습니다.")
             } else {
                 showToastMessage("업데이트 성공!")
@@ -68,14 +79,12 @@ class CircularViewModel : ViewModel() {
         }
     }
 
-    // Fragment 에서 Toast 를 띄워주기 위한 함수들 //
-
-    fun getToastMessage(): LiveData<String> {
-        return toastMessage
-    }
-
     fun showToastMessage(message: String) {
         toastMessage.value = message
+    }
+
+    fun toggleTrackingStatus() {
+        gpsTrackingStatus.value = (gpsTrackingStatus.value != true)
     }
 
 }

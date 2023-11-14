@@ -27,7 +27,8 @@
     <color name="direction_arrow">#80FFFFFF</color>
     <color name="bus_stop_marker">#FFFFFF</color>
     <color name="bus_stop_marker_stroke">#057FEE</color>
-    <color name="gps">#000000</color>
+    <color name="gps_on">@color/primary</color>
+    <color name="gps_off">#000000</color>
     <color name="gps_bg">#A0ffffff</color>
     <!-- 빨강 #FF4931 -->
     <color name="user_location">#FF4931</color>
