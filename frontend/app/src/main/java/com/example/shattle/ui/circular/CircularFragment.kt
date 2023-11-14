@@ -110,9 +110,12 @@ class CircularFragment : Fragment() {
             )
         })
 
-        // Initial Update
-        circularViewModel.notifyRefresh(runningBusesUseCase)
-        circularViewModel.getDataInit(runningBusesUseCase)
+        // call 호출이 끝난 경우에만 uiState 의 데이터 및 화면 업데이트
+        circularViewModel.getNetworkRequestStatus().observe(viewLifecycleOwner) { isFinished ->
+            if (isFinished == true) {
+                circularViewModel.getData(runningBusesUseCase)
+            }
+        }
 
         // User Location
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
@@ -134,7 +137,6 @@ class CircularFragment : Fragment() {
         // Refresh Button
         circularUI.bt_refresh.setOnClickListener {
             circularViewModel.notifyRefresh(runningBusesUseCase)
-            circularViewModel.getData(runningBusesUseCase)
         }
 
         // Toast Message
@@ -153,7 +155,6 @@ class CircularFragment : Fragment() {
             override fun run() {
                 try {
                     circularViewModel.notifyRefresh(runningBusesUseCase)
-                    circularViewModel.getData(runningBusesUseCase)
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Log.e("MyLogChecker", "error on refreshRunnable.run(): \n\t $e")
@@ -161,8 +162,8 @@ class CircularFragment : Fragment() {
                 handler.postDelayed(this, 30000)
             }
         }
-        handler.postDelayed(refreshRunnable, 500)
-        // 화면 전환 0.5초 후 새로고침, 이후 30초마다 자동 새로고침
+        handler.postDelayed(refreshRunnable, 0)
+        // 화면 전환 직후 새로고침, 이후 30초마다 자동 새로고침
 
         val root: View = binding.root
         return root

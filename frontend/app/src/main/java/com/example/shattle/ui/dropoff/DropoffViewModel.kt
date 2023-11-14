@@ -1,9 +1,12 @@
 package com.example.shattle.ui.dropoff
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.shattle.data.models.CurrentLine
+import com.example.shattle.network.NetworkCallback
+import retrofit2.Callback
 
 
 class DropoffViewModel : ViewModel() {
@@ -15,10 +18,27 @@ class DropoffViewModel : ViewModel() {
 
     private val toastMessage = MutableLiveData<String>()
 
+    val networkRequestFinished = MutableLiveData<Boolean>()
+
     fun getUIState(): MutableLiveData<DropoffUIState?> {
         return uiState
     }
 
+    fun getNetworkRequestStatus(): LiveData<Boolean?> {
+        return networkRequestFinished
+    }
+
+    fun notifyRefresh(currentLineUseCase: CurrentLineUseCase) {
+        networkRequestFinished.value = false
+        currentLineUseCase.refreshData(object : NetworkCallback {
+            override fun onCompleted() {
+                networkRequestFinished.postValue(true)
+            }
+            override fun onFailure(t: Throwable) {
+                networkRequestFinished.postValue(true)
+            }
+        })
+    }
 
     fun getData(currentLineUseCase: CurrentLineUseCase) {
         // (useCase 의) repository 에서 CurrentLine 데이터를 uiState 에 저장
@@ -36,19 +56,7 @@ class DropoffViewModel : ViewModel() {
         }
     }
 
-    fun getDataInit(currentLineUseCase: CurrentLineUseCase) {
-        if (!currentLineUseCase.isValidResponse()) {
-            uiState.value = DropoffUIState(currentLineUseCase.getCurrentLine_prev())
-        } else if (currentLineUseCase.isNoShuttle()) {
-            uiState.value = DropoffUIState(currentLineUseCase.getCurrentLine_prev())
-        } else {
-            uiState.value = DropoffUIState(currentLineUseCase.getCurrentLine())
-        }
-    }
 
-    fun notifyRefresh(currentLineUseCase: CurrentLineUseCase) {
-        currentLineUseCase.refreshData()
-    }
 
     // Fragment 에서 Toast 를 띄워주기 위한 함수들
     fun getToastMessage(): LiveData<String> {

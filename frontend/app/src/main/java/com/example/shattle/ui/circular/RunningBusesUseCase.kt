@@ -1,11 +1,12 @@
 package com.example.shattle.ui.circular
 
 import com.example.shattle.data.models.RunningBuses
+import com.example.shattle.network.NetworkCallback
 
 class RunningBusesUseCase(val runningBusesRepository: RunningBusesRepository) {
 
-    fun refreshData() {
-        runningBusesRepository.refreshRunningBuses()
+    fun refreshData(callback: NetworkCallback) {
+        runningBusesRepository.refreshRunningBuses(callback)
     }
 
     fun getRunningBuses(): RunningBuses {

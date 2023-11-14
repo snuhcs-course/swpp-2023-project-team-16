@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.shattle.data.models.RunningBuses
+import com.example.shattle.network.NetworkCallback
 import com.google.android.gms.maps.model.LatLng
 
 
@@ -18,14 +19,31 @@ class CircularViewModel : ViewModel() {
 
     private val toastMessage = MutableLiveData<String>()
 
+    val networkRequestFinished = MutableLiveData<Boolean>()
+
+    fun getNetworkRequestStatus(): LiveData<Boolean?> {
+        return networkRequestFinished
+    }
+
     fun getUIState(): MutableLiveData<CircularUIState?> {
         return uiState
     }
 
-
     val ERROR_BODY_IS_NULL = RunningBuses(true, -3)
     val ERROR_RESPONSE_IS_NOT_SUCCESSFUL = RunningBuses(true, -4)
     val ERROR_ON_FAILURE = RunningBuses(true, -5)
+
+    fun notifyRefresh(runningBusesUseCase: RunningBusesUseCase) {
+        networkRequestFinished.value = false
+        runningBusesUseCase.refreshData(object : NetworkCallback {
+            override fun onCompleted() {
+                networkRequestFinished.postValue(true)
+            }
+            override fun onFailure(t: Throwable) {
+                networkRequestFinished.postValue(true)
+            }
+        })
+    }
 
     fun getData(runningBusesUseCase: RunningBusesUseCase) {
         // (useCase 의) repository 에서 RunningBuses 데이터를 uiState 에 저장
@@ -48,29 +66,6 @@ class CircularViewModel : ViewModel() {
             }
 
         }
-    }
-
-    fun getDataInit(runningBusesUseCase: RunningBusesUseCase) {
-        val error_value = runningBusesUseCase.getErrorId()
-
-        if ((error_value == ERROR_BODY_IS_NULL.numBusesRunning)
-            || (error_value == ERROR_RESPONSE_IS_NOT_SUCCESSFUL.numBusesRunning)
-            || (error_value == ERROR_ON_FAILURE.numBusesRunning)
-        ) {
-            uiState.value = CircularUIState(runningBusesUseCase.getRunningBuses_prev())
-        } else {
-            uiState.value = CircularUIState(runningBusesUseCase.getRunningBuses())
-            if (error_value == 0){
-                //
-            } else {
-                //
-            }
-
-        }
-    }
-
-    fun notifyRefresh(runningBusesUseCase: RunningBusesUseCase) {
-        runningBusesUseCase.refreshData()
     }
 
     // Fragment 에서 Toast 를 띄워주기 위한 함수들 //
