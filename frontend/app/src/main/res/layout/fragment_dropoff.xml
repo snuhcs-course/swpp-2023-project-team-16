@@ -26,7 +26,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/extraTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="서울대입구역 방향"
+            app:layout_constraintStart_toEndOf="@id/titleTextView"
+            app:layout_constraintBottom_toBottomOf="@id/titleTextView"
+            android:layout_marginStart="10dp"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/visualViewLayout"
