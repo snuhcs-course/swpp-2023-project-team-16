@@ -55,8 +55,8 @@ class DropoffFragment : Fragment() {
         // UI elements
         dropoffUI = DropoffUI(
             binding.numPeopleTextView,
-            binding.numBusTextView,
             binding.numTimeTextView,
+            binding.numBusTextView,
             binding.updatedTimeTextView,
             binding.manImageView,
             binding.visualViewLayout,

@@ -24,8 +24,8 @@ import java.util.TimeZone
 
 class DropoffUI(
     val tv_numPeople: TextView,
-    val tv_numBus: TextView,
     val tv_numTime: TextView,
+    val tv_numBus: TextView,
     val tv_updatedTime: TextView,
     val imgv_man: ImageView,
     val layout_visualView: ConstraintLayout,
@@ -36,6 +36,8 @@ class DropoffUI(
     val imgv_bus4: ImageView,
 ) {
 
+    val dropoffUtils = DropoffUtils()
+
     fun updateUI(dropoffUIState: DropoffUIState) {
         changeTextView(dropoffUIState)
         changeVisualView(dropoffUIState)
@@ -45,25 +47,26 @@ class DropoffUI(
     fun changeTextView(dropoffUIState: DropoffUIState) {
         // 숫자 bold 적용, 크기 30sp 로 변경 (기본: 20sp)
 
-        val numPeopleText = "현재 ${dropoffUIState.numPeople}명 대기 중입니다."
+        val numPeopleText = "대기인원 ${dropoffUIState.numPeople} 명 "
+        val numTimeText = "예상 대기시간 ${dropoffUIState.numTime} 분 "
         val numBusText = "다음 ${dropoffUIState.numBus}번째 버스 탑승 가능합니다."
-        val numTimeText = "예상 대기시간: ${dropoffUIState.numTime}분 "
 
         tv_numPeople.text = applySpanAtNumber(
             numPeopleText,
             numPeopleText.indexOf(dropoffUIState.numPeople.toString()),
-            dropoffUIState.numPeople.toString().length + 1
-        )
-        tv_numBus.text = applySpanAtNumber(
-            numBusText,
-            numBusText.indexOf(dropoffUIState.numBus.toString()),
-            dropoffUIState.numBus.toString().length + 2
+            dropoffUIState.numPeople.toString().length + 2
         )
         tv_numTime.text = applySpanAtNumber(
             numTimeText,
             numTimeText.indexOf(dropoffUIState.numTime.toString()),
-            dropoffUIState.numTime.toString().length + 1
+            dropoffUIState.numTime.toString().length + 2
         )
+        tv_numBus.text = applySpanAtNumber(
+            numBusText,
+            0,
+            0
+        )
+
     }
 
     fun applySpanAtNumber(str: String, startIndex: Int, targetLength: Int): SpannableString {
@@ -83,7 +86,7 @@ class DropoffUI(
         )
 
         // 크기 변경
-        val sizeSpan = AbsoluteSizeSpan(30, true)
+        val sizeSpan = AbsoluteSizeSpan(22, true)
         spannableString.setSpan(
             sizeSpan,
             startIndex,
@@ -92,7 +95,7 @@ class DropoffUI(
         )
 
         // 색 변경
-        val colorSpan = ForegroundColorSpan(Color.parseColor("#000000"))
+        val colorSpan = ForegroundColorSpan(Color.parseColor("#057FEE"))
         spannableString.setSpan(
             colorSpan,
             startIndex,
@@ -137,7 +140,6 @@ class DropoffUI(
                 busImage.setColorFilter(Color.parseColor("#AAAAAA"))
             }
         }
-
     }
 
     //val animatorList: MutableList<ValueAnimator> = mutableListOf()
@@ -151,7 +153,7 @@ class DropoffUI(
             repeatMode = ValueAnimator.REVERSE
             addUpdateListener {
                 val animatedValue = it.animatedValue as Float
-                val color = if (animatedValue > 0.5f) Color.BLACK else Color.WHITE
+                val color = if (animatedValue > 0.05f) Color.BLACK else Color.GRAY
                 img.setColorFilter(color)
             }
         }
