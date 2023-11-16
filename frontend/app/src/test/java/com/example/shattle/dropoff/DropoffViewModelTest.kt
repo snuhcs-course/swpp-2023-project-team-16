@@ -3,6 +3,7 @@ package com.example.shattle.dropoff
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.example.shattle.data.models.CurrentLine
+import com.example.shattle.network.NetworkCallback
 import com.example.shattle.ui.dropoff.CurrentLineUseCase
 import com.example.shattle.ui.dropoff.DropoffUIState
 import com.example.shattle.ui.dropoff.DropoffViewModel
@@ -10,11 +11,15 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mock
+import org.mockito.Mockito.doAnswer
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.kotlin.anyOrNull
 
 @RunWith(MockitoJUnitRunner::class)
 class DropoffViewModelTest {
@@ -31,6 +36,9 @@ class DropoffViewModelTest {
     @Mock
     private lateinit var toastMessageObserver: Observer<String>
 
+    @Mock
+    private lateinit var networkRequestStatusObserver: Observer<Boolean?>
+
     private lateinit var viewModel: DropoffViewModel
 
     val currentLine_123 = CurrentLine(1,2,3,"")
@@ -41,6 +49,7 @@ class DropoffViewModelTest {
         viewModel = DropoffViewModel().apply {
             getUIState().observeForever(uiStateObserver)
             getToastMessage().observeForever(toastMessageObserver)
+            getNetworkRequestStatus().observeForever(networkRequestStatusObserver)
         }
     }
 
@@ -86,17 +95,23 @@ class DropoffViewModelTest {
         viewModel.getData(mockCurrentLineUseCase)
 
         // Assert
+        verify(toastMessageObserver).onChanged("업데이트 성공!")
         verify(uiStateObserver).onChanged(DropoffUIState(currentLine))
     }
 
     @Test
     fun notifyRefreshTest() {
         // Arrange
+        doAnswer { invocation ->
+            val callback = invocation.getArgument(0) as NetworkCallback
+            callback.onCompleted()
+            null
+        }.`when`(mockCurrentLineUseCase).refreshData(anyOrNull())
 
         // Act
         viewModel.notifyRefresh(mockCurrentLineUseCase)
 
         // Assert
-        verify(mockCurrentLineUseCase).refreshData()
+        verify(networkRequestStatusObserver).onChanged(true)
     }
 }
