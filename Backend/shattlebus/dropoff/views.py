@@ -2,6 +2,9 @@ import datetime
 
 from django.views import View
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.shortcuts import get_object_or_404
 
 import json
 
@@ -90,6 +93,25 @@ class RetrieveWaitingTimeView(View):
         return hour_next_bus, minute_next_bus
 
 
+@method_decorator(csrf_exempt, name='dispatch')
+class UpdateWaitingPeopleView(View):
+
+    def put(self, request):
+        request = json.loads(request.body)
+        waiting_people = request['waiting_people']
+
+        current_line = CurrentLine.objects.all()[0]
+        current_line.num_people_waiting = waiting_people
+        current_line.is_executing = True
+        current_line.save()
+
+        response = {
+            "num_people_waiting": current_line.num_people_waiting,
+            "is_executing": current_line.is_executing,
+            "updated_at": str(current_line.updated_at + datetime.timedelta(hours=9))
+        }
+
+        return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")
 
 # Exception when there is no available shuttle
 class NoShuttleException(Exception):
