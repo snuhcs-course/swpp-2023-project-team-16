@@ -69,7 +69,7 @@
             app:layout_constraintTop_toBottomOf="@id/busStopImageView" />
 
         <ImageView
-            android:id="@+id/dividerImageView_0"
+            android:id="@+id/dividerImageView_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/img_station_divider"
@@ -79,52 +79,15 @@
             app:layout_constraintBottom_toBottomOf="@id/roadImageView"/>
 
         <ImageView
-            android:id="@+id/busImageView_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/img_station_bus"
-            app:layout_constraintTop_toBottomOf="@id/roadImageView"
-            app:layout_constraintStart_toStartOf="@id/dividerImageView_0"
-            app:layout_constraintEnd_toEndOf="@id/roadImageView"
-            app:layout_constraintHorizontal_bias="0.3"/>
-
-        <ImageView
-            android:id="@+id/dividerImageView_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/img_station_divider"
-            android:paddingBottom="5dp"
-            app:layout_constraintStart_toStartOf="@id/busImageView_1"
-            app:layout_constraintBottom_toBottomOf="@id/roadImageView"/>
-
-        <ImageView
-            android:id="@+id/busImageView_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/img_station_bus"
-            app:layout_constraintTop_toBottomOf="@id/roadImageView"
-            app:layout_constraintStart_toStartOf="@id/dividerImageView_0"
-            app:layout_constraintEnd_toEndOf="@id/roadImageView"
-            app:layout_constraintHorizontal_bias="0.6"/>
-
-        <ImageView
             android:id="@+id/dividerImageView_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/img_station_divider"
             android:paddingBottom="5dp"
-            app:layout_constraintStart_toStartOf="@id/busImageView_2"
-            app:layout_constraintBottom_toBottomOf="@id/roadImageView"/>
-
-        <ImageView
-            android:id="@+id/busImageView_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/img_station_bus"
-            app:layout_constraintTop_toBottomOf="@id/roadImageView"
-            app:layout_constraintStart_toStartOf="@id/dividerImageView_0"
+            app:layout_constraintStart_toStartOf="@id/dividerImageView_1"
             app:layout_constraintEnd_toEndOf="@id/roadImageView"
-            app:layout_constraintHorizontal_bias="0.9"/>
+            app:layout_constraintHorizontal_bias="0.3"
+            app:layout_constraintBottom_toBottomOf="@id/roadImageView"/>
 
         <ImageView
             android:id="@+id/dividerImageView_3"
@@ -132,16 +95,61 @@
             android:layout_height="wrap_content"
             android:src="@drawable/img_station_divider"
             android:paddingBottom="5dp"
-            app:layout_constraintStart_toStartOf="@id/busImageView_3"
+            app:layout_constraintStart_toStartOf="@id/dividerImageView_1"
+            app:layout_constraintEnd_toEndOf="@id/roadImageView"
+            app:layout_constraintHorizontal_bias="0.6"
             app:layout_constraintBottom_toBottomOf="@id/roadImageView"/>
+
+        <ImageView
+            android:id="@+id/dividerImageView_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_station_divider"
+            android:paddingBottom="5dp"
+            app:layout_constraintStart_toStartOf="@id/dividerImageView_1"
+            app:layout_constraintEnd_toEndOf="@id/roadImageView"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintBottom_toBottomOf="@id/roadImageView"/>
+
+        <ImageView
+            android:id="@+id/busImageView_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_station_bus"
+            app:layout_constraintTop_toBottomOf="@id/roadImageView"
+            app:layout_constraintStart_toStartOf="@id/dividerImageView_1"/>
+
+        <ImageView
+            android:id="@+id/busImageView_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_station_bus"
+            app:layout_constraintTop_toBottomOf="@id/roadImageView"
+            app:layout_constraintStart_toStartOf="@id/dividerImageView_2"/>
+
+        <ImageView
+            android:id="@+id/busImageView_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_station_bus"
+            app:layout_constraintTop_toBottomOf="@id/roadImageView"
+            app:layout_constraintStart_toStartOf="@id/dividerImageView_3"/>
+
+        <ImageView
+            android:id="@+id/busImageView_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_station_bus"
+            app:layout_constraintTop_toBottomOf="@id/roadImageView"
+            app:layout_constraintStart_toStartOf="@id/dividerImageView_4"/>
 
 
         <ImageView
             android:id="@+id/manImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/dividerImageView_0"
-            app:layout_constraintEnd_toStartOf="@id/busImageView_3"
+            app:layout_constraintStart_toStartOf="@id/dividerImageView_1"
+            app:layout_constraintEnd_toStartOf="@id/dividerImageView_4"
             app:layout_constraintBottom_toTopOf="@id/roadImageView"
             android:src="@drawable/img_station_waiting_man"
             app:layout_constraintHorizontal_bias="0.15"/>
