@@ -77,29 +77,21 @@ class MainActivity : AppCompatActivity() {
     private fun toggleTracking() {
         if(isRunning){
             if (!isTracking) {
-                // Stop GPS data submission
+                // Start GPS data submission
                 isTracking = true
                 stateTextView.text = "5초마다 위치 새로고침 중"
                 updateLocationButton.text = "위치 추적 끄기"
                 startGPSDataSubmission()
             } else {
-                // Start GPS data submission
+                // Stop GPS data submission
                 isTracking = false
                 stateTextView.text = "위치 새로고침 종료됨"
                 updateLocationButton.text = "위치 추적 켜기"
-                //fixme: put 요청 종료 필요
             }
         }else{
-            if(!isTracking){
-                stateTextView.text = "미운행중"
-                updateLocationButton.text = "미운행중"
-            }else{
-                isTracking=false
-                stateTextView.text = "미운행중"
-                updateLocationButton.text = "미운행중"
-                //fixme: put 요청 종료 필요
-            }
-
+            isTracking=false
+            stateTextView.text = "미운행중"
+            updateLocationButton.text = "미운행중"
         }
 
     }
@@ -112,7 +104,7 @@ class MainActivity : AppCompatActivity() {
             override fun run() {
                 val location: Location? = gpsTracker.getLocation()
                 val licensePlate: String = licensePlateText.text.toString()
-                if (location != null) {
+                if (isTracking && location != null) {
                     // Construct a GPSData object
                     val gpsData = GPSData(
                         latitude = location.latitude,
