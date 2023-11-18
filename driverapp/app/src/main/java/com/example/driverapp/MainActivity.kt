@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -23,9 +22,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
-    private var handler = Handler(Looper.getMainLooper())
-    private lateinit var refreshRunnable: Runnable
-
     private lateinit var gpsTracker: GPSTracker
 
     private lateinit var getBusButton: Button
@@ -38,7 +34,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var busLongitude: TextView
     private lateinit var busIsRunning: TextView
     private var isRunning: Boolean = false
-    private var isTracking: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +58,8 @@ class MainActivity : AppCompatActivity() {
         busIsRunning = findViewById(R.id.busIsRunning)
 
 
+
+
         // Request location permissions if not granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
@@ -76,15 +73,12 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun startGPSDataSubmission() {
+        val handler = Handler()
         val delay = 5000L  // 5 seconds
-        if (isTracking){
-           return
-        } else{
-            isTracking = true
-        }
-        refreshRunnable = object : Runnable {
+
+        handler.post(object : Runnable {
             override fun run() {
-                if (isTracking && isRunning) {
+                if (isRunning) {
                     val location: Location? = gpsTracker.getLocation()
                     val licensePlate: String = licensePlateText.text.toString()
                     if (location != null) {
@@ -103,8 +97,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
-        handler.post(refreshRunnable)
+        })
     }
 
     private fun getBusWithLicensePlate() {
@@ -218,15 +211,9 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    override fun onPause() {
-        super.onPause()
-        handler.removeCallbacks(refreshRunnable)
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        handler.removeCallbacks(refreshRunnable)
-    }
+
+
 
 }
 
