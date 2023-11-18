@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var getBusButton: Button
     private lateinit var responseTextView: TextView
+    private lateinit var stateTextView: TextView
     private lateinit var updateLocationButton: Button
     private lateinit var updateIsRunningButton: Button
     private lateinit var licensePlateText: EditText
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var busLongitude: TextView
     private lateinit var busIsRunning: TextView
     private var isRunning: Boolean = false
+    private var isTracking: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,12 +43,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         responseTextView = findViewById(R.id.response)
+        stateTextView = findViewById(R.id.state)
         licensePlateText= findViewById(R.id.licensePlateText)
         getBusButton = findViewById(R.id.getBusButton)
         getBusButton.setOnClickListener { getBusWithLicensePlate()}
 
         updateLocationButton = findViewById(R.id.updateLocationButton)
-        updateLocationButton.setOnClickListener { startGPSDataSubmission() }
+        updateLocationButton.setOnClickListener { toggleTracking() }
 
         updateIsRunningButton = findViewById(R.id.updateIsRunningButton)
         updateIsRunningButton.setOnClickListener { updateIsRunning() }
@@ -71,6 +74,35 @@ class MainActivity : AppCompatActivity() {
         gpsTracker = GPSTracker(this)
     }
 
+    private fun toggleTracking() {
+        if(isRunning){
+            if (!isTracking) {
+                // Stop GPS data submission
+                isTracking = true
+                stateTextView.text = "5초마다 위치 새로고침 중"
+                updateLocationButton.text = "위치 추적 끄기"
+                startGPSDataSubmission()
+            } else {
+                // Start GPS data submission
+                isTracking = false
+                stateTextView.text = "위치 새로고침 종료됨"
+                updateLocationButton.text = "위치 추적 켜기"
+                //fixme: put 요청 종료 필요
+            }
+        }else{
+            if(!isTracking){
+                stateTextView.text = "미운행중"
+                updateLocationButton.text = "미운행중"
+            }else{
+                isTracking=false
+                stateTextView.text = "미운행중"
+                updateLocationButton.text = "미운행중"
+                //fixme: put 요청 종료 필요
+            }
+
+        }
+
+    }
 
     private fun startGPSDataSubmission() {
         val handler = Handler()
@@ -78,23 +110,21 @@ class MainActivity : AppCompatActivity() {
 
         handler.post(object : Runnable {
             override fun run() {
-                if (isRunning) {
-                    val location: Location? = gpsTracker.getLocation()
-                    val licensePlate: String = licensePlateText.text.toString()
-                    if (location != null) {
-                        // Construct a GPSData object
-                        val gpsData = GPSData(
-                            latitude = location.latitude,
-                            longitude = location.longitude,
-                            licensePlate = licensePlate,
-                        )
+                val location: Location? = gpsTracker.getLocation()
+                val licensePlate: String = licensePlateText.text.toString()
+                if (location != null) {
+                    // Construct a GPSData object
+                    val gpsData = GPSData(
+                        latitude = location.latitude,
+                        longitude = location.longitude,
+                        licensePlate = licensePlate,
+                    )
 
-                        // Send the GPSData object to the endpoint
-                        updateBusLocation(gpsData)
+                    // Send the GPSData object to the endpoint
+                    updateBusLocation(gpsData)
 
-                        // Schedule the next submission
-                        handler.postDelayed(this, delay)
-                    }
+                    // Schedule the next submission
+                    handler.postDelayed(this, delay)
                 }
             }
         })
@@ -154,6 +184,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     isRunning = !isRunning
+                    toggleTracking()
                     // Handle a successful response from the server
                     val body = response.body()
                     responseTextView.text = "운행 중 변경하기: ${body?.isRunning.toString()}"

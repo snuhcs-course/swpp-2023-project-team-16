@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="356dp"
-        android:text="위치 새로고침"
+        android:text="위치 추적 켜기"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.975"
         app:layout_constraintStart_toStartOf="parent"
@@ -113,12 +113,26 @@
 
     <TextView
         android:id="@+id/response"
-        android:layout_width="300dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
-        android:layout_marginTop="564dp"
+        android:layout_marginTop="600dp"
         android:text="response"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.387"
+        app:layout_constraintHorizontal_bias="0.157"
+        app:layout_constraintRight_toLeftOf="@+id/state"
+        app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/state"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="596dp"
+        android:text="state"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/response"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
