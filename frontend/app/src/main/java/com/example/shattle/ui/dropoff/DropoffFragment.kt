@@ -1,7 +1,5 @@
 package com.example.shattle.ui.dropoff
 
-import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -71,36 +68,39 @@ class DropoffFragment : Fragment() {
         // init refresh
         dropoffViewModel.getData(currentLineUseCase)
 
-        // ViewModel tracks data changes
+        // uiState 의 데이터가 바뀔 때마다 UI 업데이트
         dropoffViewModel.getUIState().observe(viewLifecycleOwner) { newDropoffUIState ->
             dropoffUI.updateUI(newDropoffUIState!!)
         }
 
-        // call 호출이 끝난 경우에만 uiState 의 데이터 및 화면 업데이트
+        // call 호출이 끝난 경우 uiState 의 데이터 업데이트
         dropoffViewModel.getNetworkRequestStatus().observe(viewLifecycleOwner) { isFinished ->
             if (isFinished == true) {
                 dropoffViewModel.getData(currentLineUseCase)
             }
         }
 
-        // Refresh Button
-        dropoffUI.bt_refresh.setOnClickListener {
-            dropoffViewModel.notifyRefresh(currentLineUseCase)
-            //dropoffViewModel.getData(currentLineUseCase)
-        }
-
         // Toast Message
         dropoffViewModel.getToastMessage().observe(viewLifecycleOwner, Observer { message ->
             if (!message.isNullOrEmpty()) {
+                // message 가 null 이 아니거나 비어있지 않은 경우
+                // 이미 실행중인 toast 취소
                 toast?.cancel()
+                // 해당 message 의 내용 띄우기
                 toast = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).apply {
                     show()
                 }
-                dropoffViewModel.showToastMessage("") // Toast 를 띄운 후 메시지 초기화
+                // message 내용을 띄운 후 초기화
+                dropoffViewModel.showToastMessage("")
             }
         })
 
-        // Automatic Refresh (delay: 30 sec)
+        // 수동 업데이트
+        dropoffUI.bt_refresh.setOnClickListener {
+            dropoffViewModel.notifyRefresh(currentLineUseCase)
+        }
+
+        // 자동 업데이트 (delay: 30 sec)
         refreshRunnable = object : Runnable {
             override fun run() {
                 try {
@@ -108,7 +108,7 @@ class DropoffFragment : Fragment() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Log.e("MyLogChecker", "error: $e")
-                    // Toast 띄워야하나?
+                    //
                 }
                 handler.postDelayed(this, 30000)
             }

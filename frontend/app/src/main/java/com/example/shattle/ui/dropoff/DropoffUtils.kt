@@ -8,10 +8,14 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 
-class DropoffUtils {
+class  DropoffUtils {
 
-    class SpannableStringBuilder(private val str: String) {
+    class SpannableStringBuilder(str: String) {
         private val spannableString = SpannableString(str)
+
+        fun build(): SpannableString {
+            return spannableString
+        }
 
         fun applyBold(): SpannableStringBuilder {
             val boldStyle = StyleSpan(Typeface.BOLD)
@@ -77,10 +81,6 @@ class DropoffUtils {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
             return this
-        }
-
-        fun build(): SpannableString {
-            return spannableString
         }
     }
 

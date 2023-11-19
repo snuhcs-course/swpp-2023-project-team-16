@@ -46,42 +46,6 @@ class CircularUI(
 
     val markersWithInitialRotation = mutableListOf<Pair<Marker, Float>>()
 
-    fun drawUserLocation(
-        googleMap: GoogleMap?,
-        location: Location
-    ) {
-
-        // 이전 마커 제거
-        userLocationMarker?.remove()
-
-        // 사용자의 현재 위치에 마커 추가
-        val userLatLng = LatLng(location.latitude, location.longitude)
-        val customMarkerIcon =
-            circularUtils.bitmapDescriptorFromVector(context, R.drawable.img_user_loaction)
-        userLocationMarker = googleMap?.addMarker(
-            MarkerOptions()
-                .position(userLatLng)
-                .icon(customMarkerIcon)
-                .anchor(0.5f, 0.5f)
-                .zIndex(2.1f)
-        )
-
-        // 지도 카메라 업데이트
-        val currentCameraPosition = googleMap?.cameraPosition
-        val cameraPosition = CameraPosition.Builder()
-            .target(userLatLng)
-            .zoom(currentCameraPosition?.zoom ?: initialZoomLevel)
-            .bearing(currentCameraPosition?.bearing ?: 0f)
-            .tilt(currentCameraPosition?.tilt ?: 0f)
-            .build()
-
-        googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-
-        // 현재 위치 저장
-        userLocation = LatLng(location.latitude, location.longitude)
-    }
-
-
     fun updateUI(googleMap: GoogleMap?, circularUIState: CircularUIState) {
         drawCurrentLocationsOfBus(googleMap, circularUIState)
         changeUpdatedDateTime(circularUIState)
@@ -120,7 +84,6 @@ class CircularUI(
         }
     }
 
-
     fun changeUpdatedDateTime(circularUIState: CircularUIState) {
         try {
             val dateTimeString = circularUIState.updatedTime
@@ -133,6 +96,41 @@ class CircularUI(
             tv_updatedTime.text = ""
         }
 
+    }
+
+    fun drawUserLocation(
+        googleMap: GoogleMap?,
+        location: Location
+    ) {
+
+        // 이전 마커 제거
+        userLocationMarker?.remove()
+
+        // 사용자의 현재 위치에 마커 추가
+        val userLatLng = LatLng(location.latitude, location.longitude)
+        val customMarkerIcon =
+            circularUtils.bitmapDescriptorFromVector(context, R.drawable.img_user_loaction)
+        userLocationMarker = googleMap?.addMarker(
+            MarkerOptions()
+                .position(userLatLng)
+                .icon(customMarkerIcon)
+                .anchor(0.5f, 0.5f)
+                .zIndex(2.1f)
+        )
+
+        // 지도 카메라 업데이트
+        val currentCameraPosition = googleMap?.cameraPosition
+        val cameraPosition = CameraPosition.Builder()
+            .target(userLatLng)
+            .zoom(currentCameraPosition?.zoom ?: initialZoomLevel)
+            .bearing(currentCameraPosition?.bearing ?: 0f)
+            .tilt(currentCameraPosition?.tilt ?: 0f)
+            .build()
+
+        googleMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
+        // 현재 위치 저장
+        userLocation = LatLng(location.latitude, location.longitude)
     }
 
     fun customizeGoogleMap(googleMap: GoogleMap?) {
