@@ -1,12 +1,7 @@
 package com.example.shattle.ui.circular
 
 import android.Manifest
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.content.IntentSender
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -15,31 +10,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.shattle.R
 import com.example.shattle.databinding.FragmentCircularBinding
-import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationSettingsRequest
-import com.google.android.gms.location.LocationSettingsResponse
-import com.google.android.gms.location.SettingsClient
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.tasks.Task
 
 class CircularFragment : Fragment() {
 
@@ -91,59 +75,48 @@ class CircularFragment : Fragment() {
         // init refresh
         circularViewModel.getData(runningBusesUseCase)
 
-        // ViewModel tracks data changes
+        // uiState 의 데이터가 바뀔 때마다 UI 업데이트
         circularViewModel.getUIState().observe(viewLifecycleOwner) { newCircularUIState ->
             circularUI.updateUI(googleMap, newCircularUIState!!)
         }
 
-        // call 호출이 끝난 경우에만 uiState 의 데이터 및 화면 업데이트
+        // call 호출이 끝난 경우 uiState 의 데이터 업데이트
         circularViewModel.getNetworkRequestStatus().observe(viewLifecycleOwner) { isFinished ->
             if (isFinished == true) {
                 circularViewModel.getData(runningBusesUseCase)
             }
         }
 
-        circularViewModel.getGpsTrackingStatus().observe(viewLifecycleOwner) { isTracking ->
-            if (isTracking == true) {
-                startLocationTracking()
-                circularUI.bt_gps.setImageResource(R.drawable.btn_circular_gps_true)
-            } else {
-                stopLocationTracking()
-                circularUI.bt_gps.setImageResource(R.drawable.btn_circular_gps_false)
-            }
-        }
-
-        // Set Google Map async
-        val mapFragment =
-            childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment // mapFragment 는 onCreateView 안에서만 초기화하기!!!
-        mapFragment.getMapAsync(OnMapReadyCallback { mMap ->
-            googleMap = mMap
-
-            //circularViewModel.setGoogleMap(googleMap!!)
-            circularUI.customizeGoogleMap(googleMap)
-            circularUI.drawCurrentLocationsOfBus(
-                googleMap,
-                circularViewModel.getUIState().value!!
-            )
-        })
-
-        // Refresh Button
-        circularUI.bt_refresh.setOnClickListener {
-            circularViewModel.notifyRefresh(runningBusesUseCase)
-        }
-
         // Toast Message
         circularViewModel.getToastMessage().observe(viewLifecycleOwner, Observer { message ->
             if (!message.isNullOrEmpty()) {
+                // message 가 null 이 아니거나 비어있지 않은 경우
+                // 이미 실행중인 toast 취소
                 toast?.cancel()
+                // 해당 message 의 내용 띄우기
                 toast = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).apply {
                     show()
                 }
+                // message 내용을 띄운 후 초기화
                 circularViewModel.showToastMessage("") // Toast를 띄운 후 메시지 초기화
             }
         })
 
-        // Automatic Refresh (delay: 30 sec)
+        // Set Google Map async
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(OnMapReadyCallback { mMap ->
+            // Google Map 이 준비 된 후 실행시킬 내용
+            googleMap = mMap
+            circularUI.customizeGoogleMap(googleMap)
+            circularUI.drawCurrentLocationsOfBus(googleMap, circularViewModel.getUIState().value!!)
+        })
+
+        // 수동 업데이트
+        circularUI.bt_refresh.setOnClickListener {
+            circularViewModel.notifyRefresh(runningBusesUseCase)
+        }
+
+        // 자동 업데이트 (delay: 30 sec)
         refreshRunnable = object : Runnable {
             override fun run() {
                 try {
@@ -158,7 +131,18 @@ class CircularFragment : Fragment() {
         handler.postDelayed(refreshRunnable, 0)
         // 화면 전환 직후 새로고침, 이후 30초마다 자동 새로고침
 
-        // User Location
+
+        // 사용자 위치 관련
+        circularViewModel.getGpsTrackingStatus().observe(viewLifecycleOwner) { isTracking ->
+            if (isTracking == true) {
+                startLocationTracking()
+                circularUI.bt_gps.setImageResource(R.drawable.btn_circular_gps_true)
+            } else {
+                stopLocationTracking()
+                circularUI.bt_gps.setImageResource(R.drawable.btn_circular_gps_false)
+            }
+        }
+
         locationRequest = LocationRequest.create().apply {
             interval = 10000 // 10초 간격
             fastestInterval = 5000 // 가장 빠른 간격 5초
@@ -166,12 +150,12 @@ class CircularFragment : Fragment() {
         }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
         circularUI.bt_gps.setOnClickListener {
             toggleUserLocationTracking()
         }
 
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
 
@@ -182,12 +166,8 @@ class CircularFragment : Fragment() {
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             locationResult ?: return
-            for (location in locationResult.locations) {
-                circularUI.drawUserLocation(
-                    googleMap,
-                    location
-                )
-            }
+            for (location in locationResult.locations)
+                circularUI.drawUserLocation(googleMap, location)
         }
     }
 
@@ -200,11 +180,19 @@ class CircularFragment : Fragment() {
     }
 
     private fun startLocationTracking() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             circularViewModel.showToastMessage("사용자의 현재 위치를 확인하려면 위치 권한을 허용해 주세요.")
         } else {
-            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
             isTrackingUserPosition = true
             circularUI.bt_gps.setImageResource(R.drawable.btn_circular_gps_true)
         }

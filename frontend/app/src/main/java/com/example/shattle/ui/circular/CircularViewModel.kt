@@ -1,12 +1,10 @@
 package com.example.shattle.ui.circular;
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.shattle.data.models.RunningBuses
 import com.example.shattle.network.NetworkCallback
-import com.google.android.gms.maps.model.LatLng
 
 
 class CircularViewModel : ViewModel() {
@@ -17,26 +15,26 @@ class CircularViewModel : ViewModel() {
     private val uiState: MutableLiveData<CircularUIState?> =
         MutableLiveData<CircularUIState?>(CircularUIState(DEFAULT_VALUE))
 
-    private val toastMessage = MutableLiveData<String>()
-
-    private val networkRequestFinished = MutableLiveData<Boolean>()
+    private val networkRequestStatus = MutableLiveData<Boolean>()
 
     private val gpsTrackingStatus = MutableLiveData<Boolean>()
+
+    private val toastMessage = MutableLiveData<String>()
 
     fun getUIState(): MutableLiveData<CircularUIState?> {
         return uiState
     }
 
-    fun getToastMessage(): LiveData<String> {
-        return toastMessage
-    }
-
     fun getNetworkRequestStatus(): LiveData<Boolean?> {
-        return networkRequestFinished
+        return networkRequestStatus
     }
 
     fun getGpsTrackingStatus(): LiveData<Boolean?> {
         return gpsTrackingStatus
+    }
+
+    fun getToastMessage(): LiveData<String> {
+        return toastMessage
     }
 
     val ERROR_BODY_IS_NULL = RunningBuses(true, -3)
@@ -44,14 +42,14 @@ class CircularViewModel : ViewModel() {
     val ERROR_ON_FAILURE = RunningBuses(true, -5)
 
     fun notifyRefresh(runningBusesUseCase: RunningBusesUseCase) {
-        networkRequestFinished.value = false
+        networkRequestStatus.value = false
         runningBusesUseCase.refreshData(object : NetworkCallback {
             override fun onCompleted() {
-                networkRequestFinished.postValue(true)
+                networkRequestStatus.postValue(true)
             }
 
             override fun onFailure(t: Throwable) {
-                networkRequestFinished.postValue(true)
+                networkRequestStatus.postValue(true)
             }
         })
     }

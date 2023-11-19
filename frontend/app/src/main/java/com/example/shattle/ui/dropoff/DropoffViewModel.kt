@@ -1,12 +1,10 @@
 package com.example.shattle.ui.dropoff
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.shattle.data.models.CurrentLine
 import com.example.shattle.network.NetworkCallback
-import retrofit2.Callback
 
 
 class DropoffViewModel : ViewModel() {
@@ -16,26 +14,30 @@ class DropoffViewModel : ViewModel() {
     private val uiState: MutableLiveData<DropoffUIState?> =
         MutableLiveData<DropoffUIState?>(DropoffUIState(DEFAULT_VALUE))
 
-    private val toastMessage = MutableLiveData<String>()
+    private val networkRequestStatus = MutableLiveData<Boolean>()
 
-    private val networkRequestFinished = MutableLiveData<Boolean>()
+    private val toastMessage = MutableLiveData<String>()
 
     fun getUIState(): MutableLiveData<DropoffUIState?> {
         return uiState
     }
 
     fun getNetworkRequestStatus(): LiveData<Boolean?> {
-        return networkRequestFinished
+        return networkRequestStatus
+    }
+
+    fun getToastMessage(): LiveData<String> {
+        return toastMessage
     }
 
     fun notifyRefresh(currentLineUseCase: CurrentLineUseCase) {
-        networkRequestFinished.value = false
+        networkRequestStatus.value = false
         currentLineUseCase.refreshData(object : NetworkCallback {
             override fun onCompleted() {
-                networkRequestFinished.postValue(true)
+                networkRequestStatus.postValue(true)
             }
             override fun onFailure(t: Throwable) {
-                networkRequestFinished.postValue(true)
+                networkRequestStatus.postValue(true)
             }
         })
     }
@@ -54,13 +56,6 @@ class DropoffViewModel : ViewModel() {
             uiState.value = DropoffUIState(currentLineUseCase.getCurrentLine())
             showToastMessage("업데이트 성공!")
         }
-    }
-
-
-
-    // Fragment 에서 Toast 를 띄워주기 위한 함수들
-    fun getToastMessage(): LiveData<String> {
-        return toastMessage
     }
 
     fun showToastMessage(message: String) {
