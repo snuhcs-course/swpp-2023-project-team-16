@@ -29,12 +29,15 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/timeTablePhotoView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/img_timetable_view"
+        android:layout_marginTop="20dp"
         android:scaleY="0.8"
         android:scaleX="0.8"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
