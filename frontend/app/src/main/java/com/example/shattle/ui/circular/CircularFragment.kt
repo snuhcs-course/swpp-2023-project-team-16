@@ -82,6 +82,7 @@ class CircularFragment : Fragment() {
 
         // UI elements
         circularUI = CircularUI(
+            requireContext(),
             binding.refreshButton,
             binding.updatedTimeTextView,
             binding.gpsImageButton,
@@ -92,7 +93,7 @@ class CircularFragment : Fragment() {
 
         // ViewModel tracks data changes
         circularViewModel.getUIState().observe(viewLifecycleOwner) { newCircularUIState ->
-            circularUI.updateUI(googleMap, newCircularUIState!!, requireContext())
+            circularUI.updateUI(googleMap, newCircularUIState!!)
         }
 
         // call 호출이 끝난 경우에만 uiState 의 데이터 및 화면 업데이트
@@ -119,11 +120,10 @@ class CircularFragment : Fragment() {
             googleMap = mMap
 
             //circularViewModel.setGoogleMap(googleMap!!)
-            circularUI.customizeGoogleMap(googleMap, requireContext())
+            circularUI.customizeGoogleMap(googleMap)
             circularUI.drawCurrentLocationsOfBus(
                 googleMap,
-                circularViewModel.getUIState().value!!,
-                requireContext()
+                circularViewModel.getUIState().value!!
             )
         })
 
@@ -185,7 +185,6 @@ class CircularFragment : Fragment() {
             for (location in locationResult.locations) {
                 circularUI.drawUserLocation(
                     googleMap,
-                    requireContext(),
                     location
                 )
             }
