@@ -4,7 +4,7 @@ from django.views import View
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from django.core.exceptions import SuspiciousOperation
+from django.core.exceptions import ValidationError
 
 import json
 
@@ -121,7 +121,11 @@ class UpdateWaitingPeopleView(View):
                 "updated_at": str(current_line.updated_at + datetime.timedelta(hours=9))
             }
         except ValueError:
-            raise SuspiciousOperation("Invalid value for \'waiting_people\'. Type of \'waiting_people\' is integer.")
+            response = HttpResponse()
+            response.status_code = 400
+            response.reason_phrase = "Invalid value"
+
+            return response
 
         return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")
 
