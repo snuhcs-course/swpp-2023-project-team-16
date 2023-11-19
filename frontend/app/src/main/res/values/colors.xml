@@ -4,18 +4,13 @@
 
     <color name="primary">#0F3E8E</color>
 
-    <!--
-   초록 #22A400
-   초록(스벅) #01A862
-   파랑(zoom) #0A5CFE
-   파랑(My SNU) #0F3E8E
-   파랑(SNU Map) #2D72D9
-
-   주황(당근) #FE6E0E, 검정 #141514
-   -->
-
     <!-- staiton -->
     <color name="station_text_view_color">@color/dark</color>
+    <color name="man_true">#000000</color>
+    <color name="man_false">#AAAAAA</color>
+    <color name="bus_true">#000000</color>
+    <color name="bus_false">#AAAAAA</color>
+    <color name="text_accent">#057FEE</color>
 
     <!-- circular -->
     <!-- #E6F4F1 (연한민트), #DEF2F0 (중간민트) #70FACB (쌔파란민트), #8190BB (죠스바), -->

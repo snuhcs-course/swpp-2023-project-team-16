@@ -10,40 +10,78 @@ import android.text.style.StyleSpan
 
 class DropoffUtils {
 
-    fun applySpanAtNumber(str: String, startIndex: Int, targetLength: Int): SpannableString {
-        // 해당 문자열에서 숫자 부분만 스타일 변경 (bold, 크기, 색)
+    class SpannableStringBuilder(private val str: String) {
+        private val spannableString = SpannableString(str)
 
-        val spannableString = SpannableString(str)
+        fun applyBold(): SpannableStringBuilder {
+            val boldStyle = StyleSpan(Typeface.BOLD)
+            spannableString.setSpan(
+                boldStyle,
+                0,
+                spannableString.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            return this
+        }
 
-        val endIndex = startIndex + targetLength
+        fun applyBold(startIndex: Int, length: Int): SpannableStringBuilder {
+            val boldStyle = StyleSpan(Typeface.BOLD)
+            spannableString.setSpan(
+                boldStyle,
+                startIndex,
+                startIndex + length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            return this
+        }
 
-        // bold 로 변경
-        val boldStyle = StyleSpan(Typeface.BOLD)
-        spannableString.setSpan(
-            boldStyle,
-            startIndex,
-            endIndex,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
+        fun applySize(size: Int): SpannableStringBuilder {
+            val sizeSpan = AbsoluteSizeSpan(size, true)
+            spannableString.setSpan(
+                sizeSpan,
+                0,
+                spannableString.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            return this
+        }
 
-        // 크기 변경
-        val sizeSpan = AbsoluteSizeSpan(22, true)
-        spannableString.setSpan(
-            sizeSpan,
-            startIndex,
-            endIndex,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
+        fun applySize(size: Int, startIndex: Int, length: Int): SpannableStringBuilder {
+            val sizeSpan = AbsoluteSizeSpan(size, true)
+            spannableString.setSpan(
+                sizeSpan,
+                startIndex,
+                startIndex + length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            return this
+        }
 
-        // 색 변경
-        val colorSpan = ForegroundColorSpan(Color.parseColor("#057FEE"))
-        spannableString.setSpan(
-            colorSpan,
-            startIndex,
-            endIndex,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
+        fun applyColor(color: Int): SpannableStringBuilder {
+            val colorSpan = ForegroundColorSpan(color)
+            spannableString.setSpan(
+                colorSpan,
+                0,
+                spannableString.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            return this
+        }
 
-        return spannableString
+        fun applyColor(color: Int, startIndex: Int, length: Int): SpannableStringBuilder {
+            val colorSpan = ForegroundColorSpan(color)
+            spannableString.setSpan(
+                colorSpan,
+                startIndex,
+                startIndex + length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            return this
+        }
+
+        fun build(): SpannableString {
+            return spannableString
+        }
     }
+
 }

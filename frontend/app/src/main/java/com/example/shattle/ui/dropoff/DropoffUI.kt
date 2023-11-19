@@ -1,28 +1,25 @@
 package com.example.shattle.ui.dropoff
 
 import android.animation.ValueAnimator
+import android.content.Context
 import android.graphics.Color
-import android.graphics.Typeface
-import android.os.Handler
-import android.os.Looper
-import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat
 import com.example.shattle.R
-import com.google.android.gms.maps.GoogleMap
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 
 class DropoffUI(
+    val context: Context,
     val tv_numPeople: TextView,
     val tv_numTime: TextView,
     val tv_numBus: TextView,
@@ -45,65 +42,42 @@ class DropoffUI(
     }
 
     fun changeTextView(dropoffUIState: DropoffUIState) {
-        // 숫자 bold 적용, 크기 30sp 로 변경 (기본: 20sp)
+        // 숫자에 bold 적용, 색, 크기 변경 (기본크기: 20sp)
 
-        val numPeopleText = "대기인원 ${dropoffUIState.numPeople} 명 "
-        val numTimeText = "예상 대기시간 ${dropoffUIState.numTime} 분 "
-        val numBusText = "다음 ${dropoffUIState.numBus}번째 버스 탑승 가능합니다."
+        val numPeopleStr = dropoffUIState.numPeople.toString()
+        val numTimeStr = dropoffUIState.numTime.toString()
+        val numBusStr = dropoffUIState.numBus.toString()
 
-        tv_numPeople.text = applySpanAtNumber(
-            numPeopleText,
-            numPeopleText.indexOf(dropoffUIState.numPeople.toString()),
-            dropoffUIState.numPeople.toString().length + 2
-        )
-        tv_numTime.text = applySpanAtNumber(
-            numTimeText,
-            numTimeText.indexOf(dropoffUIState.numTime.toString()),
-            dropoffUIState.numTime.toString().length + 2
-        )
-        tv_numBus.text = applySpanAtNumber(
-            numBusText,
-            0,
-            0
-        )
+        val numPeopleText = "대기인원 ${numPeopleStr} 명 "
+        val numTimeText = "예상 대기시간 ${numTimeStr} 분 "
+        val numBusText = "다음 ${numBusStr}번째 버스 탑승 가능합니다."
 
-    }
+        tv_numPeople.text = DropoffUtils.SpannableStringBuilder(numPeopleText)
+            .applyBold(numPeopleText.indexOf(numPeopleStr), numPeopleStr.length + 2)
+            .applyColor(
+                ContextCompat.getColor(context, R.color.text_accent),
+                numPeopleText.indexOf(numPeopleStr),
+                numPeopleStr.length + 2
+            )
+            //.applySize(20)
+            .applySize(23, numPeopleText.indexOf(numPeopleStr), numPeopleStr.length + 2)
+            .build()
 
-    fun applySpanAtNumber(str: String, startIndex: Int, targetLength: Int): SpannableString {
-        // 해당 문자열에서 숫자 부분만 스타일 변경 (bold, 크기, 색)
+        tv_numTime.text = DropoffUtils.SpannableStringBuilder(numTimeText)
+            .applyBold(numTimeText.indexOf(numTimeStr), numTimeStr.length + 2)
+            .applyColor(
+                ContextCompat.getColor(context, R.color.text_accent),
+                numTimeText.indexOf(numTimeStr),
+                numTimeStr.length + 2
+            )
+            //.applySize(20)
+            .applySize(23, numTimeText.indexOf(numTimeStr), numTimeStr.length + 2)
+            .build()
 
-        val spannableString = SpannableString(str)
+        tv_numBus.text = DropoffUtils.SpannableStringBuilder(numBusText)
+            .applySize(18)
+            .build()
 
-        val endIndex = startIndex + targetLength
-
-        // bold 로 변경
-        val boldStyle = StyleSpan(Typeface.BOLD)
-        spannableString.setSpan(
-            boldStyle,
-            startIndex,
-            endIndex,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-
-        // 크기 변경
-        val sizeSpan = AbsoluteSizeSpan(22, true)
-        spannableString.setSpan(
-            sizeSpan,
-            startIndex,
-            endIndex,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-
-        // 색 변경
-        val colorSpan = ForegroundColorSpan(Color.parseColor("#057FEE"))
-        spannableString.setSpan(
-            colorSpan,
-            startIndex,
-            endIndex,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-
-        return spannableString
     }
 
     fun changeVisualView(dropoffUIState: DropoffUIState) {
@@ -118,12 +92,12 @@ class DropoffUI(
         val constraintSet = ConstraintSet()
         constraintSet.clone(constraintLayout)
 
-        // Change the bias values as desired.
+        // Bias 계산
         var bias = (dropoffUIState.numPeople / 120.0).toFloat()
         // 정류장 이미지랑 겹쳐서 최소 bias 0.0625 로 설정
         if (bias < 0.0625F)
             bias = 0.0625F
-        constraintSet.setHorizontalBias(imgv_man.id, (bias))
+        constraintSet.setHorizontalBias(imgv_man.id, bias)
         // Apply the updated constraints to the ConstraintLayout.
         constraintSet.applyTo(constraintLayout)
     }
@@ -135,9 +109,9 @@ class DropoffUI(
         for (i: Int in 1..4) {
             var busImage = busImages[i - 1]
             if (i <= numBus) {
-                busImage.setColorFilter(Color.parseColor("#000000"))
+                busImage.setColorFilter(ContextCompat.getColor(context, R.color.bus_true))
             } else {
-                busImage.setColorFilter(Color.parseColor("#AAAAAA"))
+                busImage.setColorFilter(ContextCompat.getColor(context, R.color.bus_false))
             }
         }
     }
@@ -145,6 +119,9 @@ class DropoffUI(
     //val animatorList: MutableList<ValueAnimator> = mutableListOf()
     var animator: ValueAnimator? = null
     fun startAnimation(dropoffUIState: DropoffUIState) {
+        // 지금 실행중인 animator 중지
+        animator?.cancel()
+
         val img = imgv_man
 
         animator = ValueAnimator.ofFloat(0f, 1f).apply {
@@ -153,7 +130,9 @@ class DropoffUI(
             repeatMode = ValueAnimator.REVERSE
             addUpdateListener {
                 val animatedValue = it.animatedValue as Float
-                val color = if (animatedValue > 0.05f) Color.BLACK else Color.GRAY
+                val color =
+                    if (animatedValue > 0.1f) ContextCompat.getColor(context, R.color.man_true)
+                    else ContextCompat.getColor(context, R.color.man_false)
                 img.setColorFilter(color)
             }
         }
