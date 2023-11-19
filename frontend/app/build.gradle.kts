@@ -58,6 +58,7 @@ dependencies {
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.github.chrisbanes:PhotoView:2.3.0")
 
     testImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
     testImplementation("junit:junit:4.13.2")
