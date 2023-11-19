@@ -1,5 +1,7 @@
 package com.example.shattle.ui.dropoff
 
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -7,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -18,6 +21,7 @@ class DropoffFragment : Fragment() {
     private var _binding: FragmentDropoffBinding? = null
 
     lateinit var dropoffViewModel: DropoffViewModel
+    lateinit var dropoffUI: DropoffUI
     lateinit var currentLineUseCase: CurrentLineUseCase
 
     private var handler = Handler(Looper.getMainLooper())
@@ -46,17 +50,22 @@ class DropoffFragment : Fragment() {
         val currentLineUseCase = CurrentLineUseCase(currentLineRepository)
 
         // View Model
-        val dropoffViewModel = ViewModelProvider(this).get(DropoffViewModel::class.java)
+        dropoffViewModel = ViewModelProvider(this).get(DropoffViewModel::class.java)
 
         // UI elements
-        val dropoffUI = DropoffUI(
+        dropoffUI = DropoffUI(
+            requireContext(),
             binding.numPeopleTextView,
-            binding.numBusTextView,
             binding.numTimeTextView,
+            binding.numBusTextView,
             binding.updatedTimeTextView,
             binding.manImageView,
             binding.visualViewLayout,
             binding.refreshButton,
+            binding.busImageView1,
+            binding.busImageView2,
+            binding.busImageView3,
+            binding.busImageView4,
         )
 
         // init refresh
@@ -119,6 +128,7 @@ class DropoffFragment : Fragment() {
         super.onDestroyView()
         toast?.cancel()
         handler.removeCallbacks(refreshRunnable)
+        dropoffUI.stopAnimation()
         _binding = null
     }
 
