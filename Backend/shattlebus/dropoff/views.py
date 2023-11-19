@@ -2,6 +2,9 @@ import datetime
 
 from django.views import View
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.core.exceptions import ValidationError
 
 import json
 
@@ -89,6 +92,42 @@ class RetrieveWaitingTimeView(View):
 
         return hour_next_bus, minute_next_bus
 
+
+@method_decorator(csrf_exempt, name='dispatch')
+class UpdateWaitingPeopleView(View):
+
+    def put(self, request):
+        request = json.loads(request.body)
+        waiting_people = request[('waiting_people')]
+
+        try:
+            current_line = CurrentLine.objects.all()[0]
+            current_line.num_people_waiting = waiting_people
+            current_line.is_executing = True
+            current_line.save()
+
+            response = {
+                "num_people_waiting": current_line.num_people_waiting,
+                "is_executing": current_line.is_executing,
+                "updated_at": str(current_line.updated_at + datetime.timedelta(hours=9))
+            }
+        except IndexError:
+            current_line = CurrentLine(num_people_waiting=waiting_people, is_executing=True)
+            current_line.save()
+
+            response = {
+                "num_people_waiting": current_line.num_people_waiting,
+                "is_executing": current_line.is_executing,
+                "updated_at": str(current_line.updated_at + datetime.timedelta(hours=9))
+            }
+        except ValueError:
+            response = HttpResponse()
+            response.status_code = 400
+            response.reason_phrase = "Invalid value"
+
+            return response
+
+        return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")
 
 
 # Exception when there is no available shuttle
