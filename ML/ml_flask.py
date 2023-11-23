@@ -42,7 +42,8 @@ def perform_object_detection():
 
         # Send the results to another server using a PUT request
         # Replace 'http://other_server_endpoint' with the actual endpoint of the other server
-        requests.put('http://192.168.0.4:5000/receive_results', json=results_list)
+        requests.put('http://54.180.118.50:8000/dropoff/update-waiting', json=results_list)
+
 
 # Schedule the object detection task to run every 5 seconds
 scheduler.add_job(perform_object_detection, 'interval', seconds=5)
