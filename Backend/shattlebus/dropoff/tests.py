@@ -1,3 +1,5 @@
+import json
+
 from django.test import Client, TestCase
 
 from .models import CurrentLine
@@ -9,7 +11,7 @@ class RetrieveWaitingTimeTest(TestCase):
         pass
 
     def tearDown(self):
-        CurrentLine.objects.filter(num_people_waiting=1616).delete()
+        CurrentLine.objects.all().delete()
 
 
     def test_get_num_waiting_people_for_shuttle_when_executing(self):
@@ -82,3 +84,43 @@ class RetrieveWaitingTimeTest(TestCase):
             self.assertNotEquals(data["waiting_time"], -1)
             self.assertNotEquals(data["num_needed_bus"], -1)
         print("\n---dropoff) 셔틀이 없는 시간에 하교 셔틀 대기 시간 얻기 success---")
+
+    def test_put_update_waiting_with_valid_input(self):
+        # Given
+        current_line = CurrentLine.objects.create(num_people_waiting=1616, is_executing=True)
+        current_line.save()
+        original_updated_at_kr = current_line.updated_at+datetime.timedelta(hours=9)
+
+        # When
+        client = Client()
+        request_data = json.dumps({
+            "waiting_people": 47
+        })
+        response = client.put(path="/dropoff/update-waiting", data=request_data, secure=True)
+        data = response.json()
+
+        # Then
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(CurrentLine.objects.count(), 1)
+        self.assertEqual(data["num_people_waiting"], 47)
+
+        print("\n---dropoff) 하교 셔틀 대기 인원 update success---")
+
+    def test_put_update_waiting_when_table_is_empty(self):
+        # Given
+        # Nothing is Given
+
+        # When
+        client = Client()
+        request_data = json.dumps({
+            "waiting_people": 88
+        })
+        response = client.put(path="/dropoff/update-waiting", data=request_data, secure=True)
+        data = response.json()
+
+        # Then
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(CurrentLine.objects.count(), 1)
+        self.assertEqual(data["num_people_waiting"], 88)
+
+        print("\n---dropoff) 하교 셔틀 대기 인원 update(초기 데이터가 없을 때) success---")
