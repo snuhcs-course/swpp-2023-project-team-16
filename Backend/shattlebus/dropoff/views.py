@@ -98,7 +98,7 @@ class UpdateWaitingPeopleView(View):
 
     def put(self, request):
         request = json.loads(request.body)
-        waiting_people = request[('waiting_people')]
+        waiting_people = request['waiting_people']
 
         try:
             current_line = CurrentLine.objects.all()[0]
@@ -120,10 +120,6 @@ class UpdateWaitingPeopleView(View):
                 "is_executing": current_line.is_executing,
                 "updated_at": str(current_line.updated_at + datetime.timedelta(hours=9))
             }
-        except ValueError:
-            response = HttpResponse()
-            response.status_code = 400
-            response.reason_phrase = "Invalid value"
 
             return response
 
