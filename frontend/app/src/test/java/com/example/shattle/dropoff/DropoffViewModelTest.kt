@@ -112,4 +112,20 @@ class DropoffViewModelTest {
         // Assert
         verify(networkRequestStatusObserver).onChanged(true)
     }
+
+    @Test
+    fun notifyRefreshTest2() {
+        // Arrange
+        doAnswer { invocation ->
+            val callback = invocation.getArgument(0) as NetworkCallback
+            callback.onFailure(RuntimeException("네트워크 오류"))
+            null
+        }.`when`(mockCurrentLineUseCase).refreshData(anyOrNull())
+
+        // Act
+        viewModel.notifyRefresh(mockCurrentLineUseCase)
+
+        // Assert
+        verify(networkRequestStatusObserver).onChanged(true)
+    }
 }
