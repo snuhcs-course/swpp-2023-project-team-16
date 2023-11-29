@@ -37,6 +37,9 @@ class CircularViewModelTest {
     @Mock
     private lateinit var networkRequestStatusObserver: Observer<Boolean?>
 
+    @Mock
+    private lateinit var gpsTrackingStatusObserver: Observer<Boolean?>
+
     private lateinit var viewModel: CircularViewModel
 
     val runningBuses_1 = RunningBuses(true, 1)
@@ -48,6 +51,7 @@ class CircularViewModelTest {
             getUIState().observeForever(uiStateObserver)
             getToastMessage().observeForever(toastMessageObserver)
             getNetworkRequestStatus().observeForever(networkRequestStatusObserver)
+            getGpsTrackingStatus().observeForever(gpsTrackingStatusObserver)
         }
     }
 
@@ -102,6 +106,22 @@ class CircularViewModelTest {
         doAnswer { invocation ->
             val callback = invocation.getArgument(0) as NetworkCallback
             callback.onCompleted()
+            null
+        }.`when`(mockRunningBusesUseCase).refreshData(anyOrNull())
+
+        // Act
+        viewModel.notifyRefresh(mockRunningBusesUseCase)
+
+        // Assert
+        verify(networkRequestStatusObserver).onChanged(true)
+    }
+
+    @Test
+    fun notifyRefreshTest2() {
+        // Arrange
+        doAnswer { invocation ->
+            val callback = invocation.getArgument(0) as NetworkCallback
+            callback.onFailure(RuntimeException("네트워크 오류"))
             null
         }.`when`(mockRunningBusesUseCase).refreshData(anyOrNull())
 
