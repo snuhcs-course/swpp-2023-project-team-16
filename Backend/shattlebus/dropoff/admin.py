@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import CurrentLine
+from .models import SingleCurrentLine
+from solo.admin import SingletonModelAdmin
+
+
 
 # Register your models here.
-admin.site.register(CurrentLine)
+admin.site.register(SingleCurrentLine, SingletonModelAdmin)
