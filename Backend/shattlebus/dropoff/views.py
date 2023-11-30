@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 
 import json
 
-from .models import CurrentLine
+from .models import SingleCurrentLine
 
 HOUR_SHUTTLE_START = 7
 HOUR_SHUTTLE_END = 19
@@ -20,7 +20,11 @@ FRIDAY = 4
 class RetrieveWaitingTimeView(View):
 
     def get(self, request):
-        current_line = CurrentLine.objects.all()[0]
+        try:
+            current_line = SingleCurrentLine.objects.get()  # singleton
+        except:
+            return HttpResponse(status=400, content="SingleCurrentLine does not exist.")
+
         num_people_waiting = current_line.num_people_waiting
         updated_at = current_line.updated_at
         updated_at_kr = updated_at + datetime.timedelta(hours=9)
@@ -100,7 +104,7 @@ class UpdateWaitingPeopleView(View):
         waiting_people = request['waiting_people']
 
         try:
-            current_line = CurrentLine.objects.all()[0]
+            current_line = SingleCurrentLine.objects.get()  # singleton
             current_line.num_people_waiting = waiting_people
             current_line.is_executing = True
             current_line.save()
@@ -111,7 +115,9 @@ class UpdateWaitingPeopleView(View):
                 "updated_at": str(current_line.updated_at + datetime.timedelta(hours=9))
             }
         except IndexError:
-            current_line = CurrentLine(num_people_waiting=waiting_people, is_executing=True)
+            current_line = SingleCurrentLine.get_solo()  # singleton
+            current_line.num_people_waiting = waiting_people
+            current_line.is_executing = True
             current_line.save()
 
             response = {
