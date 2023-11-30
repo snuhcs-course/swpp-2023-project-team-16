@@ -85,11 +85,18 @@ class RetrieveWaitingTimeTest(TestCase):
             self.assertNotEquals(data["num_needed_bus"], -1)
         print("\n---dropoff) 셔틀이 없는 시간에 하교 셔틀 대기 시간 얻기 success---")
 
+
+class UpdateWaitingPeopleView(TestCase):
+    def setup(self):
+        pass
+
+    def tearDown(self):
+        CurrentLine.objects.all().delete()
+
     def test_put_update_waiting_with_valid_input(self):
         # Given
         current_line = CurrentLine.objects.create(num_people_waiting=1616, is_executing=True)
         current_line.save()
-        original_updated_at_kr = current_line.updated_at+datetime.timedelta(hours=9)
 
         # When
         client = Client()

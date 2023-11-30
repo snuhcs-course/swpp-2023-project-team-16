@@ -4,7 +4,6 @@ from django.views import View
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from django.core.exceptions import ValidationError
 
 import json
 
@@ -121,7 +120,7 @@ class UpdateWaitingPeopleView(View):
                 "updated_at": str(current_line.updated_at + datetime.timedelta(hours=9))
             }
 
-            return response
+            return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")
 
         return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")
 
