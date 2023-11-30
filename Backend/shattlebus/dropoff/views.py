@@ -114,19 +114,8 @@ class UpdateWaitingPeopleView(View):
                 "is_executing": current_line.is_executing,
                 "updated_at": str(current_line.updated_at + datetime.timedelta(hours=9))
             }
-        except IndexError:
-            current_line = SingleCurrentLine.get_solo()  # singleton
-            current_line.num_people_waiting = waiting_people
-            current_line.is_executing = True
-            current_line.save()
-
-            response = {
-                "num_people_waiting": current_line.num_people_waiting,
-                "is_executing": current_line.is_executing,
-                "updated_at": str(current_line.updated_at + datetime.timedelta(hours=9))
-            }
-
-            return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")
+        except:
+            return HttpResponse(status=400, content="SingleCurrentLine does not exist.")
 
         return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")
 
