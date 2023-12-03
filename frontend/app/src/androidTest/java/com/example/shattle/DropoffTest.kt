@@ -100,7 +100,7 @@ class DropoffTest {
             .check(matches(withText("예상 대기시간 10 분 ")))
 
         onView(withId(R.id.numBusTextView))
-            .check(matches(withText("다음 2번째 버스 탑승 가능합니다.")))
+            .check(matches(withText("기다려야 하는 버스 2 대 ")))
 
         onView(withId(R.id.manImageView))
             .check(matches(withHorizontalBias(0.5f)))

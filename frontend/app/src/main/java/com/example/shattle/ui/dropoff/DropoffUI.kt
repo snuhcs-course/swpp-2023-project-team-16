@@ -33,8 +33,6 @@ class DropoffUI(
     val imgv_bus4: ImageView,
 ) {
 
-    val dropoffUtils = DropoffUtils()
-
     fun updateUI(dropoffUIState: DropoffUIState) {
         changeTextView(dropoffUIState)
         changeVisualView(dropoffUIState)
@@ -48,19 +46,34 @@ class DropoffUI(
         val numTimeStr = dropoffUIState.numTime.toString()
         val numBusStr = dropoffUIState.numBus.toString()
 
-        val numPeopleText = "대기인원 ${numPeopleStr} 명 "
-        val numTimeText = "예상 대기시간 ${numTimeStr} 분 "
-        val numBusText = "다음 ${numBusStr}번째 버스 탑승 가능합니다."
+        var numPeopleText = "대기인원 ${numPeopleStr} 명 "
+        var targetLen1 = 2
+        var numTimeText = "예상 대기시간 ${numTimeStr} 분 "
+        var numBusText = "기다려야 하는 버스 ${numBusStr} 대 "
+        var targetLen2= 2
+
+        if(dropoffUIState.numPeople <= 10){
+            numPeopleText += "이하 "
+            targetLen1 += 3
+        } else if (dropoffUIState.numPeople >= 80){
+            numPeopleText += "이상 "
+            targetLen1 += 3
+        }
+
+        if(dropoffUIState.numBus >= 3){
+            numBusText += "이상 "
+            targetLen2 += 3
+        }
 
         tv_numPeople.text = DropoffUtils.SpannableStringBuilder(numPeopleText)
-            .applyBold(numPeopleText.indexOf(numPeopleStr), numPeopleStr.length + 2)
+            .applyBold(numPeopleText.indexOf(numPeopleStr), numPeopleStr.length + targetLen1)
             .applyColor(
                 ContextCompat.getColor(context, R.color.text_accent),
                 numPeopleText.indexOf(numPeopleStr),
-                numPeopleStr.length + 2
+                numPeopleStr.length + targetLen1
             )
             //.applySize(20)
-            .applySize(23, numPeopleText.indexOf(numPeopleStr), numPeopleStr.length + 2)
+            .applySize(23, numPeopleText.indexOf(numPeopleStr), numPeopleStr.length + targetLen1)
             .build()
 
         tv_numTime.text = DropoffUtils.SpannableStringBuilder(numTimeText)
@@ -75,7 +88,14 @@ class DropoffUI(
             .build()
 
         tv_numBus.text = DropoffUtils.SpannableStringBuilder(numBusText)
-            .applySize(18)
+            .applyBold(numBusText.indexOf(numBusStr), numBusStr.length + targetLen2)
+            .applyColor(
+                ContextCompat.getColor(context, R.color.text_accent),
+                numBusText.indexOf(numBusStr),
+                numBusStr.length + targetLen2
+            )
+            //.applySize(20)
+            .applySize(23, numBusText.indexOf(numBusStr), numBusStr.length + targetLen2)
             .build()
 
     }

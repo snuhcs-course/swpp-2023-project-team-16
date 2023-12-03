@@ -8,7 +8,7 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 
-class  DropoffUtils {
+object DropoffUtils {
 
     class SpannableStringBuilder(str: String) {
         private val spannableString = SpannableString(str)

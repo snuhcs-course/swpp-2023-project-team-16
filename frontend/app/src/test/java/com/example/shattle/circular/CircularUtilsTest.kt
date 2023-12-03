@@ -10,8 +10,6 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class CircularUtilsTest {
 
-    private val circularUtils = CircularUtils()
-
     @Test
     fun bearingBetweenLocationsTest1() {
         // Assign
@@ -20,7 +18,7 @@ class CircularUtilsTest {
         val expectedBearing = 45.0f
 
         //Act
-        val result = circularUtils.bearingBetweenLocations(start, end)
+        val result = CircularUtils.bearingBetweenLocations(start, end)
 
         // Assert
         assertEquals("", expectedBearing, result, 0.1f)
@@ -34,7 +32,7 @@ class CircularUtilsTest {
         val expectedBearing = 0.0f
 
         //Act
-        val result = circularUtils.bearingBetweenLocations(start, end)
+        val result = CircularUtils.bearingBetweenLocations(start, end)
 
         // Assert
         assertEquals("", expectedBearing, result, 0.1f)
@@ -48,7 +46,7 @@ class CircularUtilsTest {
         val expectedBearing = 90.0f
 
         //Act
-        val result = circularUtils.bearingBetweenLocations(start, end)
+        val result = CircularUtils.bearingBetweenLocations(start, end)
 
         // Assert
         assertEquals("", expectedBearing, result, 0.1f)
