@@ -47,6 +47,14 @@ class RetrieveWaitingTimeView(View):
     def get_waiting_data(self, num_people_waiting, updated_at_kr):
         num_needed_bus = (num_people_waiting // MAX_NUM_OF_PEOPLE) + 1
         waiting_time = self.get_waiting_time(num_needed_bus)
+
+        if num_people_waiting <= 10:
+            num_people_waiting = 10
+            num_needed_bus = 1
+        elif num_people_waiting >= 80:
+            num_people_waiting = 80
+            num_needed_bus = 3
+
         waiting_data = {
             "num_waiting_people": num_people_waiting,
             "waiting_time": waiting_time,
@@ -81,13 +89,13 @@ class RetrieveWaitingTimeView(View):
             minute_next_bus = 0
         elif 7 <= hour < 8:
             hour_next_bus = 7
-            minute_next_bus = ((minute // 15) + 1) * 15
+            minute_next_bus = minute + 15
         elif 11 <= hour < 15:
             hour_next_bus = hour
-            minute_next_bus = ((minute // 10) + 1) * 10
+            minute_next_bus = minute + 10
         else:
             hour_next_bus = hour
-            minute_next_bus = ((minute // 5) + 1) * 5
+            minute_next_bus = minute + 5
 
         if minute_next_bus >= 60:
             hour_next_bus += 1
