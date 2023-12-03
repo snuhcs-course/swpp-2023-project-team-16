@@ -94,13 +94,13 @@ class DropoffTest {
 //            }
 
         onView(withId(R.id.numPeopleTextView))
-            .check(matches(withText("대기인원 60 명 ")))
+            .check(matches(withText("대기인원 60명 ")))
 
         onView(withId(R.id.numTimeTextView))
-            .check(matches(withText("예상 대기시간 10 분 ")))
+            .check(matches(withText("예상 대기시간 10분 ")))
 
         onView(withId(R.id.numBusTextView))
-            .check(matches(withText("기다려야 하는 버스 2 대 ")))
+            .check(matches(withText("기다려야 하는 버스 2대 ")))
 
         onView(withId(R.id.manImageView))
             .check(matches(withHorizontalBias(0.5f)))

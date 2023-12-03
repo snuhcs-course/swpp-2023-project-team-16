@@ -62,7 +62,6 @@ class DropoffFragment : Fragment() {
             binding.busImageView1,
             binding.busImageView2,
             binding.busImageView3,
-            binding.busImageView4,
         )
 
         // init refresh
