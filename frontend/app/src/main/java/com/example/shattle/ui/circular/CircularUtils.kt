@@ -12,7 +12,7 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-class CircularUtils {
+object CircularUtils {
 
     fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor {
         // 프로젝트의 Drawable 리소스를 BitmapDescriptor 로 변환

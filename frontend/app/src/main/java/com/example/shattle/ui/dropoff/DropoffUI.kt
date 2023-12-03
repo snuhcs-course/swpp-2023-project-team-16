@@ -2,11 +2,6 @@ package com.example.shattle.ui.dropoff
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Color
-import android.text.SpannableString
-import android.text.style.AbsoluteSizeSpan
-import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -30,10 +25,7 @@ class DropoffUI(
     val imgv_bus1: ImageView,
     val imgv_bus2: ImageView,
     val imgv_bus3: ImageView,
-    val imgv_bus4: ImageView,
 ) {
-
-    val dropoffUtils = DropoffUtils()
 
     fun updateUI(dropoffUIState: DropoffUIState) {
         changeTextView(dropoffUIState)
@@ -48,34 +40,56 @@ class DropoffUI(
         val numTimeStr = dropoffUIState.numTime.toString()
         val numBusStr = dropoffUIState.numBus.toString()
 
-        val numPeopleText = "대기인원 ${numPeopleStr} 명 "
-        val numTimeText = "예상 대기시간 ${numTimeStr} 분 "
-        val numBusText = "다음 ${numBusStr}번째 버스 탑승 가능합니다."
+        var numPeopleText = "대기인원 ${numPeopleStr}명 "
+        var tailLen1 = 2
+        var numTimeText = "예상 대기시간 ${numTimeStr}분 "
+        var tailLen2 = 2
+        var numBusText = "기다려야 하는 버스 ${numBusStr}대 "
+        var tailLen3= 2
+
+        if(dropoffUIState.numPeople <= 10){
+            numPeopleText += "이하 "
+            tailLen1 += 3
+        } else if (dropoffUIState.numPeople >= 80){
+            numPeopleText += "이상 "
+            tailLen1 += 3
+            numTimeText += "이상 "
+            tailLen2 += 3
+            numBusText += "이상 "
+            tailLen3 += 3
+        }
 
         tv_numPeople.text = DropoffUtils.SpannableStringBuilder(numPeopleText)
-            .applyBold(numPeopleText.indexOf(numPeopleStr), numPeopleStr.length + 2)
+            .applyBold(numPeopleText.indexOf(numPeopleStr), numPeopleStr.length + tailLen1)
             .applyColor(
                 ContextCompat.getColor(context, R.color.text_accent),
                 numPeopleText.indexOf(numPeopleStr),
-                numPeopleStr.length + 2
+                numPeopleStr.length + tailLen1
             )
             //.applySize(20)
-            .applySize(23, numPeopleText.indexOf(numPeopleStr), numPeopleStr.length + 2)
+            .applySize(23, numPeopleText.indexOf(numPeopleStr), numPeopleStr.length + tailLen1)
             .build()
 
         tv_numTime.text = DropoffUtils.SpannableStringBuilder(numTimeText)
-            .applyBold(numTimeText.indexOf(numTimeStr), numTimeStr.length + 2)
+            .applyBold(numTimeText.indexOf(numTimeStr), numTimeStr.length + tailLen2)
             .applyColor(
                 ContextCompat.getColor(context, R.color.text_accent),
                 numTimeText.indexOf(numTimeStr),
-                numTimeStr.length + 2
+                numTimeStr.length + tailLen2
             )
             //.applySize(20)
-            .applySize(23, numTimeText.indexOf(numTimeStr), numTimeStr.length + 2)
+            .applySize(23, numTimeText.indexOf(numTimeStr), numTimeStr.length + tailLen2)
             .build()
 
         tv_numBus.text = DropoffUtils.SpannableStringBuilder(numBusText)
-            .applySize(18)
+            .applyBold(numBusText.indexOf(numBusStr), numBusStr.length + tailLen3)
+            .applyColor(
+                ContextCompat.getColor(context, R.color.text_accent),
+                numBusText.indexOf(numBusStr),
+                numBusStr.length + tailLen3
+            )
+            //.applySize(20)
+            .applySize(23, numBusText.indexOf(numBusStr), numBusStr.length + tailLen3)
             .build()
 
     }
@@ -102,11 +116,11 @@ class DropoffUI(
         constraintSet.applyTo(constraintLayout)
     }
 
-    val busImages = listOf(imgv_bus1, imgv_bus2, imgv_bus3, imgv_bus4)
+    val busImages = listOf(imgv_bus1, imgv_bus2, imgv_bus3)
     fun changeColorOfBus(dropoffUIState: DropoffUIState) {
         val numBus = dropoffUIState.numBus
 
-        for (i: Int in 1..4) {
+        for (i: Int in 1..3) {
             var busImage = busImages[i - 1]
             if (i <= numBus) {
                 busImage.setColorFilter(ContextCompat.getColor(context, R.color.bus_true))

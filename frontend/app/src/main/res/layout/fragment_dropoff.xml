@@ -105,6 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/img_station_divider"
+            app:tint="@color/transparent"
             android:paddingBottom="5dp"
             app:layout_constraintStart_toStartOf="@id/dividerImageView_1"
             app:layout_constraintEnd_toEndOf="@id/roadImageView"
@@ -134,15 +135,6 @@
             android:src="@drawable/img_station_bus"
             app:layout_constraintTop_toBottomOf="@id/roadImageView"
             app:layout_constraintStart_toStartOf="@id/dividerImageView_3"/>
-
-        <ImageView
-            android:id="@+id/busImageView_4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/img_station_bus"
-            app:layout_constraintTop_toBottomOf="@id/roadImageView"
-            app:layout_constraintStart_toStartOf="@id/dividerImageView_4"/>
-
 
         <ImageView
             android:id="@+id/manImageView"

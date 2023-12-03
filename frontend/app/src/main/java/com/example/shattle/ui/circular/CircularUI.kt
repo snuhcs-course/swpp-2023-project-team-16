@@ -28,8 +28,6 @@ class CircularUI(
 ) {
     var busMarkers: MutableList<Marker> = mutableListOf()
 
-    val circularUtils = CircularUtils();
-
     var userLocationMarker: Marker? = null
     var userLocation: LatLng? = null
 
@@ -66,7 +64,7 @@ class CircularUI(
         val buses = circularUIState.buses
 
         val customMarkerIcon =
-            circularUtils.bitmapDescriptorFromVector(context, R.drawable.img_circular_bus)
+            CircularUtils.bitmapDescriptorFromVector(context, R.drawable.img_circular_bus)
 
         // 현재 버스들 위치에 마커 추가
         for (bus in buses) {
@@ -109,7 +107,7 @@ class CircularUI(
         // 사용자의 현재 위치에 마커 추가
         val userLatLng = LatLng(location.latitude, location.longitude)
         val customMarkerIcon =
-            circularUtils.bitmapDescriptorFromVector(context, R.drawable.img_user_loaction)
+            CircularUtils.bitmapDescriptorFromVector(context, R.drawable.img_user_loaction)
         userLocationMarker = googleMap?.addMarker(
             MarkerOptions()
                 .position(userLatLng)
@@ -165,7 +163,7 @@ class CircularUI(
         googleMap?.addPolyline(
             PolylineOptions()
                 .clickable(false)
-                .addAll(circularUtils.roadCoordinates)
+                .addAll(CircularUtils.roadCoordinates)
                 .width(23.0f)
                 .color(
                     ContextCompat.getColor(
@@ -180,7 +178,7 @@ class CircularUI(
         googleMap?.addPolyline(
             PolylineOptions()
                 .clickable(false)
-                .addAll(circularUtils.roadCoordinates)
+                .addAll(CircularUtils.roadCoordinates)
                 .width(31.0f) // Set the width of the line
                 .color(
                     ContextCompat.getColor(
@@ -196,14 +194,14 @@ class CircularUI(
 
     fun drawRouteDirections(googleMap: GoogleMap?) {
 
-        for (directionData in circularUtils.arrowData) {
+        for (directionData in CircularUtils.arrowData) {
             val start = directionData.position
             val end = directionData.direction
-            val bearing = circularUtils.bearingBetweenLocations(start, end)
+            val bearing = CircularUtils.bearingBetweenLocations(start, end)
 
             // 경로 사이사이에 방향 표시
             val customMarkerIcon =
-                circularUtils.bitmapDescriptorFromVector(
+                CircularUtils.bitmapDescriptorFromVector(
                     context,
                     R.drawable.img_circular_route_direction
                 )
@@ -237,9 +235,9 @@ class CircularUI(
 
         // 해당 벡터 파일을 bitmap 이미지로 변경 (마커 이미지가 bitmap 만 지원됨)
         val customMarkerIcon =
-            circularUtils.bitmapDescriptorFromVector(context, R.drawable.img_circular_bus_stop)
+            CircularUtils.bitmapDescriptorFromVector(context, R.drawable.img_circular_bus_stop)
 
-        for (busStop in circularUtils.busStops) {
+        for (busStop in CircularUtils.busStops) {
             googleMap?.addMarker(
                 MarkerOptions()
                     .position(busStop.location)
