@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import com.example.shattle.R
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -165,7 +166,8 @@ class DropoffUI(
             val dateTimeString = dropoffUIState.updatedTime
             val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
             inputFormat.timeZone = TimeZone.getTimeZone("Asia/Seoul")
-            val dateTime = inputFormat.parse(dateTimeString)
+            //val dateTime = inputFormat.parse(dateTimeString)
+            val dateTime = Date() // 현재시각 할당
             val outputFormat = SimpleDateFormat("MM.dd HH:mm:ss", Locale.getDefault())
             tv_updatedTime.text = "최종 업데이트 - ${outputFormat.format(dateTime)}"
 
