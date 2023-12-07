@@ -10,7 +10,7 @@ import numpy as np
 model = YOLO('/nfs/home/sunwoo1/line_detection/ultralytics/runs/detect/train9/weights/best.pt')
 image_directory = "/nfs/home/sunwoo1/line_detection/ultralytics/cctv_frame_socket"
 image_paths = glob.glob(f'{image_directory}/*.jpg')
-results_list = []
+# results_list = []
 
 
 class OnMyWatch:
@@ -43,10 +43,7 @@ class Handler(FileSystemEventHandler):
 
         if event.is_directory:
             return None
-
-        # elif event.event_type == 'created':
-        #     # Event is created, you can process it now
-        #     print("created")
+        
         elif event.event_type == 'modified' or event.event_type == 'created':
             print("발생:", event.event_type)
             # inference part
@@ -72,36 +69,40 @@ class Handler(FileSystemEventHandler):
                 confidence_score = best_result.boxes.conf.max().item()
 
                 bounding_box_length = np.sqrt((x_max-x_min)**2 + (y_max-y_min)**2)
+                # waiting_people = 4.0937*np.exp(0.0057*bounding_box_length)
+
+                print("대각선 길이: ", bounding_box_length)
+                # waiting_people = 1.1*(0.0001*bounding_box_length**2 + 0.0856*bounding_box_length - 12.8080) #1.2배 임의로 추가함
+                if bounding_box_length <= 272:
+                    waiting_people = 1.1*(0.0001*bounding_box_length**2 + 0.0856*bounding_box_length - 5.8080) #상수항 변경
                 
-                # bbox 대각선 길이로 사람수 유추 (1.1~1.2배하면 될 듯)
-                # waiting_people = 5.9431*np.exp(0.0049*bounding_box_length)
-                waiting_people = 1.1*(0.0001*bounding_box_length**2 + 0.0856*bounding_box_length - 12.8080) #1.2배 임의로 추가함
-                
+                elif 400 <= bounding_box_length <= 430:
+                    waiting_people = 1.1*(0.0001*bounding_box_length**2 + 0.0856*bounding_box_length - 7.8080)
+                else:
+                    waiting_people = 1.1*(0.0001*bounding_box_length**2 + 0.0856*bounding_box_length - 12.8080)
                 
                 print("bounding box:", waiting_people)
-                results_list.append(waiting_people)
-                print("results_list:", results_list)
-                # result_info = {
-                # "waiting_peope": waiting_people,
-                # }
-                # results_list.append(result_info)
-                
-               
-            if len(results_list) == 1:
-                middle_result = results_list[len(results_list) // 2]
             
-                print("기다리는 사람 수:", middle_result)
+            if 1103 <= x_max <= 1132 and 470 <= y_max <= 485: # 꺾이는 줄 구분(80으로 전송)
+                waiting_people = 80
+                print("기다리는 사람 수:", int(waiting_people))
                 data = {
                     # 'waiting_people': 52,
-                    'waiting_people' : int(middle_result),
+                    'waiting_people' : int(waiting_people),  #여기 int 대신 ceil이 나을듯
+                }
+                response = requests.put("http://54.180.118.50:8000/dropoff/update-waiting", data=json.dumps(data))
+                print(response.status_code)
+            
+            else:
+                print("기다리는 사람 수:", int(waiting_people))
+                data = {
+                    # 'waiting_people': 52,
+                    'waiting_people' : int(waiting_people),  #여기 int 대신 ceil이 나을듯
                 }
                 response = requests.put("http://54.180.118.50:8000/dropoff/update-waiting", data=json.dumps(data))
                 print(response.status_code)
 
-                # # Remove processed image files
-                # for image_path in image_paths:
-                #     os.remove(image_path)
-                results_list.clear()
+    
 
         elif event.event_type == 'deleted':
             print("deleted")
@@ -112,3 +113,6 @@ class Handler(FileSystemEventHandler):
 if __name__ == '__main__':
     watch = OnMyWatch()
     watch.run()
+
+
+
