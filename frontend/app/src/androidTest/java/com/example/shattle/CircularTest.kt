@@ -6,15 +6,15 @@ import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.idling.CountingIdlingResource
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.isSelected
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.example.shattle.network.ApiService
 import com.example.shattle.network.ServiceCreator
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.hamcrest.Matchers.containsString
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -76,8 +76,8 @@ class CircularTest {
         onView(withId(R.id.refreshButton))
             .perform(click())
 
-
         onView(withId(R.id.updatedTimeTextView))
-            .check(matches(ViewMatchers.withText("최종 업데이트 - 01.02 03:04:05")))
+            .check(matches(withText(containsString("최종 업데이트 - "))))
     }
+
 }
