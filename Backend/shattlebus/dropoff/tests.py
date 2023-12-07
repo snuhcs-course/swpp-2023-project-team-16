@@ -2,7 +2,7 @@ import json
 
 from django.test import Client, TestCase
 
-from .models import CurrentLine
+from .models import SingleCurrentLine
 import datetime
 
 class RetrieveWaitingTimeTest(TestCase):
@@ -11,12 +11,12 @@ class RetrieveWaitingTimeTest(TestCase):
         pass
 
     def tearDown(self):
-        CurrentLine.objects.all().delete()
+        SingleCurrentLine.objects.all().delete()
 
 
     def test_get_num_waiting_people_for_shuttle_when_executing(self):
         # Given
-        current_line = CurrentLine.objects.create(num_people_waiting=1616, is_executing=True)
+        current_line = SingleCurrentLine.objects.create(num_people_waiting=1616, is_executing=True)
         current_line.save()
 
         # When
@@ -26,14 +26,14 @@ class RetrieveWaitingTimeTest(TestCase):
 
         # Then
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(CurrentLine.objects.count(), 1)
-        self.assertEqual(data["num_waiting_people"], CurrentLine.objects.all()[0].num_people_waiting)
+        self.assertEqual(SingleCurrentLine.objects.count(), 1)
+        self.assertEqual(data["num_waiting_people"], SingleCurrentLine.objects.get().num_people_waiting)
         self.assertEqual(data["num_waiting_people"], 1616)
         print("\n---dropoff) is_executing=True 일 때 하교 셔틀 대기 시간 얻기 success---")
 
     def test_get_num_waiting_people_for_shuttle_when_not_executing(self):
         # Given
-        current_line = CurrentLine.objects.create(num_people_waiting=6161, is_executing=False)
+        current_line = SingleCurrentLine.objects.create(num_people_waiting=6161, is_executing=False)
         current_line.save()
 
         # When
@@ -43,16 +43,29 @@ class RetrieveWaitingTimeTest(TestCase):
 
         # Then
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(CurrentLine.objects.count(), 1)
-        self.assertEqual(data["num_waiting_people"], CurrentLine.objects.all()[0].num_people_waiting)
+        self.assertEqual(SingleCurrentLine.objects.count(), 1)
+        self.assertEqual(data["num_waiting_people"], SingleCurrentLine.objects.get().num_people_waiting)
         self.assertEqual(data["num_waiting_people"], 6161)
         self.assertEqual(data["waiting_time"], -1)
         self.assertEqual(data["num_needed_bus"], -1)
         print("\n---dropoff) is_executing=False 일 때 하교 셔틀 대기 시간 얻기 success---")
 
+    def test_get_update_waiting_when_table_is_empty(self):
+        # Given
+        # Nothing is Given
+
+        # When
+        client = Client()
+        response = client.get(path="/dropoff/waiting-time", secure=True)
+
+        # Then
+        self.assertEqual(response.status_code, 404)
+
+        print("\n---dropoff) 초기 데이터가 없을 때 하교 셔틀 대기 시간 얻기 success---")
+
     def test_get_waiting_time_for_shuttle_including_no_shuttle_time(self):
         # Given
-        current_line = CurrentLine.objects.create(num_people_waiting=1166, is_executing=True)
+        current_line = SingleCurrentLine.objects.create(num_people_waiting=1166, is_executing=True)
         current_line.save()
 
         # When
@@ -62,8 +75,8 @@ class RetrieveWaitingTimeTest(TestCase):
 
         # Then
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(CurrentLine.objects.count(), 1)
-        self.assertEqual(data["num_waiting_people"], CurrentLine.objects.all()[0].num_people_waiting)
+        self.assertEqual(SingleCurrentLine.objects.count(), 1)
+        self.assertEqual(data["num_waiting_people"], SingleCurrentLine.objects.get().num_people_waiting)
         self.assertEqual(data["num_waiting_people"], 1166)
 
         now_kr = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
@@ -86,16 +99,16 @@ class RetrieveWaitingTimeTest(TestCase):
         print("\n---dropoff) 셔틀이 없는 시간에 하교 셔틀 대기 시간 얻기 success---")
 
 
-class UpdateWaitingPeopleView(TestCase):
+class UpdateWaitingPeopleTest(TestCase):
     def setup(self):
         pass
 
     def tearDown(self):
-        CurrentLine.objects.all().delete()
+        SingleCurrentLine.objects.all().delete()
 
     def test_put_update_waiting_with_valid_input(self):
         # Given
-        current_line = CurrentLine.objects.create(num_people_waiting=1616, is_executing=True)
+        current_line = SingleCurrentLine.objects.create(num_people_waiting=1616, is_executing=True)
         current_line.save()
 
         # When
@@ -108,7 +121,7 @@ class UpdateWaitingPeopleView(TestCase):
 
         # Then
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(CurrentLine.objects.count(), 1)
+        self.assertEqual(SingleCurrentLine.objects.count(), 1)
         self.assertEqual(data["num_people_waiting"], 47)
 
         print("\n---dropoff) 하교 셔틀 대기 인원 update success---")
@@ -123,11 +136,8 @@ class UpdateWaitingPeopleView(TestCase):
             "waiting_people": 88
         })
         response = client.put(path="/dropoff/update-waiting", data=request_data, secure=True)
-        data = response.json()
 
         # Then
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(CurrentLine.objects.count(), 1)
-        self.assertEqual(data["num_people_waiting"], 88)
+        self.assertEqual(response.status_code, 404)
 
         print("\n---dropoff) 하교 셔틀 대기 인원 update(초기 데이터가 없을 때) success---")
