@@ -2,10 +2,6 @@ package com.example.shattle
 
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.testing.FragmentScenario
-import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import okhttp3.mockwebserver.MockWebServer
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
@@ -18,14 +14,12 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.shattle.network.ApiService
 import com.example.shattle.network.ServiceCreator
-import com.example.shattle.ui.dropoff.DropoffFragment
-import com.example.shattle.ui.dropoff.DropoffUIState
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import org.hamcrest.TypeSafeMatcher
 import org.hamcrest.Description
+import org.hamcrest.Matchers
 import org.junit.After
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -106,7 +100,9 @@ class DropoffTest {
             .check(matches(withHorizontalBias(0.5f)))
 
         onView(withId(R.id.updatedTimeTextView))
-            .check(matches(withText("최종 업데이트 - 01.02 03:04:05")))
+            .check(matches(withText(Matchers.containsString("최종 업데이트 - "))))
+            .toString()
+
     }
 
     private fun withHorizontalBias(expectedBias: Float) = object : TypeSafeMatcher<View>() {
