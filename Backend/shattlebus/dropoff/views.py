@@ -23,7 +23,7 @@ class RetrieveWaitingTimeView(View):
         try:
             current_line = SingleCurrentLine.objects.get()  # singleton
         except:
-            return HttpResponse(status=400, content="SingleCurrentLine does not exist.")
+            return HttpResponse(status=404, content="SingleCurrentLine does not exist.")
 
         num_people_waiting = current_line.num_people_waiting
         updated_at = current_line.updated_at
@@ -123,7 +123,7 @@ class UpdateWaitingPeopleView(View):
                 "updated_at": str(current_line.updated_at + datetime.timedelta(hours=9))
             }
         except:
-            return HttpResponse(status=400, content="SingleCurrentLine does not exist.")
+            return HttpResponse(status=404, content="SingleCurrentLine does not exist.")
 
         return HttpResponse(json.dumps(response, ensure_ascii=False, indent=1), content_type="application/json")
 
