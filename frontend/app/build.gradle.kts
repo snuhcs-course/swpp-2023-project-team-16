@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.shattle"
+    namespace = "com.nd.shattle"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.shattle"
+        applicationId = "com.nd.shattle"
         minSdk = 24
         targetSdk = 33
         versionCode = 1

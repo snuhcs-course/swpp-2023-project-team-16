@@ -6,133 +6,113 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:layout_margin="30dp">
 
     <Button
         android:id="@+id/getBusButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="196dp"
         android:text="내 버스 보기"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/licensePlateText" />
 
     <Button
         android:id="@+id/updateLocationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="356dp"
         android:text="위치 추적 켜기"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.975"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/busLicensePlate" />
 
     <EditText
         android:id="@+id/licensePlateText"
         android:layout_width="274dp"
         android:layout_height="70dp"
-        android:layout_marginBottom="492dp"
         android:ems="10"
         android:hint="차량번호 4자리"
         android:inputType="number"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.075" />
 
     <TextView
         android:id="@+id/busLicensePlate"
-        android:layout_width="102dp"
+        android:layout_width="wrap_content"
         android:layout_height="59dp"
+        android:layout_marginTop="32dp"
         android:gravity="center"
         android:text="차량번호"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.09"
+        app:layout_constraintHorizontal_bias="0.064"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.412" />
+        app:layout_constraintTop_toBottomOf="@+id/getBusButton" />
 
     <TextView
         android:id="@+id/busLatitude"
-        android:layout_width="102dp"
+        android:layout_width="wrap_content"
         android:layout_height="100dp"
+        android:layout_marginTop="4dp"
         android:gravity="center"
         android:text="위도"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.097"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.535" />
+        app:layout_constraintStart_toStartOf="@+id/busLicensePlate"
+        app:layout_constraintTop_toBottomOf="@+id/busLicensePlate" />
 
     <TextView
         android:id="@+id/busLongitude"
-        android:layout_width="102dp"
+        android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:gravity="center"
         android:text="경도"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.093"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.665" />
+        app:layout_constraintStart_toStartOf="@+id/busLicensePlate"
+        app:layout_constraintTop_toBottomOf="@+id/busLatitude" />
 
     <TextView
         android:id="@+id/busIsRunning"
-        android:layout_width="102dp"
+        android:layout_width="wrap_content"
         android:layout_height="59dp"
         android:gravity="center"
         android:text="운행중"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.093"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.776" />
+        app:layout_constraintStart_toStartOf="@+id/busLicensePlate"
+        app:layout_constraintTop_toBottomOf="@+id/busLongitude" />
 
     <Button
         android:id="@+id/updateIsRunningButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="488dp"
+        android:layout_marginTop="52dp"
         android:text="변경"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.907"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/updateLocationButton"
+        app:layout_constraintTop_toBottomOf="@+id/updateLocationButton" />
 
     <TextView
         android:id="@+id/response"
-        android:layout_width="150dp"
+        android:layout_width="140dp"
         android:layout_height="60dp"
-        android:layout_marginTop="600dp"
         android:text="response"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.157"
-        app:layout_constraintRight_toLeftOf="@+id/state"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/busLicensePlate"
+        app:layout_constraintTop_toBottomOf="@+id/busIsRunning" />
 
     <TextView
         android:id="@+id/state"
-        android:layout_width="150dp"
+        android:layout_width="140dp"
         android:layout_height="60dp"
-        android:layout_marginTop="596dp"
         android:text="state"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/response"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/busIsRunning"
+        app:layout_constraintVertical_bias="0.493" />
 </androidx.constraintlayout.widget.ConstraintLayout>

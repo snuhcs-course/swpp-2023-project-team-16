@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     // Handle a successful response from the server
                     responseTextView.text = "버스 정보 얻기: ${body?.latitude.toString()}, ${body?.longitude.toString()}"
-                    busLicensePlate.text = "${body?.licensePlate}"
+                    busLicensePlate.text = "차량번호: ${body?.licensePlate}"
                     busLatitude.text = "위도: ${body?.latitude.toString()}"
                     busLongitude.text = "경도: ${body?.longitude.toString()}"
                     busIsRunning.text = "운행 중: ${body?.isRunning.toString()}"
@@ -215,7 +215,7 @@ class MainActivity : AppCompatActivity() {
                     val body = response.body()
                     // Handle a successful response from the server
                     responseTextView.text = "위치 변경하기: ${body?.latitude.toString()}, ${body?.longitude.toString()}"
-                    busLicensePlate.text = "${body?.licensePlate}"
+                    busLicensePlate.text = "차량번호: ${body?.licensePlate}"
                     busLatitude.text = "위도: ${body?.latitude.toString()}"
                     busLongitude.text = "경도: ${body?.longitude.toString()}"
                     busIsRunning.text = "운행 중: ${body?.isRunning.toString()}"
